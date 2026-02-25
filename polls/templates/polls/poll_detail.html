@@ -1,34 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="poll-detail-container mt-4">
+<div class="poll-detail-container">
     <h2>{{ poll.question }}</h2>
-    
-    <div class="poll-info mb-4 text-muted">
-        <p>Proposé par {{ poll.author.username }} dans <a href="{% url 'house-detail' poll.house.pk %}">{{ poll.house.name }}</a></p>
-        <p>Date d'échéance : {{ poll.deadline|date:"d F Y à H:i" }}</p>
-    </div>
+    <p>Glissez et déposez les propositions pour les classer par ordre de préférence.</p>
 
-    <div class="poll-choices mb-4">
-        <h3>Propositions</h3>
-        <ul class="list-group">
-            {% for choice in poll.choices.all %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ choice.text }}
-                <span class="badge bg-primary rounded-pill">{{ choice.votes.count }} votes</span>
+    <!-- La liste des propositions -->
+    <ul id="sortable-propositions" class="list-group mb-4">
+        {% for choice in poll.choices.all %}
+            <!-- L'attribut data-id est crucial pour récupérer l'ordre -->
+            <li class="list-group-item" data-id="{{ choice.id }}" style="cursor: grab; padding: 10px; border: 1px solid #ccc; margin-bottom: 5px; background-color: #fff;">
+                ☰ {{ choice.text }}
             </li>
-            {% empty %}
-            <li class="list-group-item">Aucune proposition pour ce scrutin.</li>
-            {% endfor %}
-        </ul>
-    </div>
+        {% empty %}
+            <p>Aucune proposition pour ce scrutin.</p>
+        {% endfor %}
+    </ul>
 
-    <div class="poll-actions mt-4">
-        {% if user == poll.author %}
-            <a href="{% url 'poll_update' poll.pk %}" class="btn btn-warning">✏️ Modifier</a>
-            <a href="{% url 'poll_delete' poll.pk %}" class="btn btn-danger">🗑️ Supprimer</a>
-        {% endif %}
-        <a href="{% url 'house-detail' poll.house.pk %}" class="btn btn-secondary">🔙 Retour à la maison</a>
-    </div>
+    <!-- Le bouton de vote -->
+    <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
 </div>
+
+<!-- 1. On charge la librairie directement ici -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+<!-- 2. On exécute notre code -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("Page chargée, recherche de la liste...");
+        
+        var el = document.getElementById('sortable-propositions');
+        
+        // On vérifie que la liste existe bien dans la page
+        if (el) {
+            var sortable = Sortable.create(el, {
+                animation: 150,
+                ghostClass: 'bg-light'
+            });
+            console.log("SortableJS est activé avec succès !");
+        } else {
+            console.error("Erreur : La liste #sortable-propositions est introuvable.");
+        }
+
+        var voteBtn = document.getElementById('vote-btn');
+        if (voteBtn) {
+            voteBtn.addEventListener('click', function() {
+                // On récupère l'ordre seulement si Sortable est bien initialisé
+                if (typeof sortable !== 'undefined') {
+                    var orderedIds = sortable.toArray();
+                    console.log("Ordre des propositions choisi :", orderedIds);
+                    alert("Regardez la console (F12) pour voir l'ordre : " + orderedIds.join(', '));
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
