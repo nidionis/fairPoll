@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h3>Confirmer la suppression</h3>
+        </div>
+        <div class="card-body">
+            <p>Êtes-vous sûr de vouloir supprimer le scrutin suivant ?</p>
+            <blockquote class="blockquote">
+                <p class="mb-0">"{{ object.question }}"</p>
+            </blockquote>
+            <p class="text-muted">Cette action est irréversible. Tous les votes associés seront également supprimés.</p>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+                <a href="{% url 'poll_detail' object.pk %}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

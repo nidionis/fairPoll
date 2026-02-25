@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import timedelta
-from django.views.generic import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from .models import Poll, Choice
 from .forms import PollForm
@@ -55,4 +55,35 @@ class PollCreateView(LoginRequiredMixin, CreateView):
             Choice.objects.create(poll=self.object, text=choice_text)
             
         return response
+
+class PollDetailView(LoginRequiredMixin, DetailView):
+    model = Poll
+    template_name = 'polls/poll_detail.html'
+    context_object_name = 'poll'
+
+class PollUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Poll
+    form_class = PollForm
+    template_name = 'polls/poll_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('poll_detail', kwargs={'pk': self.object.pk})
+
+    def test_func(self):
+        # Seul l'auteur du scrutin peut le modifier
+        poll = self.get_object()
+        return self.request.user == poll.author
+
+class PollDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Poll
+    template_name = 'polls/poll_confirm_delete.html'
+
+    def get_success_url(self):
+        # Retour à la maison après suppression
+        return reverse_lazy('house-detail', kwargs={'pk': self.object.house.pk})
+
+    def test_func(self):
+        # Seul l'auteur du scrutin peut le supprimer
+        poll = self.get_object()
+        return self.request.user == poll.author
 

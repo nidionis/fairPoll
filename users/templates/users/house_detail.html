@@ -42,7 +42,7 @@
             <ul>
                 {% for poll in active_polls %}
                 <li>
-                    <a href="#">{{ poll.question|default:"Scrutin sans titre" }}</a>
+                    <a href="{% url 'poll_detail' poll.pk %}">{{ poll.question|default:"Scrutin sans titre" }}</a>
                 </li>
                 {% endfor %}
             </ul>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="poll-detail-container mt-4">
+    <h2>{{ poll.question }}</h2>
+    
+    <div class="poll-info mb-4 text-muted">
+        <p>Proposé par {{ poll.author.username }} dans <a href="{% url 'house-detail' poll.house.pk %}">{{ poll.house.name }}</a></p>
+        <p>Date d'échéance : {{ poll.deadline|date:"d F Y à H:i" }}</p>
+    </div>
+
+    <div class="poll-choices mb-4">
+        <h3>Propositions</h3>
+        <ul class="list-group">
+            {% for choice in poll.choices.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ choice.text }}
+                <span class="badge bg-primary rounded-pill">{{ choice.votes.count }} votes</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item">Aucune proposition pour ce scrutin.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="poll-actions mt-4">
+        {% if user == poll.author %}
+            <a href="{% url 'poll_update' poll.pk %}" class="btn btn-warning">✏️ Modifier</a>
+            <a href="{% url 'poll_delete' poll.pk %}" class="btn btn-danger">🗑️ Supprimer</a>
+        {% endif %}
+        <a href="{% url 'house-detail' poll.house.pk %}" class="btn btn-secondary">🔙 Retour à la maison</a>
+    </div>
+</div>
+{% endblock %}
