@@ -4,6 +4,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import House
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required
 def home_view(request):
@@ -22,6 +24,12 @@ class HouseListView(LoginRequiredMixin, ListView):
 class HouseDetailView(LoginRequiredMixin, DetailView):
     model = House
     template_name = 'users/house_detail.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # On récupère les scrutins liés à cette maison dont la date d'échéance n'est pas passée
+        context['active_polls'] = self.object.polls.filter(deadline__gte=timezone.now())
+        return context
+
 
 class HouseCreateView(LoginRequiredMixin, CreateView):
     model = House

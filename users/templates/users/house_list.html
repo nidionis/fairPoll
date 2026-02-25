@@ -1,28 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="house-list-container">
-    <h2>Mes Maisons</h2>
-    
-    <div class="actions mb-3">
-        <a href="{% url 'house-create' %}" class="btn btn-primary">➕ Créer une nouvelle maison</a>
-    </div>
+  <h2>Houses</h2>
 
-    {% if houses %}
-        <ul class="house-list">
-            {% for house in houses %}
-                <li>
-                    <a href="{% url 'house-detail' house.pk %}">{{ house.name }}</a>
-                    <!-- Vous pourrez ajouter des boutons d'édition/suppression ici plus tard -->
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Vous n'appartenez à aucune maison pour le moment.</p>
-    {% endif %}
-    
-    <div class="mt-3">
-        <a href="{% url 'home' %}" class="btn btn-secondary">Retour à l'accueil</a>
-    </div>
-</div>
+  <a href="{% url 'house-create' %}">Create a new House</a>
+
+  {% if houses %}
+    <ul>
+      {% for house in houses %}
+        <li>
+          <a href="{% url 'house-detail' house.pk %}">{{ house.name }}</a>
+          - <a href="{% url 'house-update' house.pk %}">Edit</a>
+          - <a href="{% url 'house-delete' house.pk %}">Delete</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No houses found. Create one to get started!</p>
+  {% endif %}
 {% endblock %}

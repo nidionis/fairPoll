@@ -12,13 +12,13 @@
     <div class="house-members mb-4">
         <h3>Membres de la maison</h3>
         {% if house.users.all %}
-            <ul>
-                {% for member in house.users.all %}
-                    <li>{{ member.get_full_name|default:member.username }}</li>
-                {% endfor %}
-            </ul>
+        <ul>
+            {% for member in house.users.all %}
+            <li>{{ member.get_full_name|default:member.username }}</li>
+            {% endfor %}
+        </ul>
         {% else %}
-            <p>Il n'y a aucun membre dans cette maison.</p>
+        <p>Il n'y a aucun membre dans cette maison.</p>
         {% endif %}
     </div>
 
@@ -27,15 +27,34 @@
         <h3>Maisons parentes</h3>
         <ul>
             {% for parent in house.parent_houses.all %}
-                <li><a href="{% url 'house-detail' parent.pk %}">{{ parent.name }}</a></li>
+            <li><a href="{% url 'house-detail' parent.pk %}">{{ parent.name }}</a></li>
             {% endfor %}
         </ul>
     </div>
     {% endif %}
 
-    <div class="polls-actions mb-4">
+    <div class="polls-section mb-4">
         <h3>Scrutins</h3>
-        <a href="{% url 'poll_create' house.pk %}" class="btn btn-success">📊 Créer un nouveau scrutin</a>
+
+        <div class="ongoing-polls mb-3">
+            <h4>Scrutins en cours</h4>
+            {% if active_polls %}
+            <ul>
+                {% for poll in active_polls %}
+                <li>
+                    <a href="#">{{ poll.question|default:"Scrutin sans titre" }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Aucun scrutin en cours pour cette maison.</p>
+            {% endif %}
+        </div>
+
+        <div class="polls-actions">
+            <a href="{% url 'poll_create' house.pk %}" class="btn btn-success">📊 Créer un nouveau scrutin</a>
+            <a href="#" class="btn btn-info">🗄️ Archives des scrutins</a>
+        </div>
     </div>
 
     <div class="house-actions">
