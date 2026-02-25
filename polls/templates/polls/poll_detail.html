@@ -28,6 +28,13 @@
         {% endfor %}
     </ul>
 
+    <!-- Saisie de la clé secrète -->
+    <div class="mb-3">
+        <label for="secret-key" class="form-label"><strong>Votre clé secrète :</strong></label>
+        <input type="text" id="secret-key" class="form-control" placeholder="Entrez la clé de 14 caractères" required>
+        <div id="vote-message" class="mt-2 text-danger"></div>
+    </div>
+
     <!-- Le bouton de vote -->
     <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
 </div>
@@ -56,11 +63,49 @@
         var voteBtn = document.getElementById('vote-btn');
         if (voteBtn) {
             voteBtn.addEventListener('click', function() {
+                var secretKey = document.getElementById('secret-key').value.trim();
+                var messageDiv = document.getElementById('vote-message');
+                messageDiv.textContent = "";
+                messageDiv.className = "mt-2";
+
+                if (!secretKey) {
+                    messageDiv.textContent = "Veuillez entrer votre clé secrète.";
+                    messageDiv.classList.add('text-danger');
+                    return;
+                }
+
                 // On récupère l'ordre seulement si Sortable est bien initialisé
                 if (typeof sortable !== 'undefined') {
                     var orderedIds = sortable.toArray();
-                    console.log("Ordre des propositions choisi :", orderedIds);
-                    alert("Regardez la console (F12) pour voir l'ordre : " + orderedIds.join(', '));
+                    
+                    // Envoi des données au serveur
+                    fetch("{% url 'poll_vote' poll.pk %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            secret_key: secretKey,
+                            choices_order: orderedIds
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            messageDiv.textContent = "✅ Votre vote a été enregistré avec succès !";
+                            messageDiv.className = "mt-2 text-success";
+                            voteBtn.disabled = true; // Désactive le bouton après le vote
+                        } else {
+                            messageDiv.textContent = "❌ Erreur : " + data.error;
+                            messageDiv.className = "mt-2 text-danger";
+                        }
+                    })
+                    .catch(error => {
+                        messageDiv.textContent = "Une erreur de communication est survenue.";
+                        messageDiv.className = "mt-2 text-danger";
+                        console.error("Erreur:", error);
+                    });
                 }
             });
         }

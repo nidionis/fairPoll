@@ -6,11 +6,12 @@ from datetime import timedelta
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
-from .models import Poll, Choice, PollSecretKey
+from django.http import HttpResponse, JsonResponse
+from .models import Poll, Choice, PollSecretKey, Vote
 from .forms import PollForm
 from users.models import House
 import secrets
+import json
 
 class PollCreateView(LoginRequiredMixin, CreateView):
     model = Poll
@@ -117,3 +118,45 @@ class PollKeysDownloadView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         response = HttpResponse(content, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename="cles_scrutin_{poll.id}.txt"'
         return response
+
+def poll_vote(request, pk):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Méthode non autorisée.'}, status=405)
+
+    poll = get_object_or_404(Poll, pk=pk)
+
+    try:
+        data = json.loads(request.body)
+        secret_key = data.get('secret_key')
+        choices_order = data.get('choices_order')
+
+        if not secret_key:
+            return JsonResponse({'success': False, 'error': 'Clé secrète manquante.'})
+
+        # 1. Vérification de l'existence et de la validité de la clé
+        try:
+            key_obj = PollSecretKey.objects.get(poll=poll, key=secret_key)
+        except PollSecretKey.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Clé secrète invalide pour ce scrutin.'})
+
+        # 2. Vérification si la clé a déjà été utilisée
+        if key_obj.is_used:
+            return JsonResponse({'success': False, 'error': 'Cette clé a déjà été utilisée pour voter.'})
+
+        # 3. Enregistrement du vote (ici, vous implémenterez la logique complète selon la méthode Condorcet plus tard)
+        # Pour l'instant, on marque juste que la clé a participé
+        # TODO: Enregistrer l'ordre des choix liés à ce vote
+        
+        # On marque la clé comme utilisée
+        key_obj.is_used = True
+        key_obj.save()
+
+        # On peut aussi enregistrer un objet Vote générique
+        Vote.objects.create(poll=poll, secret_key=secret_key)
+
+        return JsonResponse({'success': True})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Données invalides.'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
