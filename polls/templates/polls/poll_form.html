@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Inclusion de Flatpickr pour un beau calendrier -->
+<div class="poll-form-container">
+    <h2>Créer un nouveau scrutin dans la maison : {{ view.house.name }}</h2>
+    
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <p>Veuillez corriger les erreurs ci-dessous :</p>
+            {{ form.non_field_errors }}
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}
+                        <li><strong>{{ field.label }}</strong> : {{ field.errors|striptags }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <div class="form-group mb-3">
+                {{ form.question.label_tag }}
+                <div class="text-danger">{{ form.question.errors|striptags }}</div>
+                {{ form.question }}
+            </div>
+            
+            <div class="form-group mb-3">
+                {{ form.duration_value.label_tag }}
+                <div class="text-danger">{{ form.duration_value.errors|striptags }}</div>
+                <div class="d-flex align-items-center">
+                    {{ form.duration_value }}
+                    {{ form.duration_unit }}
+                </div>
+            </div>
+
+        <hr>
+        
+        <h4>Propositions</h4>
+        <div id="choices-container" class="mb-3">
+            <div class="form-group mb-2 d-flex">
+                <input type="text" name="choices" class="form-control me-2" placeholder="Proposition 1" required>
+            </div>
+            <div class="form-group mb-2 d-flex">
+                <input type="text" name="choices" class="form-control me-2" placeholder="Proposition 2" required>
+            </div>
+        </div>
+        
+        <button type="button" id="add-choice-btn" class="btn btn-outline-primary mb-4">+ Ajouter une proposition</button>
+
+        <div class="form-text mb-3">
+            <small>Rappel : vous êtes limité à 7 scrutins créés par jour et l'échéance doit être située entre maintenant et d'ici 1 an.</small>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">✅ Soumettre le scrutin</button>
+            <a href="{% url 'house-detail' view.house.pk %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Initialisation de Flatpickr pour le champ deadline
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".flatpickr", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today", // Empêche de choisir une date dans le passé
+            locale: "fr", // Calendrier en français
+            time_24hr: true
+        });
+
+        // Logique pour ajouter des champs de proposition dynamiques
+        const container = document.getElementById('choices-container');
+        const addBtn = document.getElementById('add-choice-btn');
+        let choiceCount = 2;
+
+        addBtn.addEventListener('click', function() {
+            choiceCount++;
+            
+            const div = document.createElement('div');
+            div.className = 'form-group mb-2 d-flex';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'choices';
+            input.className = 'form-control me-2';
+            input.placeholder = 'Proposition ' + choiceCount;
+            input.required = true;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-outline-danger';
+            removeBtn.textContent = '❌';
+            removeBtn.onclick = function() {
+                container.removeChild(div);
+                // On ne décrémente pas choiceCount pour garder les placeholders logiques
+            };
+            
+            div.appendChild(input);
+            div.appendChild(removeBtn);
+            container.appendChild(div);
+        });
+    });
+</script>
+{% endblock %}

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     
     # Your apps
     'users',
-    
+    'polls',
+
     # django-allauth requirements
     'django.contrib.sites',
     'allauth',

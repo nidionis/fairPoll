@@ -2,7 +2,17 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from .models import House
+
+@login_required
+def home_view(request):
+    """
+    Vue pour la page d'accueil de l'utilisateur connecté.
+    Le décorateur @login_required assure que seuls les utilisateurs
+    connectés peuvent y accéder.
+    """
+    return render(request, 'users/home.html')
 
 class HouseListView(LoginRequiredMixin, ListView):
     model = House
@@ -16,8 +26,15 @@ class HouseDetailView(LoginRequiredMixin, DetailView):
 class HouseCreateView(LoginRequiredMixin, CreateView):
     model = House
     template_name = 'users/house_form.html'
-    fields = ['name', 'users', 'parent_houses']
+    fields = ['name', 'parent_houses']  # On retire 'users' du formulaire
     success_url = reverse_lazy('house-list')
+
+    def form_valid(self, form):
+        # Sauvegarde la maison d'abord pour avoir un ID
+        response = super().form_valid(form)
+        # Ajoute l'utilisateur qui a créé la maison comme membre
+        self.object.users.add(self.request.user)
+        return response
 
 class HouseUpdateView(LoginRequiredMixin, UpdateView):
     model = House

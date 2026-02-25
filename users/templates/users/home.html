@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="user-profile">
+    <h1>Bienvenue, {{ user.get_full_name|default:user.username }} !</h1>
+
+    <div class="profile-info">
+        <div class="details">
+            <!-- Nom et Email -->
+            <p><strong>Nom :</strong> {{ user.get_full_name|default:"Non renseigné" }}</p>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+        </div>
+    </div>
+        <div class="user-links">
+            <h2>Vos actions rapides</h2>
+            <ul>
+                <!-- Liens vers les autres sections -->
+                <li>
+                    <a href="{% url 'house-create' %}">➕ Créer une nouvelle maison</a>
+                </li>
+                <li>
+                    <a href="{% url 'house-list' %}">🏠 Voir la liste de mes maisons</a>
+                </li>
+                <li>
+                    <a href="#">📊 Historique de mes scrutins</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

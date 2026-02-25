@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="house-detail-container">
+    <h2>Détails de la maison : {{ house.name }}</h2>
+
+    <div class="house-info mb-4">
+        <p><strong>Date de création :</strong> {{ house.created_at|date:"d F Y à H:i" }}</p>
+        <p><strong>Dernière mise à jour :</strong> {{ house.updated_at|date:"d F Y à H:i" }}</p>
+    </div>
+
+    <div class="house-members mb-4">
+        <h3>Membres de la maison</h3>
+        {% if house.users.all %}
+            <ul>
+                {% for member in house.users.all %}
+                    <li>{{ member.get_full_name|default:member.username }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Il n'y a aucun membre dans cette maison.</p>
+        {% endif %}
+    </div>
+
+    {% if house.parent_houses.all %}
+    <div class="house-parents mb-4">
+        <h3>Maisons parentes</h3>
+        <ul>
+            {% for parent in house.parent_houses.all %}
+                <li><a href="{% url 'house-detail' parent.pk %}">{{ parent.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="polls-actions mb-4">
+        <h3>Scrutins</h3>
+        <a href="{% url 'poll_create' house.pk %}" class="btn btn-success">📊 Créer un nouveau scrutin</a>
+    </div>
+
+    <div class="house-actions">
+        <a href="{% url 'house-update' house.pk %}" class="btn btn-warning">✏️ Modifier</a>
+        <a href="{% url 'house-delete' house.pk %}" class="btn btn-danger">🗑️ Supprimer</a>
+        <a href="{% url 'house-list' %}" class="btn btn-secondary">🔙 Retour à la liste</a>
+    </div>
+</div>
+{% endblock %}

@@ -20,26 +20,3 @@ class House(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def is_valid(self):
-        """Checks if the house contains at least 2 entities (Users or Sub-houses)"""
-        total_entities = self.users.count() + self.parent_houses.count()
-        return total_entities >= 2
-
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User, House
-
-@admin.register(User)
-class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'is_staff', 'is_active')
-    search_fields = ('username', 'email')
-
-@admin.register(House)
-class HouseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_valid', 'created_at')
-    search_fields = ('name',)
-    filter_horizontal = ('users', 'parent_houses')
-
-    def __str__(self):
-        return self.name
