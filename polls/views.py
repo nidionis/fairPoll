@@ -6,9 +6,11 @@ from datetime import timedelta
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
-from .models import Poll, Choice
+from django.http import HttpResponse
+from .models import Poll, Choice, PollSecretKey
 from .forms import PollForm
 from users.models import House
+import secrets
 
 class PollCreateView(LoginRequiredMixin, CreateView):
     model = Poll
@@ -53,7 +55,14 @@ class PollCreateView(LoginRequiredMixin, CreateView):
         # Crée les instances de Choice liées à ce scrutin
         for choice_text in choices:
             Choice.objects.create(poll=self.object, text=choice_text)
-            
+        
+        # Génération des clés secrètes (une par membre de la maison)
+        num_participants = self.house.users.count()
+        for _ in range(num_participants):
+            # Génère une clé aléatoire de 14 caractères hexadécimaux
+            key = secrets.token_hex(7)
+            PollSecretKey.objects.create(poll=self.object, key=key)
+        
         return response
 
 class PollDetailView(LoginRequiredMixin, DetailView):
@@ -87,3 +96,24 @@ class PollDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         poll = self.get_object()
         return self.request.user == poll.author
 
+class PollKeysDownloadView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Poll
+
+    def test_func(self):
+        # Seul l'auteur du scrutin peut télécharger les clés
+        poll = self.get_object()
+        return self.request.user == poll.author
+
+    def get(self, request, *args, **kwargs):
+        poll = self.get_object()
+        # Récupère toutes les clés associées
+        keys = poll.secret_keys.values_list('key', flat=True)
+        
+        # Prépare le fichier texte
+        content = f"Clés secrètes pour le scrutin : {poll.question}\n"
+        content += "="*50 + "\n"
+        content += "\n".join(keys)
+        
+        response = HttpResponse(content, content_type='text/plain')
+        response['Content-Disposition'] = f'attachment; filename="cles_scrutin_{poll.id}.txt"'
+        return response

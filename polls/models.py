@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from datetime import timedelta
 from users.models import User, House
+import secrets
 
 def validate_deadline(value):
     if value > timezone.now() + timedelta(days=365):
@@ -37,6 +38,14 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.text
+
+class PollSecretKey(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='secret_keys')
+    key = models.CharField(max_length=14, unique=True)
+    is_used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Clé pour {self.poll.question}"
 
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')

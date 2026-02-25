@@ -3,6 +3,17 @@
 {% block content %}
 <div class="poll-detail-container">
     <h2>{{ poll.question }}</h2>
+
+    {% if request.user == poll.author %}
+    <div class="mb-4 p-3 bg-light border rounded">
+        <h5>🛠️ Administration du scrutin</h5>
+        <p class="text-muted mb-2">En tant que créateur, vous devez distribuer ces clés au hasard aux participants de la maison.</p>
+        <a href="{% url 'poll_keys_download' poll.pk %}" class="btn btn-outline-dark">
+            ⬇️ Télécharger les clés secrètes (.txt)
+        </a>
+    </div>
+    {% endif %}
+
     <p>Glissez et déposez les propositions pour les classer par ordre de préférence.</p>
 
     <!-- La liste des propositions -->
