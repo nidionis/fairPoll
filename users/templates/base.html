@@ -14,13 +14,22 @@
     </header>
 
     <main>
+        <!-- Affichage des messages flash Django -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <!-- C'est ici que le contenu de home.html sera injecté -->
         {% block content %}
         {% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2026 Mon Application</p>
+        <p>&copy; 2026 fairPoll</p>
     </footer>
 </body>
 </html>

@@ -71,6 +71,15 @@ class HouseCreateView(LoginRequiredMixin, CreateView):
     fields = ['name', 'integration_poll_duration', 'users', 'parent_houses']
     success_url = reverse_lazy('house-list')
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            today = timezone.now().date()
+            # On vérifie si l'utilisateur est déjà lié à une maison créée aujourd'hui
+            if House.objects.filter(users=request.user, created_at__date=today).exists():
+                messages.error(request, "Vous ne pouvez créer qu'une seule maison par jour.")
+                return redirect('house-list')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         # Utiliser des cases à cocher pour une sélection plus facile au lieu d'une liste déroulante multiple
