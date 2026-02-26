@@ -22,10 +22,10 @@
                     <a href="{% url 'house-list' %}">🏠 Maisons</a>
                 </li>
                 <li>
-                    <a href="#">📊 Mes scrutins</a>
-                </li>
-                <li>
-                    <form action="{% url 'account_logout' %}" method="post" style="display: inline;">
+                    <a href="{% url 'user_polls' %}">📊 Mes scrutins</a>
+                    </li>
+                    <li>
+                        <form action="{% url 'account_logout' %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" style="background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; text-decoration: underline;">
                                 🚪 Se déconnecter

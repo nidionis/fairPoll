@@ -74,9 +74,12 @@ class HouseCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             today = timezone.now().date()
-            # On vérifie si l'utilisateur est déjà lié à une maison créée aujourd'hui
-            if House.objects.filter(users=request.user, created_at__date=today).exists():
-                messages.error(request, "Vous ne pouvez créer qu'une seule maison par jour.")
+            # On compte combien de maisons l'utilisateur a créé aujourd'hui
+            houses_created_today = House.objects.filter(users=request.user, created_at__date=today).count()
+            
+            # Si la limite de 4 maisons est atteinte ou dépassée
+            if houses_created_today >= 4:
+                messages.error(request, "Vous avez atteint la limite de 4 nouvelles maisons par jour.")
                 return redirect('house-list')
         return super().dispatch(request, *args, **kwargs)
 

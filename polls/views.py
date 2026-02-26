@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import timedelta
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
@@ -268,3 +268,30 @@ class PollResultsDownloadView(LoginRequiredMixin, DetailView):
         response = HttpResponse(json.dumps(data, indent=4), content_type='application/json')
         response['Content-Disposition'] = f'attachment; filename="resultats_scrutin_{poll.id}.json"'
         return response
+
+class UserPollsListView(LoginRequiredMixin, ListView):
+    model = Poll
+    template_name = 'polls/user_poll_list.html'
+    context_object_name = 'polls'
+
+    def get_queryset(self):
+        # On récupère tous les scrutins des maisons dont l'utilisateur fait partie
+        return Poll.objects.filter(house__users=self.request.user).distinct().order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        polls = self.get_queryset()
+        
+        ongoing_polls = []
+        finished_polls = []
+        
+        # On sépare les scrutins en cours et clôturés via la propriété is_finished
+        for poll in polls:
+            if poll.is_finished:
+                finished_polls.append(poll)
+            else:
+                ongoing_polls.append(poll)
+                
+        context['ongoing_polls'] = ongoing_polls
+        context['finished_polls'] = finished_polls
+        return context
