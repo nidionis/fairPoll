@@ -33,12 +33,19 @@
         {% endfor %}
     </ul>
 
-    <!-- Saisie de la clé secrète -->
-    <div class="mb-3">
+    {% if poll.use_tickets %}
+    <!-- Saisie de la clé secrète uniquement si le scrutin le demande -->
+    <div class="mb-3" id="secret-key-container">
         <label for="secret-key" class="form-label"><strong>Votre clé secrète :</strong></label>
         <input type="text" id="secret-key" class="form-control" placeholder="Entrez la clé de 14 caractères" required>
-        <div id="vote-message" class="mt-2 text-danger"></div>
     </div>
+    {% else %}
+    <div class="mb-3 text-info">
+        <p>ℹ️ Ce scrutin ne nécessite pas de ticket. Votre vote sera enregistré et lié à votre compte de manière unique.</p>
+    </div>
+    {% endif %}
+    
+    <div id="vote-message" class="mt-2 text-danger"></div>
 
     <!-- Le bouton de vote -->
     <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
@@ -77,12 +84,13 @@
         var voteBtn = document.getElementById('vote-btn');
         if (voteBtn) {
             voteBtn.addEventListener('click', function() {
-                var secretKey = document.getElementById('secret-key').value.trim();
+                var secretKeyInput = document.getElementById('secret-key');
+                var secretKey = secretKeyInput ? secretKeyInput.value.trim() : null;
                 var messageDiv = document.getElementById('vote-message');
                 messageDiv.textContent = "";
                 messageDiv.className = "mt-2";
 
-                if (!secretKey) {
+                if (secretKeyInput && !secretKey) {
                     messageDiv.textContent = "Veuillez entrer votre clé secrète.";
                     messageDiv.classList.add('text-danger');
                     return;

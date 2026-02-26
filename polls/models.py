@@ -58,15 +58,20 @@ class PollSecretKey(models.Model):
 
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # Pour le vote Condorcet, on a besoin de l'ordre des choix au lieu d'un seul choix.
     # On utilise un champ JSON pour stocker cet ordre.
     choices_order = models.JSONField(null=True, blank=True, help_text="Liste ordonnée des ID de Choice")
-    secret_key = models.CharField(max_length=14, help_text="Les 14 premiers digits du shasum")
+    secret_key = models.CharField(max_length=14, null=True, blank=True, help_text="Les 14 premiers digits du shasum")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Un utilisateur (identifié par sa clef secrète) ne peut voter qu'une seule fois par scrutin
-        unique_together = ('poll', 'secret_key')
+        constraints = [
+            models.UniqueConstraint(fields=['poll', 'secret_key'], name='unique_vote_with_key', condition=models.Q(secret_key__isnull=False)),
+            models.UniqueConstraint(fields=['poll', 'user'], name='unique_vote_without_key', condition=models.Q(user__isnull=False))
+        ]
 
     def __str__(self):
-        return f"Vote sur '{self.poll.question}' par clé {self.secret_key}"
+        if self.secret_key:
+            return f"Vote sur '{self.poll.question}' par clé {self.secret_key}"
+        return f"Vote sur '{self.poll.question}' par {self.user}"

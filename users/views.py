@@ -113,7 +113,8 @@ class RequestIntegrationView(LoginRequiredMixin, View):
             author=request.user,
             house=house,
             question=question,
-            deadline=deadline
+            deadline=deadline,
+            use_tickets=False
         )
         Choice.objects.create(poll=poll, text="Oui")
         Choice.objects.create(poll=poll, text="Non")
@@ -152,7 +153,8 @@ class InviteUserView(LoginRequiredMixin, View):
             author=request.user,
             house=house,
             question=question,
-            deadline=deadline
+            deadline=deadline,
+            use_tickets=False
         )
         Choice.objects.create(poll=poll, text="Oui")
         Choice.objects.create(poll=poll, text="Non")

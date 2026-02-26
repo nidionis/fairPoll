@@ -107,24 +107,40 @@ def poll_vote(request, pk):
 
     try:
         data = json.loads(request.body)
-        secret_key = data.get('secret_key')
         choices_order = data.get('choices_order')
+        
+        # Vérification si le scrutin utilise les tickets
+        if poll.use_tickets:
+            secret_key = data.get('secret_key')
+            if not secret_key:
+                return JsonResponse({'success': False, 'error': 'Clé secrète manquante.'})
 
-        if not secret_key:
-            return JsonResponse({'success': False, 'error': 'Clé secrète manquante.'})
+            try:
+                key_obj = PollSecretKey.objects.get(poll=poll, key=secret_key)
+            except PollSecretKey.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Clé secrète invalide pour ce scrutin.'})
 
-        try:
-            key_obj = PollSecretKey.objects.get(poll=poll, key=secret_key)
-        except PollSecretKey.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Clé secrète invalide pour ce scrutin.'})
+            if key_obj.is_used:
+                return JsonResponse({'success': False, 'error': 'Cette clé a déjà été utilisée pour voter.'})
 
-        if key_obj.is_used:
-            return JsonResponse({'success': False, 'error': 'Cette clé a déjà été utilisée pour voter.'})
+            key_obj.is_used = True
+            key_obj.save()
 
-        key_obj.is_used = True
-        key_obj.save()
-
-        Vote.objects.create(poll=poll, secret_key=secret_key, choices_order=choices_order)
+            Vote.objects.create(poll=poll, secret_key=secret_key, choices_order=choices_order)
+            
+        else:
+            # Scrutin sans ticket : validation par l'utilisateur connecté
+            user = request.user
+            
+            # Vérifier que l'utilisateur fait bien partie de la maison
+            if user not in poll.house.users.all():
+                return JsonResponse({'success': False, 'error': "Vous n'êtes pas membre de cette maison."})
+                
+            # Vérifier que l'utilisateur n'a pas déjà voté
+            if Vote.objects.filter(poll=poll, user=user).exists():
+                return JsonResponse({'success': False, 'error': "Vous avez déjà voté pour ce scrutin."})
+                
+            Vote.objects.create(poll=poll, user=user, choices_order=choices_order)
 
         return JsonResponse({'success': True})
 
