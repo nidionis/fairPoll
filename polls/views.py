@@ -187,10 +187,24 @@ class PollDetailView(LoginRequiredMixin, DetailView):
                     formatted_duels[a] = {}
                     for b in choices:
                         if a == b:
-                            formatted_duels[a][b] = "-"
+                            formatted_duels[a][b] = {"score": "-", "opponent_score": "-"}
                         else:
-                            formatted_duels[a][b] = duels[str(a.id)][str(b.id)]
-                context['duels'] = formatted_duels
+                            score = duels[str(a.id)][str(b.id)]
+                            opponent_score = duels[str(b.id)][str(a.id)]
+                            formatted_duels[a][b] = {"score": score, "opponent_score": opponent_score}
+                    context['duels'] = formatted_duels
+                    
+                # On prépare les votes pour afficher le texte des choix au lieu des IDs
+                choices_dict = {str(c.id): c.text for c in choices}
+                formatted_votes = []
+                for vote in votes:
+                    if vote.choices_order:
+                        text_order = [choices_dict.get(str(cid), str(cid)) for cid in vote.choices_order]
+                        formatted_votes.append({
+                            'secret_key': vote.secret_key,
+                            'choices_text': text_order
+                        })
+                context['formatted_votes'] = formatted_votes
                 
             except Exception as e:
                 context['condorcet_error'] = str(e)
@@ -206,12 +220,20 @@ class PollResultsDownloadView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         poll = self.get_object()
         
+        # Dictionnaire pour remplacer les IDs par les textes
+        choices_dict = {str(c.id): c.text for c in poll.choices.all()}
+        
         # On rassemble les données de votes pour le JSON
         votes_data = []
         for vote in poll.votes.all():
+            if vote.choices_order:
+                choices_text = [choices_dict.get(str(cid), str(cid)) for cid in vote.choices_order]
+            else:
+                choices_text = []
+                
             votes_data.append({
                 'secret_key': vote.secret_key,
-                'choices_order': vote.choices_order,
+                'choices_order': choices_text,
             })
             
         data = {

@@ -14,13 +14,19 @@
     </div>
     {% endif %}
 
-    <p>Glissez et déposez les propositions pour les classer par ordre de préférence.</p>
+    <p>Utilisez les flèches pour classer les propositions par ordre de préférence.</p>
 
     <!-- La liste des propositions -->
     <ul id="sortable-propositions" class="list-group mb-4">
         {% for choice in poll.choices.all %}
-            <li class="list-group-item" data-id="{{ choice.id }}" style="cursor: grab; padding: 10px; border: 1px solid #ccc; margin-bottom: 5px; background-color: #fff;">
-                ☰ {{ choice.text }}
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-id="{{ choice.id }}" style="padding: 10px; border: 1px solid #ccc; margin-bottom: 5px; background-color: #fff;">
+                <span>{{ choice.text }}</span>
+                
+                <!-- Les boutons d'action -->
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-outline-secondary btn-up" title="Monter">⬆️</button>
+                    <button type="button" class="btn btn-outline-secondary btn-down" title="Descendre">⬇️</button>
+                </div>
             </li>
         {% empty %}
             <p>Aucune proposition pour ce scrutin.</p>
@@ -38,19 +44,33 @@
     <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
 </div>
 
-<!-- Scripts pour la gestion du drag and drop -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var el = document.getElementById('sortable-propositions');
-        var sortable; // On déclare la variable ici pour la rendre accessible partout dans la fonction
+        var list = document.getElementById('sortable-propositions');
 
-        if (el) {
-            sortable = Sortable.create(el, {
-                animation: 150,
-                ghostClass: 'bg-light',
-                forceFallback: true, // Force l'utilisation du fallback JS (très utile pour Firefox)
-                fallbackClass: 'sortable-fallback' // Optionnel, ajoute une classe css lors du drag
+        // Gérer les clics sur les boutons Haut / Bas
+        if (list) {
+            list.addEventListener('click', function(e) {
+                // Trouver le bouton cliqué (et gérer le clic sur l'icône à l'intérieur)
+                var btn = e.target.closest('button');
+                if (!btn) return;
+
+                var li = btn.closest('li');
+                
+                if (btn.classList.contains('btn-up')) {
+                    // Si ce n'est pas le premier élément, on l'insère avant son grand frère
+                    var prev = li.previousElementSibling;
+                    if (prev) {
+                        list.insertBefore(li, prev);
+                    }
+                } 
+                else if (btn.classList.contains('btn-down')) {
+                    // Si ce n'est pas le dernier élément, on l'insère après son petit frère
+                    var next = li.nextElementSibling;
+                    if (next) {
+                        list.insertBefore(next, li);
+                    }
+                }
             });
         }
 
@@ -68,36 +88,40 @@
                     return;
                 }
 
-                if (sortable) { // Vérification simplifiée
-                    var orderedIds = sortable.toArray();
+                // Récupérer l'ordre actuel des IDs directement depuis le DOM
+                var orderedIds = [];
+                var items = list.querySelectorAll('li.list-group-item');
+                items.forEach(function(item) {
+                    orderedIds.push(item.getAttribute('data-id'));
+                });
                 
-                    fetch("{% url 'poll_vote' poll.pk %}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": "{{ csrf_token }}"
-                        },
-                        body: JSON.stringify({
-                            secret_key: secretKey,
-                            choices_order: orderedIds
-                        })
+                // Envoi des données via Fetch API
+                fetch("{% url 'poll_vote' poll.pk %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        secret_key: secretKey,
+                        choices_order: orderedIds
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            messageDiv.textContent = "✅ Votre vote a été enregistré avec succès !";
-                            messageDiv.className = "mt-2 text-success";
-                            voteBtn.disabled = true;
-                        } else {
-                            messageDiv.textContent = "❌ Erreur : " + data.error;
-                            messageDiv.className = "mt-2 text-danger";
-                        }
-                    })
-                    .catch(error => {
-                        messageDiv.textContent = "Une erreur de communication est survenue.";
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        messageDiv.textContent = "✅ Votre vote a été enregistré avec succès !";
+                        messageDiv.className = "mt-2 text-success";
+                        voteBtn.disabled = true;
+                    } else {
+                        messageDiv.textContent = "❌ Erreur : " + data.error;
                         messageDiv.className = "mt-2 text-danger";
-                    });
-                }
+                    }
+                })
+                .catch(error => {
+                    messageDiv.textContent = "Une erreur de communication est survenue.";
+                    messageDiv.className = "mt-2 text-danger";
+                });
             });
         }
     });

@@ -79,14 +79,14 @@
                 <thead class="table-light">
                     <tr>
                         <th>Clé secrète (Vote)</th>
-                        <th>Ordre des préférences (IDs des propositions)</th>
+                        <th>Ordre des préférences (Propositions)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for vote in poll.votes.all %}
+                    {% for vote in formatted_votes %}
                         <tr>
                             <td><code>{{ vote.secret_key }}</code></td>
-                            <td>{{ vote.choices_order|join:" > " }}</td>
+                            <td>{{ vote.choices_text|join:" > " }}</td>
                         </tr>
                     {% empty %}
                         <tr>
