@@ -36,6 +36,17 @@
                     {{ form.duration_unit }}
                 </div>
             </div>
+            
+            <div class="form-check mb-3">
+                {{ form.use_tickets }}
+                <label class="form-check-label" for="{{ form.use_tickets.id_for_label }}">
+                    {{ form.use_tickets.label }}
+                </label>
+                <div class="text-danger">{{ form.use_tickets.errors|striptags }}</div>
+                <small class="form-text text-muted d-block">
+                    Si coché, des clés secrètes seront générées pour ce scrutin. Sinon, le vote sera validé via le compte utilisateur.
+                </small>
+            </div>
         </div> <!-- Ajout de la balise fermante manquante -->
 
         <hr>

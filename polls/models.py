@@ -27,6 +27,46 @@ class Poll(models.Model):
         votes_count = self.votes.count()
         return timezone.now() > self.deadline or votes_count >= total_participants
 
+    @property
+    def condorcet_winners(self):
+        """Calcule et renvoie la liste des choix gagnants selon la méthode de Condorcet."""
+        if not self.is_finished:
+            return []
+
+        try:
+            votes = self.votes.all()
+            choices = list(self.choices.all())
+            choice_ids = [str(c.id) for c in choices]
+
+            # Matrice des duels
+            duels = {a: {b: 0 for b in choice_ids if b != a} for a in choice_ids}
+
+            for vote in votes:
+                if not vote.choices_order:
+                    continue
+                order = [str(choice_id) for choice_id in vote.choices_order]
+                for i, a in enumerate(order):
+                    for b in order[i+1:]:
+                        if a in duels and b in duels[a]:
+                            duels[a][b] += 1
+
+            winners = []
+            if votes.exists():
+                for a in choice_ids:
+                    is_winner = True
+                    for b in choice_ids:
+                        if a != b:
+                            if duels[a][b] <= duels[b][a]:
+                                is_winner = False
+                                break
+                    if is_winner:
+                        winner_choice = next((c for c in choices if str(c.id) == a), None)
+                        if winner_choice:
+                            winners.append(winner_choice)
+            return winners
+        except Exception:
+            return []
+
     def clean(self):
         # Vérification de la limite de 7 scrutins par jour pour l'auteur
         if not self.pk:

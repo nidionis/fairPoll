@@ -9,18 +9,21 @@
         {% if ongoing_polls %}
             <ul class="list-group">
                 {% for poll in ongoing_polls %}
-                <li class="list-group-item">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a href="{% url 'poll_detail' poll.pk %}">
-                            <strong>{{ poll.question|default:"Scrutin sans titre" }}</strong> 
-                            <small class="text-muted">({{ poll.house.name }})</small>
-                        </a>
-                        <span class="badge bg-success">
-                            Fin le {{ poll.deadline|date:"d M Y" }}
-                        </span>
-                    </div>
-                </li>
-                {% endfor %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'poll_detail' poll.pk %}">{{ poll.question|default:"Scrutin sans titre" }}</a>
+                            <span class="badge bg-secondary">
+                                {% if not poll.is_finished %}
+                                    ⏳ Fin le {{ poll.deadline|date:"d/m/Y" }}
+                                {% elif poll.condorcet_winners %}
+                                    🏆 {{ poll.condorcet_winners|join:", " }}
+                                {% else %}
+                                    Aucun vainqueur
+                                {% endif %}
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
             </ul>
         {% else %}
             <div class="alert alert-secondary">
@@ -41,7 +44,11 @@
                             <small class="text-muted">({{ poll.house.name }})</small>
                         </a>
                         <span class="badge bg-secondary">
-                            Clôturé
+                            {% if poll.condorcet_winners %}
+                                🏆 {{ poll.condorcet_winners|join:", " }}
+                            {% else %}
+                                Aucun vainqueur
+                            {% endif %}
                         </span>
                     </div>
                 </li>

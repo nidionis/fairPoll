@@ -3,6 +3,7 @@
 {% block content %}
 <div class="poll-detail-container">
     <h2>{{ poll.question }}</h2>
+    <p class="text-muted">Proposé par {{ poll.author.username }} ({{ poll.author.email }})</p>
 
     {% if condorcet_error %}
         <p style="color: red;">Erreur lors du calcul : {{ condorcet_error }}</p>
@@ -47,16 +48,13 @@
                             {% for col_choice in choices %}
                                 {% for key, value in columns.items %}
                                     {% if key == col_choice %}
-                                        {% if value == "-" %}
-                                            <td class="bg-light text-muted">-</td>
-                                        {% elif value > duels|dictsort:col_choice.id|dictsort:row_choice.id %}
-                                            <td class="table-success fw-bold">{{ value }}</td>
-                                        {% elif value < duels|dictsort:col_choice.id|dictsort:row_choice.id %}
-                                            <td class="table-danger">{{ value }}</td>
-                                        {% else %}
-                                            <td class="table-warning">{{ value }}</td>
-                                        {% endif %}
-                                        <td>{{ value }}</td>
+                                        <td class="{% if value.score == '-' %}bg-light text-muted{% endif %}">
+                                            {% if value.score == "-" %}
+                                                -
+                                            {% else %}
+                                                {{ value.score }}-{{ value.opponent_score }}
+                                            {% endif %}
+                                        </td>
                                     {% endif %}
                                 {% endfor %}
                             {% endfor %}

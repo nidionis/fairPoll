@@ -18,7 +18,7 @@ class PollCreateView(LoginRequiredMixin, CreateView):
     template_name = 'polls/poll_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('house-detail', kwargs={'pk': self.house.pk})
+        return reverse_lazy('poll_detail', kwargs={'pk': self.object.pk})
 
     def dispatch(self, request, *args, **kwargs):
         self.house = get_object_or_404(House, pk=self.kwargs['house_id'])
@@ -43,12 +43,13 @@ class PollCreateView(LoginRequiredMixin, CreateView):
         
         for choice_text in choices:
             Choice.objects.create(poll=self.object, text=choice_text)
-        
-        num_participants = self.house.users.count()
-        for _ in range(num_participants):
-            key = secrets.token_hex(7)
-            PollSecretKey.objects.create(poll=self.object, key=key)
-        
+    
+        if self.object.use_tickets:
+            num_participants = self.house.users.count()
+            for _ in range(num_participants):
+                key = secrets.token_hex(7)
+                PollSecretKey.objects.create(poll=self.object, key=key)
+    
         return response
 
 class PollUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -201,7 +202,7 @@ class PollDetailView(LoginRequiredMixin, DetailView):
                             if winner_choice:
                                 condorcet_winners.append(winner_choice)
                 
-                context['condorcet_winners'] = condorcet_winners
+                context['condorcet_winners'] = self.object.condorcet_winners
                 context['choices'] = choices
                 # On formate les duels pour le template : on associe les objets Choice directement
                 formatted_duels = {}

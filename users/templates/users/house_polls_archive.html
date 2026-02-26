@@ -12,7 +12,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="{% url 'poll_detail' poll.pk %}">{{ poll.question|default:"Scrutin sans titre" }}</a>
                         <span class="badge bg-secondary">
-                            Clôturé le {{ poll.deadline|date:"d M Y" }}
+                            Résultats
                         </span>
                     </div>
                 </li>

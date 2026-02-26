@@ -11,8 +11,6 @@
       {% for house in my_houses %}
         <li>
           <a href="{% url 'house-detail' house.pk %}"><strong>{{ house.name }}</strong></a>
-          - <a href="{% url 'house-update' house.pk %}">Modifier</a>
-          - <a href="{% url 'house-delete' house.pk %}">Supprimer</a>
         </li>
       {% endfor %}
     </ul>
@@ -26,11 +24,7 @@
       {% for house in other_houses %}
         <li>
             <a href="{% url 'house-detail' house.pk %}">{{ house.name }}</a>
-            - <form action="{% url 'house-request-integration' house.pk %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Intégrer</button>
-                </form>
-            </li>
+        </li>
           {% endfor %}
         </ul>
       {% else %}
