@@ -60,7 +60,7 @@
 
         <div class="polls-actions">
             <a href="{% url 'poll_create' house.pk %}" class="btn btn-success">📊 Créer un nouveau scrutin</a>
-            <a href="#" class="btn btn-info">🗄️ Archives des scrutins</a>
+            <a href="{% url 'house-polls-archive' house.pk %}" class="btn btn-info">🗄️ Archives des scrutins</a>
         </div>
     </div>
 

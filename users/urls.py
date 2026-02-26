@@ -8,6 +8,9 @@ urlpatterns = [
     path('houses/<int:pk>/update/', views.HouseUpdateView.as_view(), name='house-update'),
     path('houses/<int:pk>/delete/', views.HouseDeleteView.as_view(), name='house-delete'),
     
+    # Route pour l'archive des scrutins d'une maison
+    path('houses/<int:pk>/polls/archive/', views.HousePollsArchiveView.as_view(), name='house-polls-archive'),
+
     # Nouvelles routes pour l'intégration et l'invitation
     path('houses/<int:pk>/request-integration/', views.RequestIntegrationView.as_view(), name='house-request-integration'),
     path('houses/<int:house_pk>/invite/<int:user_pk>/', views.InviteUserView.as_view(), name='house-invite-user'),

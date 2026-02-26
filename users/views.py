@@ -46,6 +46,24 @@ class HouseDetailView(LoginRequiredMixin, DetailView):
         context['active_polls'] = [poll for poll in all_polls if not poll.is_finished]
         return context
 
+class HousePollsArchiveView(LoginRequiredMixin, ListView):
+    model = Poll
+    template_name = 'users/house_polls_archive.html'
+    context_object_name = 'archived_polls'
+
+    def get_queryset(self):
+        # On récupère la maison grâce au paramètre pk dans l'URL
+        house = get_object_or_404(House, pk=self.kwargs['pk'])
+        # On récupère tous les scrutins de la maison, ordonnés du plus récent au plus ancien
+        all_polls = house.polls.all().order_by('-created_at')
+        # On retourne uniquement les scrutins terminés
+        return [poll for poll in all_polls if poll.is_finished]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # On ajoute la maison au contexte pour pouvoir afficher son nom dans le template
+        context['house'] = get_object_or_404(House, pk=self.kwargs['pk'])
+        return context
 
 class HouseCreateView(LoginRequiredMixin, CreateView):
     model = House
@@ -101,7 +119,7 @@ class RequestIntegrationView(LoginRequiredMixin, View):
             messages.warning(request, "Vous faites déjà partie de cette maison.")
             return redirect('house-detail', pk=pk)
             
-        question = f"Intégration de {request.user.username} : oui / non"
+        question = f"Intégration de {request.user.username}"
 
         # Vérification si un scrutin est déjà en cours
         if Poll.objects.filter(house=house, question=question, deadline__gte=timezone.now()).exists():
