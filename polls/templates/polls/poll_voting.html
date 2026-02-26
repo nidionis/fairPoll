@@ -38,14 +38,19 @@
     <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
 </div>
 
+<!-- Scripts pour la gestion du drag and drop -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var el = document.getElementById('sortable-propositions');
+        var sortable; // On déclare la variable ici pour la rendre accessible partout dans la fonction
+
         if (el) {
-            var sortable = Sortable.create(el, {
+            sortable = Sortable.create(el, {
                 animation: 150,
-                ghostClass: 'bg-light'
+                ghostClass: 'bg-light',
+                forceFallback: true, // Force l'utilisation du fallback JS (très utile pour Firefox)
+                fallbackClass: 'sortable-fallback' // Optionnel, ajoute une classe css lors du drag
             });
         }
 
@@ -63,7 +68,7 @@
                     return;
                 }
 
-                if (typeof sortable !== 'undefined') {
+                if (sortable) { // Vérification simplifiée
                     var orderedIds = sortable.toArray();
                 
                     fetch("{% url 'poll_vote' poll.pk %}", {
