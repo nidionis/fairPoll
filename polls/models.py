@@ -18,6 +18,13 @@ class Poll(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField(validators=[validate_deadline])
 
+    @property
+    def is_finished(self):
+        # Vérifie si la date d'échéance est passée ou si tout le monde a voté
+        total_participants = self.house.users.count()
+        votes_count = self.votes.count()
+        return timezone.now() > self.deadline or votes_count >= total_participants
+
     def clean(self):
         # Vérification de la limite de 7 scrutins par jour pour l'auteur
         if not self.pk:
@@ -49,7 +56,9 @@ class PollSecretKey(models.Model):
 
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='votes', null=True, blank=True)
+    # Pour le vote Condorcet, on a besoin de l'ordre des choix au lieu d'un seul choix.
+    # On utilise un champ JSON pour stocker cet ordre.
+    choices_order = models.JSONField(null=True, blank=True, help_text="Liste ordonnée des ID de Choice")
     secret_key = models.CharField(max_length=14, help_text="Les 14 premiers digits du shasum")
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="poll-detail-container">
+    <h2>{{ poll.question }}</h2>
+
+    {% if condorcet_error %}
+        <p style="color: red;">Erreur lors du calcul : {{ condorcet_error }}</p>
+    {% endif %}
+
+    <div class="alert alert-info mt-4">
+        <h4>🏁 Le scrutin est terminé</h4>
+    
+        {% if condorcet_winners %}
+            <h5 class="mt-3">🏆 Résultat (Gagnant(s) de Condorcet) :</h5>
+            <ul class="list-group mb-3">
+                {% for winner in condorcet_winners %}
+                    <li class="list-group-item list-group-item-success"><strong>{{ winner.text }}</strong></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun gagnant n'a pu être déterminé (égalité parfaite ou aucun vote n'a été enregistré).</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-4">
+        <h5>📜 Registre public des votes (Vérifiabilité)</h5>
+        <p class="text-muted small">
+            Conformément à la constitution, les paires <strong>identifiant secret : choix</strong> sont rendues publiques. 
+            Vous pouvez ainsi vérifier l'intégrité de votre vote de manière anonyme et vous assurer qu'il a bien été pris en compte.
+        </p>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Clé secrète (Vote)</th>
+                        <th>Ordre des préférences (IDs des propositions)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vote in poll.votes.all %}
+                        <tr>
+                            <td><code>{{ vote.secret_key }}</code></td>
+                            <td>{{ vote.choices_order|join:" > " }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">Aucun vote enregistré.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <a href="{% url 'poll_results_download' poll.pk %}" class="btn btn-outline-secondary mt-2">
+            ⬇️ Télécharger les résultats (.json)
+        </a>
+    </div>
+</div>
+{% endblock %}

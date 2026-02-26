@@ -19,7 +19,6 @@
     <!-- La liste des propositions -->
     <ul id="sortable-propositions" class="list-group mb-4">
         {% for choice in poll.choices.all %}
-            <!-- L'attribut data-id est crucial pour récupérer l'ordre -->
             <li class="list-group-item" data-id="{{ choice.id }}" style="cursor: grab; padding: 10px; border: 1px solid #ccc; margin-bottom: 5px; background-color: #fff;">
                 ☰ {{ choice.text }}
             </li>
@@ -39,25 +38,15 @@
     <button id="vote-btn" class="btn btn-primary">🗳️ Voter</button>
 </div>
 
-<!-- 1. On charge la librairie directement ici -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-
-<!-- 2. On exécute notre code -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("Page chargée, recherche de la liste...");
-        
         var el = document.getElementById('sortable-propositions');
-        
-        // On vérifie que la liste existe bien dans la page
         if (el) {
             var sortable = Sortable.create(el, {
                 animation: 150,
                 ghostClass: 'bg-light'
             });
-            console.log("SortableJS est activé avec succès !");
-        } else {
-            console.error("Erreur : La liste #sortable-propositions est introuvable.");
         }
 
         var voteBtn = document.getElementById('vote-btn');
@@ -74,11 +63,9 @@
                     return;
                 }
 
-                // On récupère l'ordre seulement si Sortable est bien initialisé
                 if (typeof sortable !== 'undefined') {
                     var orderedIds = sortable.toArray();
-                    
-                    // Envoi des données au serveur
+                
                     fetch("{% url 'poll_vote' poll.pk %}", {
                         method: "POST",
                         headers: {
@@ -95,7 +82,7 @@
                         if (data.success) {
                             messageDiv.textContent = "✅ Votre vote a été enregistré avec succès !";
                             messageDiv.className = "mt-2 text-success";
-                            voteBtn.disabled = true; // Désactive le bouton après le vote
+                            voteBtn.disabled = true;
                         } else {
                             messageDiv.textContent = "❌ Erreur : " + data.error;
                             messageDiv.className = "mt-2 text-danger";
@@ -104,7 +91,6 @@
                     .catch(error => {
                         messageDiv.textContent = "Une erreur de communication est survenue.";
                         messageDiv.className = "mt-2 text-danger";
-                        console.error("Erreur:", error);
                     });
                 }
             });
