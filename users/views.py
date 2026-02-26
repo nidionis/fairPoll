@@ -40,8 +40,10 @@ class HouseDetailView(LoginRequiredMixin, DetailView):
     template_name = 'users/house_detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # On récupère les scrutins liés à cette maison dont la date d'échéance n'est pas passée
-        context['active_polls'] = self.object.polls.filter(deadline__gte=timezone.now())
+        # On récupère tous les scrutins liés à cette maison et on filtre ceux qui sont encore actifs
+        # en utilisant la propriété is_finished (qui vérifie la date et la participation totale)
+        all_polls = self.object.polls.all()
+        context['active_polls'] = [poll for poll in all_polls if not poll.is_finished]
         return context
 
 

@@ -22,10 +22,12 @@
         {% endif %}
     </div>
 
+    {% if request.user not in house.users.all %}
     <form method="post" action="{% url 'house-request-integration' house.pk %}">
         {% csrf_token %}
         <button type="submit">Demander à intégrer cette maison</button>
     </form>
+    {% endif %}
 
     {% if house.parent_houses.all %}
     <div class="house-parents mb-4">
