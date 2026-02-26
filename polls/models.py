@@ -17,6 +17,8 @@ class Poll(models.Model):
     question = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField(validators=[validate_deadline])
+    use_tickets = models.BooleanField(default=True, verbose_name="Sécurisation par ticket")
+    voters = models.ManyToManyField(User, related_name='voted_ticketless_polls', blank=True)
 
     @property
     def is_finished(self):

@@ -93,6 +93,12 @@ class PollKeysDownloadView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         response['Content-Disposition'] = f'attachment; filename="cles_scrutin_{poll.id}.txt"'
         return response
 
+
+
+
+
+
+
 def poll_vote(request, pk):
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Méthode non autorisée.'}, status=405)
@@ -114,7 +120,7 @@ def poll_vote(request, pk):
 
         if key_obj.is_used:
             return JsonResponse({'success': False, 'error': 'Cette clé a déjà été utilisée pour voter.'})
-        
+
         key_obj.is_used = True
         key_obj.save()
 

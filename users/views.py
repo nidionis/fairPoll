@@ -7,6 +7,11 @@ from .models import House
 from django.utils import timezone
 from datetime import timedelta
 from django import forms
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.contrib import messages
+from polls.models import Poll, Choice
+from .models import User
 
 @login_required
 def home_view(request):
@@ -82,3 +87,75 @@ class HouseDeleteView(LoginRequiredMixin, DeleteView):
     model = House
     template_name = 'users/house_confirm_delete.html'
     success_url = reverse_lazy('house-list')
+
+class RequestIntegrationView(LoginRequiredMixin, View):
+    """Permet à un utilisateur de demander à intégrer une maison dont il ne fait pas partie."""
+    
+    def post(self, request, pk):
+        house = get_object_or_404(House, pk=pk)
+        
+        # Vérification si l'utilisateur est déjà membre
+        if request.user in house.users.all():
+            messages.warning(request, "Vous faites déjà partie de cette maison.")
+            return redirect('house-detail', pk=pk)
+            
+        question = f"Intégration de {request.user.username} : oui / non"
+
+        # Vérification si un scrutin est déjà en cours
+        if Poll.objects.filter(house=house, question=question, deadline__gte=timezone.now()).exists():
+            messages.warning(request, "Une demande d'intégration est déjà en cours pour votre compte.")
+            return redirect('house-detail', pk=pk)
+
+        # Création du scrutin d'intégration
+        deadline = timezone.now() + house.integration_poll_duration
+        
+        poll = Poll.objects.create(
+            author=request.user,
+            house=house,
+            question=question,
+            deadline=deadline
+        )
+        Choice.objects.create(poll=poll, text="Oui")
+        Choice.objects.create(poll=poll, text="Non")
+        
+        messages.success(request, "Une demande d'intégration a été créée sous la forme d'un scrutin pour les membres.")
+        return redirect('house-detail', pk=pk)
+
+class InviteUserView(LoginRequiredMixin, View):
+    """Permet à un membre d'une maison d'inviter un autre utilisateur."""
+    
+    def post(self, request, house_pk, user_pk):
+        house = get_object_or_404(House, pk=house_pk)
+        target_user = get_object_or_404(User, pk=user_pk)
+        
+        # Sécurité : seul un membre peut lancer l'invitation
+        if request.user not in house.users.all():
+            messages.error(request, "Vous devez être membre de la maison pour inviter quelqu'un.")
+            return redirect('house-detail', pk=house_pk)
+            
+        # Vérification si la cible est déjà membre
+        if target_user in house.users.all():
+            messages.warning(request, f"{target_user.username} fait déjà partie de la maison.")
+            return redirect('house-detail', pk=house_pk)
+
+        question = f"Intégration de {target_user.username}"
+
+        # Vérification si un scrutin est déjà en cours
+        if Poll.objects.filter(house=house, question=question, deadline__gte=timezone.now()).exists():
+            messages.warning(request, f"Un scrutin d'intégration est déjà en cours pour {target_user.username}.")
+            return redirect('house-detail', pk=house_pk)
+
+        # Création du scrutin d'intégration
+        deadline = timezone.now() + house.integration_poll_duration
+        
+        poll = Poll.objects.create(
+            author=request.user,
+            house=house,
+            question=question,
+            deadline=deadline
+        )
+        Choice.objects.create(poll=poll, text="Oui")
+        Choice.objects.create(poll=poll, text="Non")
+        
+        messages.success(request, f"Un scrutin a été créé pour valider l'intégration de {target_user.username}.")
+        return redirect('house-detail', pk=house_pk)

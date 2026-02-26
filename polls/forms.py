@@ -28,7 +28,7 @@ class PollForm(forms.ModelForm):
 
     class Meta:
         model = Poll
-        fields = ['question']  # On retire 'deadline' d'ici
+        fields = ['question', 'use_tickets']  # On retire 'deadline' d'ici
         widgets = {
             'question': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Posez votre question...'}),
         }

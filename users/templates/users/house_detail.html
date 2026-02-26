@@ -22,6 +22,11 @@
         {% endif %}
     </div>
 
+    <form method="post" action="{% url 'house-request-integration' house.pk %}">
+        {% csrf_token %}
+        <button type="submit">Demander à intégrer cette maison</button>
+    </form>
+
     {% if house.parent_houses.all %}
     <div class="house-parents mb-4">
         <h3>Maisons parentes</h3>
