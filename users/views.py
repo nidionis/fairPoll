@@ -21,6 +21,14 @@ class HouseListView(LoginRequiredMixin, ListView):
     template_name = 'users/house_list.html'
     context_object_name = 'houses'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        # On utilise l'ORM pour filtrer efficacement
+        context['my_houses'] = House.objects.filter(users=user)
+        context['other_houses'] = House.objects.exclude(users=user)
+        return context
+
 class HouseDetailView(LoginRequiredMixin, DetailView):
     model = House
     template_name = 'users/house_detail.html'
@@ -38,11 +46,19 @@ class HouseCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('house-list')
 
     def form_valid(self, form):
-        # Sauvegarde la maison d'abord pour avoir un ID
-        response = super().form_valid(form)
-        # Ajoute l'utilisateur qui a créé la maison comme membre
+        # On sauvegarde l'instance de la maison sans la commiter tout de suite
+        self.object = form.save(commit=False)
+        self.object.save() # Sauvegarde en base pour générer l'ID
+        
+        # On sauvegarde les relations ManyToMany du formulaire (ici parent_houses)
+        form.save_m2m()
+        
+        # Ensuite, on ajoute l'utilisateur connecté explicitement et uniquement à CETTE maison
         self.object.users.add(self.request.user)
-        return response
+        
+        # On redirige vers l'URL de succès
+        from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(self.get_success_url())
 
 class HouseUpdateView(LoginRequiredMixin, UpdateView):
     model = House
