@@ -193,3 +193,77 @@ class InviteUserView(LoginRequiredMixin, View):
         
         messages.success(request, f"Un scrutin a été créé pour valider l'intégration de {target_user.username}.")
         return redirect('house-detail', pk=house_pk)
+
+class BanishUserView(LoginRequiredMixin, View):
+    """Permet de proposer le bannissement d'un membre de la maison."""
+    
+    def post(self, request, house_pk, user_pk):
+        house = get_object_or_404(House, pk=house_pk)
+        target_user = get_object_or_404(User, pk=user_pk)
+        
+        # Vérification si l'utilisateur est membre
+        if request.user not in house.users.all():
+            messages.error(request, "Vous devez être membre de la maison pour proposer un bannissement.")
+            return redirect('house-detail', pk=house_pk)
+            
+        if target_user not in house.users.all():
+            messages.warning(request, f"{target_user.username} ne fait pas partie de la maison.")
+            return redirect('house-detail', pk=house_pk)
+
+        question = f"Bannissement de {target_user.username}"
+
+        # Vérification si un scrutin est déjà en cours
+        if Poll.objects.filter(house=house, question=question, deadline__gte=timezone.now()).exists():
+            messages.warning(request, f"Un scrutin de bannissement est déjà en cours pour {target_user.username}.")
+            return redirect('house-detail', pk=house_pk)
+
+        # Création du scrutin de bannissement
+        deadline = timezone.now() + house.integration_poll_duration
+        
+        poll = Poll.objects.create(
+            author=request.user,
+            house=house,
+            question=question,
+            deadline=deadline,
+            use_tickets=False
+        )
+        Choice.objects.create(poll=poll, text="Oui")
+        Choice.objects.create(poll=poll, text="Non")
+        
+        messages.success(request, f"Un scrutin a été créé pour le bannissement de {target_user.username}.")
+        return redirect('house-detail', pk=house_pk)
+
+class BanishHouseView(LoginRequiredMixin, View):
+    """Permet de proposer le bannissement d'une maison parente."""
+    
+    def post(self, request, house_pk, target_house_pk):
+        house = get_object_or_404(House, pk=house_pk)
+        target_house = get_object_or_404(House, pk=target_house_pk)
+        
+        # Vérification si l'utilisateur est membre de la maison d'où part le ban
+        if request.user not in house.users.all():
+            messages.error(request, "Vous devez être membre de la maison pour proposer un bannissement.")
+            return redirect('house-detail', pk=house_pk)
+
+        question = f"Bannissement de la maison {target_house.name}"
+
+        # Vérification si un scrutin est déjà en cours
+        if Poll.objects.filter(house=house, question=question, deadline__gte=timezone.now()).exists():
+            messages.warning(request, f"Un scrutin de bannissement est déjà en cours pour la maison {target_house.name}.")
+            return redirect('house-detail', pk=house_pk)
+
+        # Création du scrutin de bannissement
+        deadline = timezone.now() + house.integration_poll_duration
+        
+        poll = Poll.objects.create(
+            author=request.user,
+            house=house,
+            question=question,
+            deadline=deadline,
+            use_tickets=False
+        )
+        Choice.objects.create(poll=poll, text="Oui")
+        Choice.objects.create(poll=poll, text="Non")
+        
+        messages.success(request, f"Un scrutin a été créé pour le bannissement de la maison {target_house.name}.")
+        return redirect('house-detail', pk=house_pk)

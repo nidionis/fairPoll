@@ -14,4 +14,8 @@ urlpatterns = [
     # Nouvelles routes pour l'intégration et l'invitation
     path('houses/<int:pk>/request-integration/', views.RequestIntegrationView.as_view(), name='house-request-integration'),
     path('houses/<int:house_pk>/invite/<int:user_pk>/', views.InviteUserView.as_view(), name='house-invite-user'),
+    
+    # Nouvelles routes pour le bannissement
+    path('houses/<int:house_pk>/banish-user/<int:user_pk>/', views.BanishUserView.as_view(), name='house-banish-user'),
+    path('houses/<int:house_pk>/banish-house/<int:target_house_pk>/', views.BanishHouseView.as_view(), name='house-banish-house'),
 ]

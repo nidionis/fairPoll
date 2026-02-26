@@ -14,7 +14,15 @@
         {% if house.users.all %}
         <ul>
             {% for member in house.users.all %}
-            <li>{{ member.get_full_name|default:member.username }}</li>
+            <li>
+                {{ member.get_full_name|default:member.username }}
+                {% if request.user in house.users.all and member != request.user %}
+                <form method="post" action="{% url 'house-banish-user' house.pk member.pk %}" style="display:inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Proposer un bannissement">🛑 Bannir</button>
+                </form>
+                {% endif %}
+            </li>
             {% endfor %}
         </ul>
         {% else %}
@@ -34,7 +42,15 @@
         <h3>Maisons parentes</h3>
         <ul>
             {% for parent in house.parent_houses.all %}
-            <li><a href="{% url 'house-detail' parent.pk %}">{{ parent.name }}</a></li>
+            <li>
+                <a href="{% url 'house-detail' parent.pk %}">{{ parent.name }}</a>
+                {% if request.user in house.users.all %}
+                <form method="post" action="{% url 'house-banish-house' house.pk parent.pk %}" style="display:inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Proposer un bannissement">🛑 Bannir</button>
+                </form>
+                {% endif %}
+            </li>
             {% endfor %}
         </ul>
     </div>
