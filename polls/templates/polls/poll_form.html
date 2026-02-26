@@ -36,20 +36,19 @@
                     {{ form.duration_unit }}
                 </div>
             </div>
+        </div> <!-- Ajout de la balise fermante manquante -->
 
         <hr>
         
         <h4>Propositions</h4>
-        <div id="choices-container" class="mb-3">
-            <div class="form-group mb-2 d-flex">
-                <input type="text" name="choices" class="form-control me-2" placeholder="Proposition 1" required>
-            </div>
-            <div class="form-group mb-2 d-flex">
-                <input type="text" name="choices" class="form-control me-2" placeholder="Proposition 2" required>
-            </div>
+        <div id="choices-list" class="mb-3">
+            <!-- La liste des propositions déjà entrées apparaîtra ici -->
         </div>
         
-        <button type="button" id="add-choice-btn" class="btn btn-outline-primary mb-4">+ Ajouter une proposition</button>
+        <div class="form-group mb-4 d-flex">
+            <input type="text" id="new-choice-input" class="form-control me-2" placeholder="Nouvelle proposition">
+            <button type="button" id="add-choice-btn" class="btn btn-outline-primary text-nowrap">+ Ajouter une proposition</button>
+        </div>
 
         <div class="form-text mb-3">
             <small>Rappel : vous êtes limité à 7 scrutins créés par jour et l'échéance doit être située entre maintenant et d'ici 1 an.</small>
@@ -65,44 +64,68 @@
 <script>
     // Initialisation de Flatpickr pour le champ deadline
     document.addEventListener("DOMContentLoaded", function() {
-        flatpickr(".flatpickr", {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            minDate: "today", // Empêche de choisir une date dans le passé
-            locale: "fr", // Calendrier en français
-            time_24hr: true
-        });
+        // On vérifie que flatpickr est bien défini avant de l'appeler pour éviter de planter le script
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr(".flatpickr", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today", // Empêche de choisir une date dans le passé
+                locale: "fr", // Calendrier en français
+                time_24hr: true
+            });
+        } else {
+            console.warn("Flatpickr n'est pas chargé sur cette page.");
+        }
 
         // Logique pour ajouter des champs de proposition dynamiques
-        const container = document.getElementById('choices-container');
+        const choicesList = document.getElementById('choices-list');
         const addBtn = document.getElementById('add-choice-btn');
-        let choiceCount = 2;
+        const newChoiceInput = document.getElementById('new-choice-input');
 
-        addBtn.addEventListener('click', function() {
-            choiceCount++;
+        function addChoice(value) {
+            const trimmedValue = value.trim();
+            if (!trimmedValue) return; // Ne rien ajouter si le champ est vide
             
             const div = document.createElement('div');
-            div.className = 'form-group mb-2 d-flex';
+            div.className = 'form-group mb-2 d-flex align-items-center';
             
+            // Le champ contenant la proposition validée (envoyé au backend avec name="choices")
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'choices';
             input.className = 'form-control me-2';
-            input.placeholder = 'Proposition ' + choiceCount;
+            input.value = trimmedValue;
+            input.readOnly = true; // On empêche la modification directe de la liste
             input.required = true;
             
+            // Le bouton de suppression
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.className = 'btn btn-outline-danger';
             removeBtn.textContent = '❌';
             removeBtn.onclick = function() {
-                container.removeChild(div);
-                // On ne décrémente pas choiceCount pour garder les placeholders logiques
+                choicesList.removeChild(div);
             };
             
             div.appendChild(input);
             div.appendChild(removeBtn);
-            container.appendChild(div);
+            choicesList.appendChild(div);
+        }
+
+        // Ajout via le bouton
+        addBtn.addEventListener('click', function() {
+            addChoice(newChoiceInput.value);
+            newChoiceInput.value = ''; // On vide le champ après l'ajout
+            newChoiceInput.focus();
+        });
+
+        // Ajout via la touche Entrée dans le champ de texte
+        newChoiceInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Empêche la soumission accidentelle du formulaire principal
+                addChoice(newChoiceInput.value);
+                newChoiceInput.value = '';
+            }
         });
     });
 </script>
