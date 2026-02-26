@@ -140,6 +140,62 @@ class PollDetailView(LoginRequiredMixin, DetailView):
         context['is_finished'] = is_finished
         
         if is_finished:
+            # === Dépouillement avec la méthode de Condorcet ===
+            try:
+                votes = self.object.votes.all()
+                choices = list(self.object.choices.all())
+                choice_ids = [str(c.id) for c in choices]
+                
+                # Matrice des duels : duels[A][B] = nombre de fois où A est préféré à B
+                duels = {a: {b: 0 for b in choice_ids if b != a} for a in choice_ids}
+                
+                for vote in votes:
+                    if not vote.choices_order:
+                        continue
+                        
+                    # On convertit les IDs en chaîne de caractères par sécurité
+                    order = [str(choice_id) for choice_id in vote.choices_order]
+                    
+                    # On compare chaque paire de choix dans l'ordre de préférence du votant
+                    for i, a in enumerate(order):
+                        for b in order[i+1:]:
+                            if a in duels and b in duels[a]:
+                                duels[a][b] += 1
+                                
+                condorcet_winners = []
+                
+                # On détermine s'il y a un gagnant de Condorcet (quelqu'un qui gagne tous ses duels)
+                if votes.exists():
+                    for a in choice_ids:
+                        is_winner = True
+                        for b in choice_ids:
+                            if a != b:
+                                # A gagne contre B si A est strictement préféré à B plus de fois que B est préféré à A
+                                if duels[a][b] <= duels[b][a]:
+                                    is_winner = False
+                                    break
+                        if is_winner:
+                            winner_choice = next((c for c in choices if str(c.id) == a), None)
+                            if winner_choice:
+                                condorcet_winners.append(winner_choice)
+                
+                context['condorcet_winners'] = condorcet_winners
+                context['choices'] = choices
+                # On formate les duels pour le template : on associe les objets Choice directement
+                formatted_duels = {}
+                for a in choices:
+                    formatted_duels[a] = {}
+                    for b in choices:
+                        if a == b:
+                            formatted_duels[a][b] = "-"
+                        else:
+                            formatted_duels[a][b] = duels[str(a.id)][str(b.id)]
+                context['duels'] = formatted_duels
+                
+            except Exception as e:
+                context['condorcet_error'] = str(e)
+            # =================================================
+            
             return render(request, 'polls/poll_stripping.html', context)
         else:
             return render(request, 'polls/poll_voting.html', context)

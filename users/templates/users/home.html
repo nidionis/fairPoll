@@ -24,7 +24,16 @@
                 <li>
                     <a href="#">📊 Historique de mes scrutins</a>
                 </li>
-            </ul>
+                <li>
+                    <form action="{% url 'account_logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; text-decoration: underline;">
+                                🚪 Se déconnecter
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

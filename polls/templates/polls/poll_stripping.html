@@ -23,6 +23,51 @@
         {% endif %}
     </div>
 
+    {% if duels %}
+    <div class="mt-4">
+        <h5>⚔️ Matrice des duels (Résultats détaillés)</h5>
+        <p class="text-muted small">
+            Ce tableau se lit en ligne : la proposition de la ligne affronte la proposition de la colonne.
+            Le nombre indique combien de fois la proposition en ligne a été préférée à celle en colonne.
+        </p>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm table-striped text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-start">Propositions</th>
+                        {% for choice in choices %}
+                            <th>{{ choice.text }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row_choice, columns in duels.items %}
+                        <tr>
+                            <td class="text-start fw-bold">{{ row_choice.text }}</td>
+                            {% for col_choice in choices %}
+                                {% for key, value in columns.items %}
+                                    {% if key == col_choice %}
+                                        {% if value == "-" %}
+                                            <td class="bg-light text-muted">-</td>
+                                        {% elif value > duels|dictsort:col_choice.id|dictsort:row_choice.id %}
+                                            <td class="table-success fw-bold">{{ value }}</td>
+                                        {% elif value < duels|dictsort:col_choice.id|dictsort:row_choice.id %}
+                                            <td class="table-danger">{{ value }}</td>
+                                        {% else %}
+                                            <td class="table-warning">{{ value }}</td>
+                                        {% endif %}
+                                        <td>{{ value }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="mt-4">
         <h5>📜 Registre public des votes (Vérifiabilité)</h5>
         <p class="text-muted small">
