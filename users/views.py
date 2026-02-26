@@ -43,7 +43,7 @@ class HouseDetailView(LoginRequiredMixin, DetailView):
 class HouseCreateView(LoginRequiredMixin, CreateView):
     model = House
     template_name = 'users/house_form.html'
-    fields = ['name', 'users', 'parent_houses']  # On rajoute 'users' ici
+    fields = ['name', 'integration_poll_duration', 'users', 'parent_houses']
     success_url = reverse_lazy('house-list')
 
     def get_form(self, form_class=None):
@@ -68,9 +68,9 @@ class HouseCreateView(LoginRequiredMixin, CreateView):
 class HouseUpdateView(LoginRequiredMixin, UpdateView):
     model = House
     template_name = 'users/house_form.html'
-    fields = ['name', 'users', 'parent_houses']
+    fields = ['name', 'integration_poll_duration', 'users', 'parent_houses']
     success_url = reverse_lazy('house-list')
-    
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields['users'].widget = forms.CheckboxSelectMultiple()
