@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ house.name }}</h1>
+
+  <h2>Polls to do</h2>
+  {% if polls_to_do %}
+    <ul>
+      {% for p in polls_to_do %}
+        <li>{{ p }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No polls to do (yet).</p>
+  {% endif %}
+
+  <h2>Pending polls</h2>
+  {% if pending_polls %}
+    <ul>
+      {% for p in pending_polls %}
+        <li>{{ p }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No pending polls (yet).</p>
+  {% endif %}
+
+  <h2>Members</h2>
+  <ul>
+    {% for m in members %}
+      <li><a href="{% url 'users:user_homepage_by_id' m.id %}">{{ m.username }}</a></li>
+    {% empty %}
+      <li>No members found.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Archives</h2>
+  <p><a href="{{ archives_url }}">Passed polls (archives)</a></p>
+{% endblock %}:w

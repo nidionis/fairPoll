@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Houses</h1>
+
+  {% if user.is_authenticated %}
+    <p><a href="{% url 'houses:create_house' %}">Create a house</a></p>
+  {% endif %}
+
+  <h2>My homes</h2>
+  {% if my_homes %}
+    <ul>
+      {% for h in my_homes %}
+        <li><a href="{% url 'houses:house_homepage_by_id' h.id %}">{{ h.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No home yet.</p>
+  {% endif %}
+
+  <h2>Homes (the others)</h2>
+  {% if other_homes %}
+    <ul>
+      {% for h in other_homes %}
+        <li><a href="{% url 'houses:house_homepage_by_id' h.id %}">{{ h.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No other homes.</p>
+  {% endif %}
+{% endblock %}

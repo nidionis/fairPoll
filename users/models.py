@@ -10,8 +10,23 @@ class User(AbstractUser):
     lets us extend it later (roles, ticket bindings, etc.) without pain.
     """
 
-    # Example extension point (disabled for now):
-    # house = models.ForeignKey("houses.House", null=True, blank=True, on_delete=models.SET_NULL)
+    # Users belong to houses (membership).
+    house = models.ForeignKey(
+        "houses.House",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="members",
+    )
+
+    # Simple plan flag used for quota rules (free: 1/day, paid: 10/day).
+    PLAN_FREE = "free"
+    PLAN_PAID = "paid"
+    PLAN_CHOICES = [
+        (PLAN_FREE, "Free"),
+        (PLAN_PAID, "Paid"),
+    ]
+    plan = models.CharField(max_length=10, choices=PLAN_CHOICES, default=PLAN_FREE)
 
     def __str__(self) -> str:
         return self.get_username()
