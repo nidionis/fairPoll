@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+  <h1>Account</h1>
+
+  <ul>
+    <li><a href="{% url 'two_factor:profile' %}">2FA</a></li>
+    <li><a href="{% url 'account_logout' %}">Modify/Sign Out</a></li>
+  </ul>
+{% endblock %}
