@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block content %}
+  <h1>{% trans "Sign In" %}</h1>
+  <p>Choose your action:</p>
+  <ul>
+      <li><a href="{% url 'two_factor:login' %}">{% trans "Sign In" %}</a></li>
+      <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
+  </ul>
+{% endblock %}

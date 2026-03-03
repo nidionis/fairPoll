@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}FairPoll{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            {% if user.is_authenticated %}
+                | <a href="{% url 'two_factor:profile' %}">Profile (2FA)</a>
+                | <a href="{% url 'account_logout' %}">Logout</a>
+            {% else %}
+                | <a href="{% url 'two_factor:login' %}">Login</a>
+                | <a href="{% url 'account_signup' %}">Sign Up</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
