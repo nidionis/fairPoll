@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h1>User home</h1>
+
+  <ul>
+    <li><a href="{% url 'polls:polls_homepage' %}">Polls</a></li>
+    <li><a href="{% url 'houses:houses_homepage' %}">Houses</a></li>
+    <li><a href="{% url 'polls:quickpoll_create' %}">Quick poll</a></li>
+  </ul>
+{% endblock %}

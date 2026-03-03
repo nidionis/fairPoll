@@ -8,3 +8,7 @@ def index(request):
 
 def account(request):
     return render(request, "users/account.html")
+
+
+def homepage(request):
+    return render(request, "users/user_homepage.html")
