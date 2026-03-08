@@ -41,7 +41,7 @@ def quickpoll_create(request):
                 request,
                 f"Quick poll created successfully. Share this ID: {quickpoll.poll_id}",
             )
-            return redirect("polls:quickpoll_create")
+            return redirect("polls:quickpoll_voting_form", poll_id=quickpoll.poll_id)
     else:
         form = QuickPollCreateForm()
 

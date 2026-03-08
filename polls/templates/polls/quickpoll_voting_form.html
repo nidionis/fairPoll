@@ -4,6 +4,12 @@
 
 {% block content %}
   <h1>{{ poll.title }}</h1>
+  
+  <div style="background-color: #e9ecef; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ced4da;">
+    <strong>Quick Poll ID: <span style="font-family: monospace; font-size: 1.2em;">{{ poll.poll_id }}</span></strong><br>
+    <small>Share this ID with participants so they can join the poll.</small>
+  </div>
+
   <p>Use the Up and Down buttons to rank the propositions (your top choice at the top).</p>
 
   <form method="post" id="vote-form" onsubmit="prepareSubmission()">
