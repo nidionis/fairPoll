@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Quick Polls{% endblock %}
+
+{% block content %}
+    <h1>Quick Polls</h1>
+
+    <section>
+        <h2>Create a quick poll</h2>
+        <p>Create a quick poll with several propositions and share its ID.</p>
+        <p>
+            <a href="{% url 'polls:quickpoll_create' %}">Create a quick poll</a>
+        </p>
+    </section>
+
+    <section>
+        <h2>Participate in a quick poll</h2>
+        <p>Enter the 6-character ID to open a quick poll.</p>
+
+        <form method="post" action="{% url 'polls:quickpoll_join' %}">
+            {% csrf_token %}
+            {{ join_form.as_p }}
+            <button type="submit">Open quick poll</button>
+        </form>
+    </section>
+{% endblock %}

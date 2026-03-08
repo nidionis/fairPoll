@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Create a Quick Poll{% endblock %}
+
+{% block content %}
+    <h1>Create a Quick Poll</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create quick poll</button>
+    </form>
+
+    <p>
+        A quick poll gets a shareable ID, has a default deadline of 10 minutes,
+        and will later be removed after 24 hours.
+    </p>
+{% endblock %}
