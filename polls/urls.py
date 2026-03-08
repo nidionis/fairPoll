@@ -9,5 +9,5 @@ urlpatterns = [
     path("home/", views.quickpoll_homepage, name="quickpoll_homepage"),
     path("quickpoll/create/", views.quickpoll_create, name="quickpoll_create"),
     path("quickpoll/join/", views.quickpoll_join, name="quickpoll_join"),
-    path("quickpoll/<str:poll_id>/", views.quickpoll_detail, name="quickpoll_detail"),
+    path("quickpoll/<str:poll_id>/", views.quickpoll_voting_form, name="quickpoll_voting_form"),
 ]

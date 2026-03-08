@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from .forms import QuickPollCreateForm, QuickPollJoinForm
 from .models import QuickPoll, QuickPollProposition
@@ -62,8 +62,49 @@ def quickpoll_join(request):
         form.add_error("poll_id", "No quick poll was found with this ID.")
         return render(request, "polls/quickpoll_homepage.html", {"join_form": form})
 
-    return redirect("polls:quickpoll_detail", poll_id=poll_id)
+    return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
 
 
-def quickpoll_detail(request, poll_id):
-    return HttpResponse(f"quick poll participation page for {poll_id}")
+def quickpoll_voting_form(request, poll_id):
+    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
+
+    # Check if the poll is finished
+    if poll.is_finished():
+        messages.error(request, "This poll is already finished.")
+        return redirect("polls:quickpoll_homepage")
+
+    # Check if the client has already voted using session
+    voted_polls = request.session.get("voted_quickpolls", [])
+    if poll_id in voted_polls:
+        messages.error(request, "You have already voted in this poll.")
+        return redirect("polls:quickpoll_homepage")
+
+    propositions = poll.propositions.all()
+
+    if request.method == "POST":
+        ordered_ids_string = request.POST.get("ordered_propositions")
+        
+        if not ordered_ids_string:
+            messages.error(request, "Invalid vote data submitted.")
+            return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
+
+        # Parse the comma-separated string back into a list of IDs
+        ordered_ids = ordered_ids_string.split(",")
+        
+        # Here you would typically save the vote using the ordered_ids
+        # For now, we will just register that the user voted.
+        
+        poll.participants_voted_count += 1
+        poll.save()
+
+        voted_polls.append(poll_id)
+        request.session["voted_quickpolls"] = voted_polls
+        
+        messages.success(request, "Your vote has been successfully registered.")
+        return redirect("polls:quickpoll_homepage")
+
+    context = {
+        "poll": poll,
+        "propositions": propositions,
+    }
+    return render(request, "polls/quickpoll_voting_form.html", context)
