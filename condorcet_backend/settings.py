@@ -158,7 +158,8 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 
 # 2FA settings
 LOGIN_URL = 'two_factor:login'
-LOGIN_REDIRECT_URL = 'securisation:index'
+LOGIN_REDIRECT_URL = "users:user_homepage"
+LOGOUT_REDIRECT_URL = "home"
 
 # Email settings (for testing, use console backend)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
