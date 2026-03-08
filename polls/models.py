@@ -81,3 +81,19 @@ class QuickPollProposition(models.Model):
 
     def __str__(self) -> str:
         return self.text
+
+
+class QuickPollVote(models.Model):
+    poll = models.ForeignKey(
+        QuickPoll,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+    ordered_propositions_ids = models.CharField(max_length=1024)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_ordered_propositions(self):
+        return [int(pid) for pid in self.ordered_propositions_ids.split(',')]
+
+    def __str__(self) -> str:
+        return f"Vote for {self.poll.poll_id}"

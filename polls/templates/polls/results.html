@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Results: {{ poll.title }}{% endblock %}
+
+{% block content %}
+  <h1>Results: {{ poll.title }}</h1>
+  
+  <div style="background-color: #e9ecef; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ced4da;">
+    <strong>Quick Poll ID: <span style="font-family: monospace; font-size: 1.2em;">{{ poll.poll_id }}</span></strong><br>
+    <small>This poll is now finished.</small>
+  </div>
+
+  <h2>Statistics</h2>
+  <p>Total participants who voted: <strong>{{ total_votes }}</strong> / {{ poll.max_participants }}</p>
+
+  <h3>First Choice Rankings</h3>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+    <thead>
+      <tr style="background-color: #f8f9fa; text-align: left;">
+        <th style="padding: 10px; border: 1px solid #dee2e6;">Proposition</th>
+        <th style="padding: 10px; border: 1px solid #dee2e6;">First Choices</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stat in stats %}
+      <tr>
+        <td style="padding: 10px; border: 1px solid #dee2e6;">{{ stat.text }}</td>
+        <td style="padding: 10px; border: 1px solid #dee2e6;">{{ stat.first_choices }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top: 30px;">
+    <h3>Export Data</h3>
+    <p>Download the raw ballots containing the ordered choices to verify or calculate results using another method (e.g. Condorcet).</p>
+    <a href="{% url 'polls:download_ballots' poll.poll_id %}" 
+       style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+       Download counting_ballots.json
+    </a>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <a href="{% url 'polls:quickpoll_homepage' %}">← Back to Quick Polls</a>
+  </div>
+{% endblock %}
