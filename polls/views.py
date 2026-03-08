@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
-from .forms import QuickPollCreateForm, QuickPollJoinForm
-from .models import QuickPoll, QuickPollProposition, QuickPollVote
+from .forms import QuickPollCreateForm, QuickPollJoinForm, PollCreateForm
+from .models import QuickPoll, Poll, Proposition, Vote, Ticket, generate_poll_id
 
 
 def index(request):
@@ -173,3 +174,40 @@ def download_ballots(request, poll_id):
     response = JsonResponse(ballots, safe=False)
     response['Content-Disposition'] = f'attachment; filename="counting_ballots_{poll.poll_id}.json"'
     return response
+
+@login_required
+def poll_create(request, house_id):
+    from houses.models import House
+    house = get_object_or_404(House, id=house_id)
+    
+    if request.method == "POST":
+        form = PollCreateForm(request.POST)
+        if form.is_valid():
+            propositions = form.cleaned_data["propositions_text"]
+            
+            poll = form.save(commit=False)
+            poll.creator = request.user
+            poll.house = house
+            poll.save()
+
+            # Create Propositions
+            Proposition.objects.bulk_create([
+                Proposition(poll=poll, text=prop, position=idx)
+                for idx, prop in enumerate(propositions, start=1)
+            ])
+
+            # Generate Tickets if secured
+            if poll.is_ticket_secured:
+                member_count = house.members.count()
+                tickets = []
+                for _ in range(member_count):
+                    tickets.append(Ticket(poll=poll, code=generate_poll_id()))
+                Ticket.objects.bulk_create(tickets)
+
+            messages.success(request, f"Poll created! ID: {poll.poll_id}")
+            return redirect("polls:poll_detail", poll_id=poll.poll_id)
+    else:
+        # Default duration for normal poll is 20 min
+        form = PollCreateForm(initial={"duration_minutes": 20})
+
+    return render(request, "polls/poll_create.html", {"form": form, "house": house})

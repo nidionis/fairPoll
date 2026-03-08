@@ -7,38 +7,46 @@ from django.db import models
 from django.utils import timezone
 
 
-def generate_quickpoll_id(length: int = 6) -> str:
+def generate_poll_id(length: int = 6) -> str:
     alphabet = string.ascii_uppercase + string.digits
     while True:
         candidate = "".join(random.choices(alphabet, k=length))
-        if not QuickPoll.objects.filter(poll_id=candidate).exists():
+        # Ensure it's unique across both models
+        if not QuickPoll.objects.filter(poll_id=candidate).exists() and \
+           not Poll.objects.filter(poll_id=candidate).exists():
             return candidate
 
+generate_quickpoll_id = generate_poll_id
 
-def default_quickpoll_deadline():
-    return timezone.now() + timedelta(minutes=10)
+def default_poll_deadline(duration=10):
+    return timezone.now() + timedelta(minutes=duration)
 
 
-class QuickPoll(models.Model):
+# Alias for old migrations to prevent AttributeError
+default_quickpoll_deadline = default_poll_deadline
+
+
+class AbstractPoll(models.Model):
     poll_id = models.CharField(
         max_length=6,
         unique=True,
         editable=False,
-        default=generate_quickpoll_id,
+        default=generate_poll_id,
     )
     title = models.CharField(max_length=255)
-    max_participants = models.PositiveIntegerField()
     participants_voted_count = models.PositiveIntegerField(default=0)
-    duration_minutes = models.PositiveIntegerField(default=10)
+    duration_minutes = models.PositiveIntegerField(default=20)
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="created_quickpolls",
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    deadline_at = models.DateTimeField(default=default_quickpoll_deadline)
+    deadline_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
 
     def save(self, *args, **kwargs):
         if self.duration_minutes < 1:
@@ -47,53 +55,74 @@ class QuickPoll(models.Model):
         if self.deadline_at is None:
             base_time = self.created_at or timezone.now()
             self.deadline_at = base_time + timedelta(minutes=self.duration_minutes)
-
         elif self._state.adding:
             self.deadline_at = timezone.now() + timedelta(minutes=self.duration_minutes)
 
         super().save(*args, **kwargs)
 
     def is_finished(self) -> bool:
+        return timezone.now() >= self.deadline_at
+
+
+class QuickPoll(AbstractPoll):
+    max_participants = models.PositiveIntegerField()
+
+    def is_finished(self) -> bool:
         return (
             self.participants_voted_count >= self.max_participants
-            or timezone.now() >= self.deadline_at
+            or super().is_finished()
         )
 
-    def expires_at(self):
-        return self.created_at + timedelta(hours=24)
+    def __str__(self) -> str:
+        return f"QuickPoll: {self.title} ({self.poll_id})"
+
+
+class Poll(AbstractPoll):
+    house = models.ForeignKey(
+        "houses.House",
+        on_delete=models.CASCADE,
+        related_name="polls"
+    )
+    is_ticket_secured = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f"{self.title} ({self.poll_id})"
+        return f"Poll: {self.title} ({self.poll_id})"
 
 
-class QuickPollProposition(models.Model):
-    quickpoll = models.ForeignKey(
-        QuickPoll,
-        on_delete=models.CASCADE,
-        related_name="propositions",
-    )
+class Proposition(models.Model):
     text = models.CharField(max_length=255)
     position = models.PositiveIntegerField()
+    # Generic relations or separate foreign keys for factorization
+    quickpoll = models.ForeignKey(QuickPoll, null=True, blank=True, on_delete=models.CASCADE, related_name="propositions")
+    poll = models.ForeignKey(Poll, null=True, blank=True, on_delete=models.CASCADE, related_name="propositions")
 
     class Meta:
         ordering = ["position"]
-        unique_together = [("quickpoll", "position")]
 
     def __str__(self) -> str:
         return self.text
 
 
-class QuickPollVote(models.Model):
-    poll = models.ForeignKey(
-        QuickPoll,
-        on_delete=models.CASCADE,
-        related_name="votes",
-    )
+class Vote(models.Model):
+    # Depending on the vote type
+    quickpoll = models.ForeignKey(QuickPoll, null=True, blank=True, on_delete=models.CASCADE, related_name="votes")
+    poll = models.ForeignKey(Poll, null=True, blank=True, on_delete=models.CASCADE, related_name="votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    
     ordered_propositions_ids = models.CharField(max_length=1024)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_ordered_propositions(self):
         return [int(pid) for pid in self.ordered_propositions_ids.split(',')]
 
-    def __str__(self) -> str:
-        return f"Vote for {self.poll.poll_id}"
+
+class Ticket(models.Model):
+    """
+    Generated for ticket-secured polls.
+    """
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="tickets")
+    code = models.CharField(max_length=6, unique=True, editable=False)
+    is_used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.code
