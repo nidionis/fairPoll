@@ -14,4 +14,5 @@ urlpatterns = [
     path("quickpoll/<str:poll_id>/ballots/download/", views.download_ballots, name="download_ballots"),
     path("create/<int:house_id>/", views.poll_create, name="poll_create"),
     path("<str:poll_id>/", views.poll_voting_form, name="poll_voting_form"),
+    path("<str:poll_id>/tickets/download/", views.download_tickets, name="download_tickets"),
 ]

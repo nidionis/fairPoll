@@ -7,6 +7,13 @@
   
   <div style="background-color: #e9ecef; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ced4da;">
     <strong>Poll ID: <span style="font-family: monospace; font-size: 1.2em;">{{ poll.poll_id }}</span></strong><br>
+    {% if poll.is_ticket_secured and request.user == poll.creator %}
+      <div style="margin-top: 10px;">
+        <a href="{% url 'polls:download_tickets' poll.poll_id %}" style="padding: 5px 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 3px; display: inline-block;">
+          Download Tickets
+        </a>
+      </div>
+    {% endif %}
   </div>
 
   <p>Use the Up and Down buttons to rank the propositions (your top choice at the top).</p>

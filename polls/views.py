@@ -8,7 +8,16 @@ from .models import QuickPoll, Poll, Proposition, Vote, Ticket, generate_poll_id
 
 
 def index(request):
-    return render(request, "polls/homepage.html")
+    polls_to_do = []
+    if request.user.is_authenticated and request.user.house_id:
+        for poll in request.user.house.polls.all():
+            if not poll.is_finished():
+                if poll.is_ticket_secured:
+                    polls_to_do.append(poll)
+                elif not poll.votes.filter(user=request.user).exists():
+                    polls_to_do.append(poll)
+                    
+    return render(request, "polls/homepage.html", {"polls_to_do": polls_to_do})
 
 
 def quickpoll_homepage(request):
@@ -118,11 +127,18 @@ def quickpoll_voting_form(request, poll_id):
 
 
 def results(request, poll_id):
-    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
+    is_quickpoll = True
+    try:
+        poll = QuickPoll.objects.get(poll_id=poll_id)
+    except QuickPoll.DoesNotExist:
+        poll = get_object_or_404(Poll, poll_id=poll_id)
+        is_quickpoll = False
 
     if not poll.is_finished():
         messages.warning(request, "The poll is not finished yet.")
-        return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
+        if is_quickpoll:
+            return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
+        return redirect("polls:poll_voting_form", poll_id=poll_id)
 
     propositions = poll.propositions.all()
     votes = poll.votes.all()
@@ -211,6 +227,31 @@ def poll_create(request, house_id):
         form = PollCreateForm(initial={"duration_minutes": 20})
 
     return render(request, "polls/poll_create.html", {"form": form, "house": house})
+
+
+@login_required
+def download_tickets(request, poll_id):
+    poll = get_object_or_404(Poll, poll_id=poll_id)
+    
+    if request.user != poll.creator:
+        return JsonResponse({"error": "Only the poll creator can download tickets."}, status=403)
+        
+    if not poll.is_ticket_secured:
+        return JsonResponse({"error": "This poll does not use tickets."}, status=400)
+        
+    tickets = poll.tickets.all()
+    
+    # Generate simple readable text file for printing / sharing
+    content = f"Tickets for Poll: {poll.title} (ID: {poll.poll_id})\n"
+    content += "=" * 40 + "\n\n"
+    
+    for i, ticket in enumerate(tickets, 1):
+        content += f"{ticket.code}\n"
+        
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="tickets_{poll.poll_id}.txt"'
+    
+    return response
 
 
 def poll_voting_form(request, poll_id):

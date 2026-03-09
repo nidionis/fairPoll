@@ -50,6 +50,17 @@ def house_homepage(request):
 
     polls_to_do = []
     pending_polls = []
+    
+    for poll in house.polls.all():
+        if not poll.is_finished():
+            if poll.is_ticket_secured:
+                polls_to_do.append(poll)
+            else:
+                if poll.votes.filter(user=request.user).exists():
+                    pending_polls.append(poll)
+                else:
+                    polls_to_do.append(poll)
+
     members = house.members.all().order_by("username")
 
     return render(
@@ -74,6 +85,17 @@ def house_homepage_by_id(request, house_id: int):
 
     polls_to_do = []
     pending_polls = []
+    
+    for poll in house.polls.all():
+        if not poll.is_finished():
+            if poll.is_ticket_secured:
+                polls_to_do.append(poll)
+            else:
+                if request.user.is_authenticated and poll.votes.filter(user=request.user).exists():
+                    pending_polls.append(poll)
+                else:
+                    polls_to_do.append(poll)
+
     members = house.members.all().order_by("username")
 
     return render(

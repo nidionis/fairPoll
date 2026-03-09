@@ -12,7 +12,7 @@
   {% if polls_to_do %}
     <ul>
       {% for p in polls_to_do %}
-        <li>{{ p }}</li>
+        <li><a href="{% url 'polls:poll_voting_form' p.poll_id %}">{{ p.title }}</a></li>
       {% endfor %}
     </ul>
   {% else %}
@@ -23,7 +23,7 @@
   {% if pending_polls %}
     <ul>
       {% for p in pending_polls %}
-        <li>{{ p }}</li>
+        <li><a href="{% url 'polls:poll_voting_form' p.poll_id %}">{{ p.title }}</a></li>
       {% endfor %}
     </ul>
   {% else %}

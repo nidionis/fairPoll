@@ -85,6 +85,12 @@ class Poll(AbstractPoll):
     )
     is_ticket_secured = models.BooleanField(default=False)
 
+    def is_finished(self) -> bool:
+        return (
+            self.participants_voted_count >= self.house.members.count()
+            or super().is_finished()
+        )
+
     def __str__(self) -> str:
         return f"Poll: {self.title} ({self.poll_id})"
 
