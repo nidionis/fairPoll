@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Vote: {{ poll.title }}{% endblock %}
+
+{% block content %}
+  <h1>{{ poll.title }}</h1>
+  
+  <div style="background-color: #e9ecef; padding: 10px 15px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ced4da;">
+    <strong>Poll ID: <span style="font-family: monospace; font-size: 1.2em;">{{ poll.poll_id }}</span></strong><br>
+  </div>
+
+  <p>Use the Up and Down buttons to rank the propositions (your top choice at the top).</p>
+
+  <form method="post" id="vote-form" onsubmit="prepareSubmission()">
+    {% csrf_token %}
+    
+    <ul id="proposition-list" style="list-style-type: none; padding: 0;">
+      {% for proposition in propositions %}
+        <li data-id="{{ proposition.id }}" style="padding: 10px; margin: 5px; background: #eee; border: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center;">
+          <span>{{ proposition.text }}</span>
+          <div>
+            <button type="button" onclick="moveUp(this)">↑ Up</button>
+            <button type="button" onclick="moveDown(this)">↓ Down</button>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <!-- This hidden input will hold the ordered list of proposition IDs -->
+    <input type="hidden" name="ordered_propositions" id="ordered_propositions">
+
+    <!-- Conditionally show the ticket input -->
+    {% if poll.is_ticket_secured %}
+        <div class="form-group" style="margin-top: 15px;">
+            <label for="ticket_code"><strong>Enter your Ticket Code:</strong></label>
+            <input type="text" name="ticket_code" id="ticket_code" required>
+        </div>
+    {% endif %}
+
+    <button type="submit" style="margin-top: 15px;">Submit Vote</button>
+  </form>
+
+  <script>
+    function moveUp(button) {
+      const li = button.closest('li');
+      const prevLi = li.previousElementSibling;
+      if (prevLi) {
+        li.parentNode.insertBefore(li, prevLi);
+      }
+    }
+
+    function moveDown(button) {
+      const li = button.closest('li');
+      const nextLi = li.nextElementSibling;
+      if (nextLi) {
+        li.parentNode.insertBefore(nextLi, li);
+      }
+    }
+
+    function prepareSubmission() {
+      const listItems = document.querySelectorAll('#proposition-list li');
+      const orderedIds = Array.from(listItems).map(li => li.getAttribute('data-id'));
+      document.getElementById('ordered_propositions').value = orderedIds.join(',');
+    }
+  </script>
+{% endblock %}

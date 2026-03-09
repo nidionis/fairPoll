@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Polls{% endblock %}
 
 {% block content %}
-  <h1>User home</h1>
-
-  <ul>
-    <li><a href="{% url 'polls:polls_homepage' %}">Polls</a></li>
-    <li><a href="{% url 'houses:houses_homepage' %}">Houses</a></li>
-    <li><a href="{% url 'polls:quickpolls_homepage' %}">Quick poll</a></li>
-  </ul>
+  <h1>Polls</h1>
+  
+  <p>Regular polls must belong to a House.</p>
+  <p>
+    To <strong>create</strong> or view regular polls, please go to your 
+    <a href="{% url 'houses:houses_homepage' %}">Houses list</a> and select a specific house.
+  </p>
+  
+  <p>
+    Alternatively, you can create a <a href="{% url 'polls:quickpoll_homepage' %}">Quick Poll</a> that doesn't require a house.
+  </p>
 {% endblock %}

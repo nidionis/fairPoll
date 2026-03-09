@@ -3,6 +3,11 @@
 {% block content %}
   <h1>{{ house.name }}</h1>
 
+  <p>
+    <a href="{% url 'polls:poll_create' house.id %}">Create a new Poll in {{ house.name }}</a>
+  </p>
+
+
   <h2>Polls to do</h2>
   {% if polls_to_do %}
     <ul>

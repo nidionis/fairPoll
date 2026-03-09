@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Create a Poll in {{ house.name }}{% endblock %}
+
+{% block content %}
+    <h1>Create a Poll in {{ house.name }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create poll</button>
+    </form>
+
+    <p>
+        A poll gets a shareable ID and can be secured with tickets.
+    </p>
+{% endblock %}

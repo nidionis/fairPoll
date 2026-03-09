@@ -1,14 +1,14 @@
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import QuickPollCreateForm, QuickPollJoinForm, PollCreateForm
 from .models import QuickPoll, Poll, Proposition, Vote, Ticket, generate_poll_id
 
 
 def index(request):
-    return HttpResponse("polls: ok")
+    return render(request, "polls/homepage.html")
 
 
 def quickpoll_homepage(request):
@@ -27,9 +27,9 @@ def quickpoll_create(request):
                 quickpoll.creator = request.user
             quickpoll.save()
 
-            QuickPollProposition.objects.bulk_create(
+            Proposition.objects.bulk_create(
                 [
-                    QuickPollProposition(
+                    Proposition(
                         quickpoll=quickpoll,
                         text=proposition,
                         position=index,
@@ -93,8 +93,8 @@ def quickpoll_voting_form(request, poll_id):
         ordered_ids = ordered_ids_string.split(",")
         
         # Save the vote
-        QuickPollVote.objects.create(
-            poll=poll,
+        Vote.objects.create(
+            quickpoll=poll,
             ordered_propositions_ids=ordered_ids_string
         )
         
@@ -205,9 +205,90 @@ def poll_create(request, house_id):
                 Ticket.objects.bulk_create(tickets)
 
             messages.success(request, f"Poll created! ID: {poll.poll_id}")
-            return redirect("polls:poll_detail", poll_id=poll.poll_id)
+            return redirect("polls:poll_voting_form", poll_id=poll.poll_id)
     else:
         # Default duration for normal poll is 20 min
         form = PollCreateForm(initial={"duration_minutes": 20})
 
     return render(request, "polls/poll_create.html", {"form": form, "house": house})
+
+
+def poll_voting_form(request, poll_id):
+    poll = get_object_or_404(Poll, poll_id=poll_id)
+
+    # 1. Check if the poll is finished
+    if poll.is_finished():
+        messages.info(request, "This poll is finished.")
+        return redirect("polls:results", poll_id=poll_id)
+
+    # 2. Security Checks
+    if not poll.is_ticket_secured:
+        # --- Connection Secured ---
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to vote in this poll.")
+            # Redirect to login page, optionally passing the current URL as 'next'
+            return redirect(f"/account/login/?next={request.path}")
+        
+        # Check if user already voted
+        if Vote.objects.filter(poll=poll, user=request.user).exists():
+            messages.error(request, "You have already voted in this poll.")
+            return redirect("polls:index") # Adjust redirect as needed
+    
+    propositions = poll.propositions.all()
+
+    # 3. Handle the Vote Submission
+    if request.method == "POST":
+        ordered_ids_string = request.POST.get("ordered_propositions")
+        
+        if not ordered_ids_string:
+            messages.error(request, "Invalid vote data submitted.")
+            return redirect("polls:poll_voting_form", poll_id=poll_id)
+
+        # If it's ticket secured, validate the ticket provided in the form
+        ticket_code = request.POST.get("ticket_code")
+        used_ticket = None
+        
+        if poll.is_ticket_secured:
+            if not ticket_code:
+                messages.error(request, "A ticket code is required for this poll.")
+                return redirect("polls:poll_voting_form", poll_id=poll_id)
+            
+            try:
+                # Find the ticket for this specific poll
+                used_ticket = Ticket.objects.get(poll=poll, code=ticket_code)
+                if used_ticket.is_used:
+                    messages.error(request, "This ticket has already been used.")
+                    return redirect("polls:poll_voting_form", poll_id=poll_id)
+            except Ticket.DoesNotExist:
+                messages.error(request, "Invalid ticket code.")
+                return redirect("polls:poll_voting_form", poll_id=poll_id)
+
+        # Save the vote
+        vote = Vote(
+            poll=poll,
+            ordered_propositions_ids=ordered_ids_string
+        )
+        
+        # Attach the user if it's connection-secured
+        if not poll.is_ticket_secured:
+            vote.user = request.user
+            
+        vote.save()
+
+        # Mark ticket as used if applicable
+        if used_ticket:
+            used_ticket.is_used = True
+            used_ticket.save()
+
+        # Update poll count
+        poll.participants_voted_count += 1
+        poll.save()
+    
+        messages.success(request, "Your vote has been successfully registered.")
+        return redirect("polls:index") # Adjust redirect as needed
+
+    context = {
+        "poll": poll,
+        "propositions": propositions,
+    }
+    return render(request, "polls/poll_voting_form.html", context)
