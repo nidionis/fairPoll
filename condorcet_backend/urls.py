@@ -19,5 +19,4 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("houses/", include("houses.urls")),
     path("polls/", include("polls.urls")),
-    path("securisation/", include("securisation.urls")),
 ]

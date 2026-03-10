@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 
 from .forms import HouseCreateForm
@@ -71,7 +72,7 @@ def house_homepage(request):
             "polls_to_do": polls_to_do,
             "pending_polls": pending_polls,
             "members": members,
-            "archives_url": "#",
+            "archives_url": reverse("houses:house_archives", args=[house.id]),
         },
     )
 
@@ -106,7 +107,27 @@ def house_homepage_by_id(request, house_id: int):
             "polls_to_do": polls_to_do,
             "pending_polls": pending_polls,
             "members": members,
-            "archives_url": "#",
+            "archives_url": reverse("houses:house_archives", args=[house.id]),
+        },
+    )
+
+
+@login_required
+def house_archives(request, house_id: int):
+    """
+    House archives (for finished polls).
+    """
+    house = get_object_or_404(House, id=house_id)
+    
+    # Filter the polls that are finished
+    finished_polls = [poll for poll in house.polls.all() if poll.is_finished()]
+    
+    return render(
+        request,
+        "houses/house_archives.html",
+        {
+            "house": house,
+            "finished_polls": finished_polls,
         },
     )
 

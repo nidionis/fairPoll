@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ house.name }} - Archives</h1>
+
+  <p><a href="{% url 'houses:house_homepage_by_id' house.id %}">Back to House</a></p>
+
+  <h2>Finished polls</h2>
+  {% if finished_polls %}
+    <ul>
+      {% for p in finished_polls %}
+        <li><a href="{% url 'polls:results' p.poll_id %}">{{ p.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No finished polls yet.</p>
+  {% endif %}
+{% endblock %}

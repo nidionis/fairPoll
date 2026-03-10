@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     "users",
     "houses",
     "polls",
-    "securisation",
 ]
 
 MIDDLEWARE = [

@@ -171,7 +171,10 @@ def results(request, poll_id):
 
 
 def download_ballots(request, poll_id):
-    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
+    try:
+        poll = QuickPoll.objects.get(poll_id=poll_id)
+    except QuickPoll.DoesNotExist:
+        poll = get_object_or_404(Poll, poll_id=poll_id)
 
     if not poll.is_finished():
         return JsonResponse({"error": "Poll is not finished yet."}, status=403)
