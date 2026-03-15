@@ -1,0 +1,7 @@
+Django==5.2.11
+django-allauth
+django-otp
+django-two-factor-auth
+gunicorn
+qrcode
+pillow

@@ -6,6 +6,10 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.mail import send_mail
+
 
 def generate_poll_id(length: int = 6) -> str:
     alphabet = string.ascii_uppercase + string.digits
@@ -132,3 +136,14 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.code
+
+@receiver(post_save, sender=Poll)
+def notify_house_members(sender, instance, created, **kwargs):
+    if created:
+        house = instance.house
+        subject = f'New Poll in {house.name}: {instance.title}'
+        message = 'A new poll has been created in your house. Please check it out and vote!'
+        from_email = settings.DEFAULT_FROM_EMAIL  # Ensure this is configured in settings.py
+        for member in house.members.all():
+            if member.email:  # Check if email exists
+                send_mail(subject, message, from_email, [member.email], fail_silently=True)
