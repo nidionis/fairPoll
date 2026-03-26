@@ -1,338 +1,146 @@
-from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.db import models
+from .models import HousePoll, QuickPoll, Ticket, Ballot
+from .forms import HousePollForm, QuickPollForm, VoteForm
+from houses.models import House
 
-from .forms import QuickPollCreateForm, QuickPollJoinForm, PollCreateForm
-from .models import QuickPoll, Poll, Proposition, Vote, Ticket, generate_poll_id
+def house_poll_create(request, house_pk):
+    house = get_object_or_404(House, pk=house_pk)
+    if request.method == 'POST':
+        form = HousePollForm(request.POST)
+        if form.is_valid():
+            poll = form.save(house=house, creator=request.user)
+            messages.success(request, f"Poll {poll.question} created.")
+            return redirect('polls:house_poll_detail', pk=poll.pk)
+    else:
+        form = HousePollForm()
+    return render(request, 'polls/house_poll_form.html', {'form': form, 'house': house})
 
+def house_poll_detail(request, pk):
+    poll = get_object_or_404(HousePoll, pk=pk)
+    return render(request, 'polls/house_poll_detail.html', {'poll': poll})
 
-def index(request):
-    polls_to_do = []
-    if request.user.is_authenticated and request.user.house_id:
-        for poll in request.user.house.polls.all():
-            if not poll.is_finished():
-                if poll.is_ticket_secured:
-                    polls_to_do.append(poll)
-                elif not poll.votes.filter(user=request.user).exists():
-                    polls_to_do.append(poll)
-                    
-    return render(request, "polls/homepage.html", {"polls_to_do": polls_to_do})
+def house_poll_vote(request, pk):
+    poll = get_object_or_404(HousePoll, pk=pk)
+    if poll.is_finished:
+        messages.error(request, "Poll is closed.")
+        return redirect('polls:house_poll_results', pk=pk)
+        
+    if request.method == 'POST':
+        form = VoteForm(request.POST, poll=poll)
+        if form.is_valid():
+            try:
+                poll.save_ballot(
+                    choices=form.get_ranked_choices(),
+                    user=request.user,
+                    ticket_code=form.cleaned_data.get('ticket_code')
+                )
+                messages.success(request, "Vote cast successfully!")
+                return redirect('polls:house_poll_detail', pk=pk)
+            except ValueError as e:
+                messages.error(request, str(e))
+    else:
+        form = VoteForm(poll=poll)
+    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
 
+def house_poll_results(request, pk):
+    poll = get_object_or_404(HousePoll, pk=pk)
+    if not poll.is_finished:
+         messages.info(request, "Poll is still in progress. Check back later.")
+    
+    stats = {}
+    for ballot in poll.ballots.all():
+        # Find choices with the best (minimum) rank in this ballot
+        if isinstance(ballot.choices, dict):
+             best_rank = min(ballot.choices.values()) if ballot.choices else None
+             if best_rank is not None:
+                 for choice, rank in ballot.choices.items():
+                     if rank == best_rank:
+                         stats[choice] = stats.get(choice, 0) + 1
+                         
+    return render(request, 'polls/poll_results.html', {'poll': poll, 'stats': stats})
 
-def quickpoll_homepage(request):
-    join_form = QuickPollJoinForm()
-    return render(request, "polls/quickpoll_homepage.html", {"join_form": join_form})
+def house_poll_export(request, pk):
+    poll = get_object_or_404(HousePoll, pk=pk)
+    if not poll.is_finished:
+        return HttpResponse("Poll is not finished.", status=403)
+    results = poll.get_results_json()
+    response = HttpResponse(results, content_type='application/json')
+    response['Content-Disposition'] = f'attachment; filename="house_poll_{pk}_results.json"'
+    return response
 
+# QuickPolls
 
 def quickpoll_create(request):
-    if request.method == "POST":
-        form = QuickPollCreateForm(request.POST)
+    if request.method == 'POST':
+        form = QuickPollForm(request.POST)
         if form.is_valid():
-            propositions = form.cleaned_data["propositions_text"]
-
-            quickpoll = form.save(commit=False)
-            if request.user.is_authenticated:
-                quickpoll.creator = request.user
-            quickpoll.save()
-
-            Proposition.objects.bulk_create(
-                [
-                    Proposition(
-                        quickpoll=quickpoll,
-                        text=proposition,
-                        position=index,
-                    )
-                    for index, proposition in enumerate(propositions, start=1)
-                ]
-            )
-
-            messages.success(
-                request,
-                f"Quick poll created successfully. Share this ID: {quickpoll.poll_id}",
-            )
-            return redirect("polls:quickpoll_voting_form", poll_id=quickpoll.poll_id)
-    else:
-        form = QuickPollCreateForm()
-
-    return render(request, "polls/quickpoll_create.html", {"form": form})
-
-
-def quickpoll_join(request):
-    if request.method != "POST":
-        return redirect("polls:quickpoll_homepage")
-
-    form = QuickPollJoinForm(request.POST)
-    if not form.is_valid():
-        return render(request, "polls/quickpoll_homepage.html", {"join_form": form})
-
-    poll_id = form.cleaned_data["poll_id"]
-
-    if not QuickPoll.objects.filter(poll_id=poll_id).exists():
-        form.add_error("poll_id", "No quick poll was found with this ID.")
-        return render(request, "polls/quickpoll_homepage.html", {"join_form": form})
-
-    return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
-
-
-def quickpoll_voting_form(request, poll_id):
-    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
-
-    # Check if the poll is finished
-    if poll.is_finished():
-        messages.info(request, "This poll is finished. Here are the results.")
-        return redirect("polls:results", poll_id=poll_id)
-
-    # Check if the client has already voted using session
-    voted_polls = request.session.get("voted_quickpolls", [])
-    if poll_id in voted_polls:
-        messages.error(request, "You have already voted in this poll.")
-        return redirect("polls:quickpoll_homepage")
-
-    propositions = poll.propositions.all()
-
-    if request.method == "POST":
-        ordered_ids_string = request.POST.get("ordered_propositions")
-        
-        if not ordered_ids_string:
-            messages.error(request, "Invalid vote data submitted.")
-            return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
-
-        # Parse the comma-separated string back into a list of IDs
-        ordered_ids = ordered_ids_string.split(",")
-        
-        # Save the vote
-        Vote.objects.create(
-            quickpoll=poll,
-            ordered_propositions_ids=ordered_ids_string
-        )
-        
-        poll.participants_voted_count += 1
-        poll.save()
-
-        voted_polls.append(poll_id)
-        request.session["voted_quickpolls"] = voted_polls
-        
-        messages.success(request, "Your vote has been successfully registered.")
-        
-        if poll.is_finished():
-            return redirect("polls:results", poll_id=poll_id)
-        return redirect("polls:quickpoll_homepage")
-
-    context = {
-        "poll": poll,
-        "propositions": propositions,
-    }
-    return render(request, "polls/quickpoll_voting_form.html", context)
-
-
-def results(request, poll_id):
-    is_quickpoll = True
-    try:
-        poll = QuickPoll.objects.get(poll_id=poll_id)
-    except QuickPoll.DoesNotExist:
-        poll = get_object_or_404(Poll, poll_id=poll_id)
-        is_quickpoll = False
-
-    if not poll.is_finished():
-        messages.warning(request, "The poll is not finished yet.")
-        if is_quickpoll:
-            return redirect("polls:quickpoll_voting_form", poll_id=poll_id)
-        return redirect("polls:poll_voting_form", poll_id=poll_id)
-
-    propositions = poll.propositions.all()
-    votes = poll.votes.all()
-
-    # Simple statistics: Count first choices
-    first_choice_counts = {prop.id: 0 for prop in propositions}
-    for vote in votes:
-        ordered_ids = vote.get_ordered_propositions()
-        if ordered_ids:
-            first_choice = ordered_ids[0]
-            if first_choice in first_choice_counts:
-                first_choice_counts[first_choice] += 1
-
-    # Attach stats to propositions
-    stats = []
-    for prop in propositions:
-        stats.append({
-            "text": prop.text,
-            "first_choices": first_choice_counts[prop.id]
-        })
-        
-    stats.sort(key=lambda x: x["first_choices"], reverse=True)
-
-    context = {
-        "poll": poll,
-        "stats": stats,
-        "total_votes": votes.count(),
-    }
-    return render(request, "polls/results.html", context)
-
-
-def download_ballots(request, poll_id):
-    try:
-        poll = QuickPoll.objects.get(poll_id=poll_id)
-    except QuickPoll.DoesNotExist:
-        poll = get_object_or_404(Poll, poll_id=poll_id)
-
-    if not poll.is_finished():
-        return JsonResponse({"error": "Poll is not finished yet."}, status=403)
-
-    votes = poll.votes.all()
-    propositions_dict = {prop.id: prop.text for prop in poll.propositions.all()}
-    ballots = []
-
-    for vote in votes:
-        readable_vote = [propositions_dict.get(pid, str(pid)) for pid in vote.get_ordered_propositions()]
-        ballots.append({
-            "secret_ID": "none",
-            "vote": readable_vote
-        })
-
-    response = JsonResponse(ballots, safe=False)
-    response['Content-Disposition'] = f'attachment; filename="counting_ballots_{poll.poll_id}.json"'
-    return response
-
-@login_required
-def poll_create(request, house_id):
-    from houses.models import House
-    house = get_object_or_404(House, id=house_id)
-    
-    if request.method == "POST":
-        form = PollCreateForm(request.POST)
-        if form.is_valid():
-            propositions = form.cleaned_data["propositions_text"]
-            
             poll = form.save(commit=False)
-            poll.creator = request.user
-            poll.house = house
+            poll.options = form.cleaned_data['options_text']
+            if request.user.is_authenticated:
+                poll.owner = request.user
             poll.save()
-
-            # Create Propositions
-            Proposition.objects.bulk_create([
-                Proposition(poll=poll, text=prop, position=idx)
-                for idx, prop in enumerate(propositions, start=1)
-            ])
-
-            # Generate Tickets if secured
-            if poll.is_ticket_secured:
-                member_count = house.members.count()
-                tickets = []
-                for _ in range(member_count):
-                    tickets.append(Ticket(poll=poll, code=generate_poll_id()))
-                Ticket.objects.bulk_create(tickets)
-
-            messages.success(request, f"Poll created! ID: {poll.poll_id}")
-            return redirect("polls:poll_voting_form", poll_id=poll.poll_id)
+            messages.success(request, f"QuickPoll created. ID: {poll.external_id}")
+            return redirect('polls:quickpoll_detail', external_id=poll.external_id)
     else:
-        # Default duration for normal poll is 20 min
-        form = PollCreateForm(initial={"duration_minutes": 20})
+        form = QuickPollForm()
+    return render(request, 'polls/quickpoll_form.html', {'form': form})
 
-    return render(request, "polls/poll_create.html", {"form": form, "house": house})
+def quickpoll_detail(request, external_id):
+    poll = get_object_or_404(QuickPoll, external_id=external_id)
+    return render(request, 'polls/quickpoll_detail.html', {'poll': poll})
 
+def quickpoll_vote(request, external_id):
+    poll = get_object_or_404(QuickPoll, external_id=external_id)
+    if poll.is_finished:
+        messages.error(request, "Poll is closed.")
+        return redirect('polls:quickpoll_results', external_id=external_id)
+        
+    if request.method == 'POST':
+        form = VoteForm(request.POST, poll=poll)
+        if form.is_valid():
+            try:
+                poll.save_ballot(
+                    choices=form.get_ranked_choices(),
+                    user=request.user if request.user.is_authenticated else None,
+                    ticket_code=form.cleaned_data.get('ticket_code')
+                )
+                messages.success(request, "Vote cast successfully!")
+                return redirect('polls:quickpoll_detail', external_id=external_id)
+            except ValueError as e:
+                messages.error(request, str(e))
+    else:
+        form = VoteForm(poll=poll)
+    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
 
-@login_required
-def download_tickets(request, poll_id):
-    poll = get_object_or_404(Poll, poll_id=poll_id)
-    
-    if request.user != poll.creator:
-        return JsonResponse({"error": "Only the poll creator can download tickets."}, status=403)
-        
-    if not poll.is_ticket_secured:
-        return JsonResponse({"error": "This poll does not use tickets."}, status=400)
-        
-    tickets = poll.tickets.all()
-    
-    # Generate simple readable text file for printing / sharing
-    content = f"Tickets for Poll: {poll.title} (ID: {poll.poll_id})\n"
-    content += "=" * 40 + "\n\n"
-    
-    for i, ticket in enumerate(tickets, 1):
-        content += f"{ticket.code}\n"
-        
-    response = HttpResponse(content, content_type='text/plain')
-    response['Content-Disposition'] = f'attachment; filename="tickets_{poll.poll_id}.txt"'
-    
+def quickpoll_results(request, external_id):
+    poll = get_object_or_404(QuickPoll, external_id=external_id)
+    stats = {}
+    for ballot in poll.ballots.all():
+        if isinstance(ballot.choices, dict):
+            best_rank = min(ballot.choices.values()) if ballot.choices else None
+            if best_rank is not None:
+                for choice, rank in ballot.choices.items():
+                    if rank == best_rank:
+                        stats[choice] = stats.get(choice, 0) + 1
+    return render(request, 'polls/poll_results.html', {'poll': poll, 'stats': stats})
+
+def quickpoll_export(request, external_id):
+    poll = get_object_or_404(QuickPoll, external_id=external_id)
+    if not poll.is_finished:
+        return HttpResponse("Poll is not finished.", status=403)
+    results = poll.get_results_json()
+    response = HttpResponse(results, content_type='application/json')
+    response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_results.json"'
     return response
 
-
-def poll_voting_form(request, poll_id):
-    poll = get_object_or_404(Poll, poll_id=poll_id)
-
-    # 1. Check if the poll is finished
-    if poll.is_finished():
-        messages.info(request, "This poll is finished.")
-        return redirect("polls:results", poll_id=poll_id)
-
-    # 2. Security Checks
-    if not poll.is_ticket_secured:
-        # --- Connection Secured ---
-        if not request.user.is_authenticated:
-            messages.error(request, "You must be logged in to vote in this poll.")
-            # Redirect to login page, optionally passing the current URL as 'next'
-            return redirect(f"/account/login/?next={request.path}")
-        
-        # Check if user already voted
-        if Vote.objects.filter(poll=poll, user=request.user).exists():
-            messages.error(request, "You have already voted in this poll.")
-            return redirect("polls:index") # Adjust redirect as needed
-    
-    propositions = poll.propositions.all()
-
-    # 3. Handle the Vote Submission
-    if request.method == "POST":
-        ordered_ids_string = request.POST.get("ordered_propositions")
-        
-        if not ordered_ids_string:
-            messages.error(request, "Invalid vote data submitted.")
-            return redirect("polls:poll_voting_form", poll_id=poll_id)
-
-        # If it's ticket secured, validate the ticket provided in the form
-        ticket_code = request.POST.get("ticket_code")
-        used_ticket = None
-        
-        if poll.is_ticket_secured:
-            if not ticket_code:
-                messages.error(request, "A ticket code is required for this poll.")
-                return redirect("polls:poll_voting_form", poll_id=poll_id)
-            
-            try:
-                # Find the ticket for this specific poll
-                used_ticket = Ticket.objects.get(poll=poll, code=ticket_code)
-                if used_ticket.is_used:
-                    messages.error(request, "This ticket has already been used.")
-                    return redirect("polls:poll_voting_form", poll_id=poll_id)
-            except Ticket.DoesNotExist:
-                messages.error(request, "Invalid ticket code.")
-                return redirect("polls:poll_voting_form", poll_id=poll_id)
-
-        # Save the vote
-        vote = Vote(
-            poll=poll,
-            ordered_propositions_ids=ordered_ids_string
-        )
-        
-        # Attach the user if it's connection-secured
-        if not poll.is_ticket_secured:
-            vote.user = request.user
-            
-        vote.save()
-
-        # Mark ticket as used if applicable
-        if used_ticket:
-            used_ticket.is_used = True
-            used_ticket.save()
-
-        # Update poll count
-        poll.participants_voted_count += 1
-        poll.save()
-    
-        messages.success(request, "Your vote has been successfully registered.")
-        return redirect("polls:index") # Adjust redirect as needed
-
-    context = {
-        "poll": poll,
-        "propositions": propositions,
-    }
-    return render(request, "polls/poll_voting_form.html", context)
+def quickpoll_archive(request):
+    # Wait, queryset for is_finished is hard to do directly in filter for properties.
+    # Let's just grab all and filter in python for now or use annotation if needed.
+    all_polls = QuickPoll.objects.all().order_by('-dead_line')
+    finished_polls = [p for p in all_polls if p.is_finished]
+    return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})

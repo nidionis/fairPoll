@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Vote: {{ poll.question }}</h2>
+<p>Please rank the choices (lower number = higher preference). If two choices have the same rank, they are considered equal in your preference.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% if poll.is_ticket_secured %}
+        <div class="alert alert-warning">
+            This poll is ticket secured. Please enter your 8-character ticket code.
+        </div>
+        <p>{{ form.ticket_code.label_tag }} {{ form.ticket_code }}</p>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Option</th>
+                <th>Rank</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for field in form %}
+                {% if field.name != "ticket_code" %}
+                    <tr>
+                        <td>{{ field.label }}</td>
+                        <td>{{ field }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Cast Vote</button>
+</form>
+{% endblock %}

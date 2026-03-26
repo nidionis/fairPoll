@@ -4,8 +4,12 @@
 
 {% block content %}
   <ul>
-    <li><a href="{% url 'polls:index' %}">Polls</a></li>
-    <li><a href="{% url 'houses:houses_homepage' %}">Houses</a></li>
-    <li><a href="{% url 'polls:quickpoll_homepage' %}">Quick poll</a></li>
+    <li><a href="{% url 'houses:house_list' %}">Houses</a></li>
+    <li><a href="{% url 'polls:quickpoll_archive' %}">Quick Polls</a></li>
+    {% if user.house %}
+      <li><a href="{% url 'houses:house_detail' user.house.pk %}">My House ({{ user.house.name }})</a></li>
+    {% else %}
+      <li><a href="{% url 'houses:house_create' %}">Create a House</a></li>
+    {% endif %}
   </ul>
 {% endblock %}

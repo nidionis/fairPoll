@@ -8,6 +8,8 @@
     <header>
         <nav>
             <a href="{% url 'users:user_homepage' %}">Home</a>
+            | <a href="{% url 'about' %}">How to</a>
+        
             {% if user.is_authenticated %}
                 | <a href="{% url 'users:account' %}">Account</a>
             {% else %}

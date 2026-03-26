@@ -1,82 +1,97 @@
 from django import forms
+from .models import HousePoll, QuickPoll
 
-from .models import QuickPoll, Poll
+class HousePollForm(forms.ModelForm):
+    options_text = forms.CharField(
+        widget=forms.Textarea,
+        help_text="Enter choices separated by commas (e.g., choice1, choice2, choice3).",
+        label="Choices"
+    )
 
+    class Meta:
+        model = HousePoll
+        fields = ['question', 'dead_line', 'max_participants', 'is_ticket_secured']
+        widgets = {
+            'dead_line': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
-class QuickPollCreateForm(forms.ModelForm):
-    propositions_text = forms.CharField(
-        label="Propositions",
-        widget=forms.Textarea(
-            attrs={
-                "rows": 6,
-                "placeholder": "One proposition per line",
-            }
-        ),
-        help_text="Enter one proposition per line.",
+    def clean_options_text(self):
+        data = self.cleaned_data['options_text']
+        options = [o.strip() for o in data.split(',') if o.strip()]
+        if len(options) < 2:
+            raise forms.ValidationError("Please provide at least two options.")
+        return options
+
+    def save(self, commit=True, house=None, creator=None):
+        instance = super().save(commit=False)
+        if house:
+            instance.house = house
+        if creator:
+            instance.creator = creator
+        instance.options = self.cleaned_data['options_text']
+        if commit:
+            instance.save()
+        return instance
+
+class QuickPollForm(forms.ModelForm):
+    options_text = forms.CharField(
+        widget=forms.Textarea,
+        help_text="Enter choices separated by commas (e.g., choice1, choice2, choice3).",
+        label="Choices"
     )
 
     class Meta:
         model = QuickPoll
-        fields = ["title", "max_participants", "duration_minutes", "propositions_text"]
+        fields = ['question', 'dead_line', 'max_participants', 'is_ticket_secured']
+        widgets = {
+            'dead_line': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
-    def clean_max_participants(self):
-        value = self.cleaned_data["max_participants"]
-        if value < 1:
-            raise forms.ValidationError("The number of participants must be at least 1.")
-        return value
+    def clean_options_text(self):
+        data = self.cleaned_data['options_text']
+        options = [o.strip() for o in data.split(',') if o.strip()]
+        if len(options) < 2:
+            raise forms.ValidationError("Please provide at least two options.")
+        return options
 
-    def clean_duration_minutes(self):
-        value = self.cleaned_data["duration_minutes"]
-        if value < 1:
-            raise forms.ValidationError("The duration must be at least 1 minute.")
-        return value
+    def save(self, commit=True, owner=None):
+        instance = super().save(commit=False)
+        if owner and owner.is_authenticated:
+            instance.owner = owner
+        instance.options = self.cleaned_data['options_text']
+        if commit:
+            instance.save()
+        return instance
 
-    def clean_propositions_text(self):
-        raw_value = self.cleaned_data["propositions_text"]
-        propositions = [line.strip() for line in raw_value.splitlines() if line.strip()]
+class VoteForm(forms.Form):
+    ticket_code = forms.CharField(max_length=8, required=False, label="Ticket Code")
 
-        if len(propositions) < 2:
-            raise forms.ValidationError("Please enter at least 2 propositions.")
+    def __init__(self, *args, **kwargs):
+        poll = kwargs.pop('poll')
+        super().__init__(*args, **kwargs)
+        self.poll = poll
 
-        return propositions
+        # In a real Condorcet poll, you'd rank them.
+        # For simplicity in this demo, we'll provide a sorted list of choices.
+        # But wait, Condorcet needs ranking.
+        # Let's use multiple choice fields for simplicity for now, or just comma-separated ranking.
+        # Let's say it's comma-separated ranks: "choice1, choice2, choice3"
+        for i, option in enumerate(poll.options):
+            self.fields[f'rank_{i}'] = forms.IntegerField(
+                label=f"Rank for {option}",
+                min_value=1,
+                max_value=len(poll.options),
+                initial=i+1
+            )
 
+    def clean_ticket_code(self):
+        code = self.cleaned_data.get('ticket_code')
+        if self.poll.is_ticket_secured and not code:
+            raise forms.ValidationError("This poll is ticket secured. Please enter your ticket code.")
+        return code
 
-class QuickPollJoinForm(forms.Form):
-    poll_id = forms.CharField(
-        label="Quick poll ID",
-        max_length=6,
-        min_length=6,
-        help_text="Enter the 6-character quick poll ID.",
-    )
-
-    def clean_poll_id(self):
-        return self.cleaned_data["poll_id"].strip().upper()
-
-class PollCreateForm(forms.ModelForm):
-    propositions_text = forms.CharField(
-        label="Propositions",
-        widget=forms.Textarea(attrs={"rows": 6, "placeholder": "One proposition per line"}),
-        help_text="Enter one proposition per line.",
-    )
-    is_ticket_secured = forms.BooleanField(
-        required=False, 
-        label="Enable Ticket Securisation",
-        help_text="Generates unique voting tickets for each house member."
-    )
-
-    class Meta:
-        model = Poll
-        fields = ["title", "duration_minutes", "is_ticket_secured", "propositions_text"]
-
-    def clean_duration_minutes(self):
-        value = self.cleaned_data["duration_minutes"]
-        if value < 1:
-            raise forms.ValidationError("The duration must be at least 1 minute.")
-        return value
-
-    def clean_propositions_text(self):
-        raw_value = self.cleaned_data["propositions_text"]
-        propositions = [line.strip() for line in raw_value.splitlines() if line.strip()]
-        if len(propositions) < 2:
-            raise forms.ValidationError("Please enter at least 2 propositions.")
-        return propositions
+    def get_ranked_choices(self):
+        ranks = {}
+        for i, option in enumerate(self.poll.options):
+            ranks[option] = self.cleaned_data[f'rank_{i}']
+        return ranks

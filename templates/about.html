@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}About | FairPoll{% endblock %}
+
+{% block content %}
+  <h1>About FairPoll</h1>
+
+  <p>
+    Welcome.
+  </p>
+
+  <p>
+    For a quick vote, or for decisions that do not require a high level of importance,
+    use <strong>QuickPoll</strong> and share the poll ID.
+  </p>
+
+  <p>
+    To ensure a properly secured vote and reduce issues such as ballot stuffing,
+    mistakes, and server-side monitoring concerns, please follow the instructions below:
+  </p>
+
+  <ol>
+    <li>Voters must belong to the house.</li>
+    <li>
+      Create the house.
+      <br>
+      <em>Note: you cannot add a voter after creating a house, in order to avoid ballot stuffing.</em>
+    </li>
+    <li>Create the poll through the house.</li>
+    <li>
+      The creator must print, cut, and randomly distribute the tickets
+      (for example, using a hat).
+    </li>
+    <li>Each voter uses their ticket to vote.</li>
+    <li>
+      At the end of the vote, it is stored in the house archives,
+      and the ballot can be downloaded for verification.
+    </li>
+  </ol>
+
+  <p>
+    <strong>Note:</strong> in the event of a tie, the order of the propositions matters.
+  </p>
+
+  <p>
+    The group is free to invalidate a vote according to its own rules
+    (tie, ballot corruption, and so on).
+  </p>
+{% endblock %}

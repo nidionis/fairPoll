@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ house.name }}</h2>
+<p>Creator: {{ house.creator.username }}</p>
+<p>Default Deadline: {{ house.default_deadline }}</p>
+
+<h3>Members</h3>
+<ul>
+    {% for member in members %}
+        <li>{{ member.username }}</li>
+    {% empty %}
+        <li>No members.</li>
+    {% endfor %}
+</ul>
+
+{% if user == house.creator %}
+    <h3>Governance Actions</h3>
+    <a href="{% url 'houses:create_integration_poll' house.pk %}" class="btn btn-secondary">Integrate New Member</a>
+    <a href="{% url 'houses:create_banishment_poll' house.pk %}" class="btn btn-secondary">Banish Member</a>
+    <a href="{% url 'houses:create_deletion_poll' house.pk %}" class="btn btn-danger" onclick="return confirm('Start a poll to delete this house?')">Start Deletion Poll</a>
+{% endif %}
+
+<h3>Polls</h3>
+<ul>
+    {% for poll in polls %}
+        <li>
+            <a href="{% url 'polls:house_poll_detail' poll.pk %}">{{ poll.question }}</a> 
+            ({{ poll.poll_type }}) 
+            {% if poll.is_finished %} (Finished) {% else %} (Active) {% endif %}
+        </li>
+    {% empty %}
+        <li>No polls yet.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'polls:house_poll_create' house.pk %}" class="btn btn-primary">Create New Poll</a>
+{% endblock %}

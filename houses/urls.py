@@ -1,14 +1,13 @@
 from django.urls import path
-
 from . import views
 
-app_name = "houses"
+app_name = 'houses'
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("home/", views.homepage, name="houses_homepage"),
-    path("my/", views.house_homepage, name="house_homepage"),
-    path("<int:house_id>/", views.house_homepage_by_id, name="house_homepage_by_id"),
-    path("<int:house_id>/archives/", views.house_archives, name="house_archives"),
-    path("create/", views.create_house, name="create_house"),
+    path('', views.house_list, name='house_list'),
+    path('create/', views.house_create, name='house_create'),
+    path('<int:pk>/', views.house_detail, name='house_detail'),
+    path('<int:pk>/integrate/', views.create_integration_poll, name='create_integration_poll'),
+    path('<int:pk>/banish/', views.create_banishment_poll, name='create_banishment_poll'),
+    path('<int:pk>/delete/', views.create_deletion_poll, name='create_deletion_poll'),
 ]

@@ -1,18 +1,19 @@
 from django.urls import path
-
 from . import views
 
-app_name = "polls"
+app_name = 'polls'
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("home/", views.quickpoll_homepage, name="quickpoll_homepage"),
-    path("quickpoll/create/", views.quickpoll_create, name="quickpoll_create"),
-    path("quickpoll/join/", views.quickpoll_join, name="quickpoll_join"),
-    path("quickpoll/<str:poll_id>/", views.quickpoll_voting_form, name="quickpoll_voting_form"),
-    path("quickpoll/<str:poll_id>/results/", views.results, name="results"),
-    path("quickpoll/<str:poll_id>/ballots/download/", views.download_ballots, name="download_ballots"),
-    path("create/<int:house_id>/", views.poll_create, name="poll_create"),
-    path("<str:poll_id>/", views.poll_voting_form, name="poll_voting_form"),
-    path("<str:poll_id>/tickets/download/", views.download_tickets, name="download_tickets"),
+    path('house/<int:house_pk>/create/', views.house_poll_create, name='house_poll_create'),
+    path('house_poll/<int:pk>/', views.house_poll_detail, name='house_poll_detail'),
+    path('house_poll/<int:pk>/vote/', views.house_poll_vote, name='house_poll_vote'),
+    path('house_poll/<int:pk>/results/', views.house_poll_results, name='house_poll_results'),
+    path('house_poll/<int:pk>/export/', views.house_poll_export, name='house_poll_export'),
+    
+    path('quickpoll/create/', views.quickpoll_create, name='quickpoll_create'),
+    path('quickpoll/<uuid:external_id>/', views.quickpoll_detail, name='quickpoll_detail'),
+    path('quickpoll/<uuid:external_id>/vote/', views.quickpoll_vote, name='quickpoll_vote'),
+    path('quickpoll/<uuid:external_id>/results/', views.quickpoll_results, name='quickpoll_results'),
+    path('quickpoll/<uuid:external_id>/export/', views.quickpoll_export, name='quickpoll_export'),
+    path('quickpoll/archive/', views.quickpoll_archive, name='quickpoll_archive'),
 ]

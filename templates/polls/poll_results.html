@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Results: {{ poll.question }}</h2>
+<p>Status: {% if poll.is_finished %}Finished{% else %}Active{% endif %}</p>
+
+<h3>Summary</h3>
+<ul>
+    <li>Total Ballots: {{ poll.ballots.count }}</li>
+    <li>Max Participants: {{ poll.max_participants }}</li>
+</ul>
+
+{% if stats %}
+    <h3>First Preference Counts</h3>
+    <ul>
+        {% for choice, count in stats.items %}
+            <li>{{ choice }}: {{ count }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if poll.is_finished %}
+    <p>Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable).</p>
+    {% if poll.house %}
+        <a href="{% url 'polls:house_poll_export' poll.pk %}" class="btn btn-secondary">Download JSON Results</a>
+    {% else %}
+        <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
+    {% endif %}
+{% else %}
+    <p>The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted.</p>
+{% endif %}
+
+<hr>
+{% if poll.house %}
+    <a href="{% url 'polls:house_poll_detail' poll.pk %}" class="btn btn-primary">Back to Poll</a>
+{% else %}
+    <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="btn btn-primary">Back to Poll</a>
+{% endif %}
+{% endblock %}

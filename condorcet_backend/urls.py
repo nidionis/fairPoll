@@ -13,6 +13,7 @@ def root_home(request):
 
 urlpatterns = [
     path("", root_home, name="home"),
+    path("about/", TemplateView.as_view(template_name="about.html"), name="about"),
     path("admin/", admin.site.urls),
     path("account/", include("allauth.urls")),
     path("", include((tf_urls[0], "two_factor"), namespace="two_factor")),

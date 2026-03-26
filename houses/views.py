@@ -1,164 +1,90 @@
-from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse
-from django.utils import timezone
-
-from .forms import HouseCreateForm
+from django.contrib import messages
 from .models import House
-
-User = get_user_model()
-
-
-def index(request):
-    return HttpResponse("houses: ok")
-
-
-def homepage(request):
-    qs = House.objects.all().order_by("name")
-
-    my_homes = []
-    others = qs
-
-    if request.user.is_authenticated:
-        my_house_id = getattr(request.user, "house_id", None)
-        if my_house_id:
-            my_homes = list(qs.filter(id=my_house_id))
-            others = qs.exclude(id=my_house_id)
-
-    return render(
-        request,
-        "houses/houses_homepage.html",
-        {
-            "my_homes": my_homes,
-            "other_homes": others,
-        },
-    )
-
+from .forms import HouseForm, IntegrationPollForm, BanishmentPollForm
+from polls.models import HousePoll
 
 @login_required
-def house_homepage(request):
-    """
-    House homepage (for the house the current user belongs to).
-    """
-    if not request.user.house_id:
-        messages.info(request, "You are not in a house yet.")
-        return redirect("houses:houses_homepage")
-
-    house = request.user.house
-
-    polls_to_do = []
-    pending_polls = []
-    
-    for poll in house.polls.all():
-        if not poll.is_finished():
-            if poll.is_ticket_secured:
-                polls_to_do.append(poll)
-            else:
-                if poll.votes.filter(user=request.user).exists():
-                    pending_polls.append(poll)
-                else:
-                    polls_to_do.append(poll)
-
-    members = house.members.all().order_by("username")
-
-    return render(
-        request,
-        "houses/house_homepage.html",
-        {
-            "house": house,
-            "polls_to_do": polls_to_do,
-            "pending_polls": pending_polls,
-            "members": members,
-            "archives_url": reverse("houses:house_archives", args=[house.id]),
-        },
-    )
-
+def house_list(request):
+    houses = House.objects.all()
+    return render(request, 'houses/house_list.html', {'houses': houses})
 
 @login_required
-def house_homepage_by_id(request, house_id: int):
-    """
-    House homepage (for a specific house).
-    """
-    house = House.objects.get(id=house_id)
-
-    polls_to_do = []
-    pending_polls = []
-    
-    for poll in house.polls.all():
-        if not poll.is_finished():
-            if poll.is_ticket_secured:
-                polls_to_do.append(poll)
-            else:
-                if request.user.is_authenticated and poll.votes.filter(user=request.user).exists():
-                    pending_polls.append(poll)
-                else:
-                    polls_to_do.append(poll)
-
-    members = house.members.all().order_by("username")
-
-    return render(
-        request,
-        "houses/house_homepage.html",
-        {
-            "house": house,
-            "polls_to_do": polls_to_do,
-            "pending_polls": pending_polls,
-            "members": members,
-            "archives_url": reverse("houses:house_archives", args=[house.id]),
-        },
-    )
-
-
-@login_required
-def house_archives(request, house_id: int):
-    """
-    House archives (for finished polls).
-    """
-    house = get_object_or_404(House, id=house_id)
-    
-    # Filter the polls that are finished
-    finished_polls = [poll for poll in house.polls.all() if poll.is_finished()]
-    
-    return render(
-        request,
-        "houses/house_archives.html",
-        {
-            "house": house,
-            "finished_polls": finished_polls,
-        },
-    )
-
-
-@login_required
-def create_house(request):
-    # Quota rule: free -> 1/day, paid -> 10/day
-    daily_limit = 10 if getattr(request.user, "plan", "free") == "paid" else 1
-
-    today = timezone.localdate()
-    created_today = House.objects.filter(creator=request.user, created_at__date=today).count()
-    if created_today >= daily_limit:
-        messages.error(request, f"Daily limit reached: {daily_limit} house(s) per day for your plan.")
-        return redirect("houses:houses_homepage")
-
-    if request.method == "POST":
-        form = HouseCreateForm(request.POST, request_user=request.user)
+def house_create(request):
+    if request.user.house:
+        messages.error(request, "You already belong to a house.")
+        return redirect('houses:house_detail', pk=request.user.house.pk)
+        
+    if request.method == 'POST':
+        form = HouseForm(request.POST)
         if form.is_valid():
-            house = form.save()
-
-            members = form.cleaned_data.get("members")
-            if members:
-                User.objects.filter(id__in=members.values_list("id", flat=True)).update(house=house)
-
-            if request.user.house_id != house.id:
-                request.user.house = house
-                request.user.save(update_fields=["house"])
-
-            messages.success(request, "House created successfully.")
-            return redirect("houses:houses_homepage")
+            house = form.save(creator=request.user)
+            messages.success(request, f"House {house.name} created successfully.")
+            return redirect('houses:house_detail', pk=house.pk)
     else:
-        form = HouseCreateForm(request_user=request.user)
+        form = HouseForm()
+    return render(request, 'houses/house_create.html', {'form': form})
 
-    return render(request, "houses/create_house.html", {"form": form})
+@login_required
+def house_detail(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    polls = house.polls.all().order_by('-id')
+    return render(request, 'houses/house_detail.html', {
+        'house': house,
+        'polls': polls,
+        'members': house.members.all()
+    })
+
+@login_required
+def create_integration_poll(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    if request.user != house.creator:
+         messages.error(request, "Only the creator can start governance polls.")
+         return redirect('houses:house_detail', pk=pk)
+
+    if request.method == 'POST':
+        form = IntegrationPollForm(request.POST)
+        if form.is_valid():
+            target_user = form.cleaned_data['target_user']
+            question = f"Should we integrate {target_user.username} into {house.name}?"
+            # We add target_user_id as extra info in question or poll?
+            # For now, let's keep it simple.
+            poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_INTEGRATION)
+            # We should probably store target user id somewhere, but for now we'll rely on poll type logic later
+            messages.success(request, f"Integration poll for {target_user.username} created.")
+            return redirect('houses:house_detail', pk=pk)
+    else:
+        form = IntegrationPollForm()
+    return render(request, 'houses/governance_poll_form.html', {'form': form, 'house': house, 'type': 'Integration'})
+
+@login_required
+def create_banishment_poll(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    if request.user != house.creator:
+         messages.error(request, "Only the creator can start governance polls.")
+         return redirect('houses:house_detail', pk=pk)
+
+    if request.method == 'POST':
+        form = BanishmentPollForm(request.POST, house=house)
+        if form.is_valid():
+            target_user = form.cleaned_data['target_user']
+            question = f"Should we banish {target_user.username} from {house.name}?"
+            poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_BANISHMENT)
+            messages.success(request, f"Banishment poll for {target_user.username} created.")
+            return redirect('houses:house_detail', pk=pk)
+    else:
+        form = BanishmentPollForm(house=house)
+    return render(request, 'houses/governance_poll_form.html', {'form': form, 'house': house, 'type': 'Banishment'})
+
+@login_required
+def create_deletion_poll(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    if request.user != house.creator:
+         messages.error(request, "Only the creator can start governance polls.")
+         return redirect('houses:house_detail', pk=pk)
+
+    question = f"Should we delete the house {house.name}?"
+    poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_DELETION)
+    messages.success(request, f"Deletion poll created.")
+    return redirect('houses:house_detail', pk=pk)
