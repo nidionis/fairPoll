@@ -117,6 +117,47 @@ def house_poll_results(request, pk):
          messages.info(request, "Poll is still in progress. Check back later.")
 
     condorcet_stats = calculate_condorcet(poll)
+    
+    # Apply governance logic if finished and approved
+    if poll.is_finished:
+        if poll.poll_type == HousePoll.POLL_TYPE_INTEGRATION:
+            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
+                import re
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                
+                # Extract the username from the standardized question string
+                match = re.search(r"Should we integrate (.+) into", poll.question)
+                if match:
+                    username = match.group(1)
+                    try:
+                        user = User.objects.get(username=username)
+                        user.houses.add(poll.house)
+                    except User.DoesNotExist:
+                        pass
+                        
+        elif poll.poll_type == HousePoll.POLL_TYPE_BANISHMENT:
+            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
+                import re
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                
+                # Extract the username from the standardized question string
+                match = re.search(r"Should we banish (.+) from", poll.question)
+                if match:
+                    username = match.group(1)
+                    try:
+                        user = User.objects.get(username=username)
+                        user.houses.remove(poll.house)
+                    except User.DoesNotExist:
+                        pass
+                        
+        elif poll.poll_type == HousePoll.POLL_TYPE_DELETION:
+            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
+                # Delete the house (which will cascade and delete its polls)
+                poll.house.delete()
+                messages.warning(request, "The house has been deleted following the successful deletion poll.")
+                return redirect('houses:house_list')
                      
     return render(request, 'polls/poll_results.html', {
         'poll': poll, 
