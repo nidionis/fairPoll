@@ -144,3 +144,16 @@ def quickpoll_archive(request):
     all_polls = QuickPoll.objects.all().order_by('-dead_line')
     finished_polls = [p for p in all_polls if p.is_finished]
     return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
+
+def quickpoll_join(request):
+    if request.method == 'POST':
+        poll_id = request.POST.get('poll_id', '').strip()
+        if poll_id:
+            try:
+                poll = QuickPoll.objects.get(external_id=poll_id)
+                return redirect('polls:quickpoll_detail', external_id=poll.external_id)
+            except (QuickPoll.DoesNotExist, ValidationError, ValueError):
+                messages.error(request, "Poll not found. Please check the ID.")
+    
+    # If it's a GET request or the form had errors, return to home
+    return redirect('home')

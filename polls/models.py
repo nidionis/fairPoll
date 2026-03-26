@@ -143,12 +143,15 @@ class Poll(models.Model):
             
         results = {}
         for ballot in self.ballots.all():
-            key = ballot.ticket.code if ballot.ticket else (ballot.voter.username if ballot.voter else "Anonymous")
+            if ballot.ticket:
+               key = ballot.ticket.code
+            else:
+                # Use the ballot's primary key to ensure uniqueness while remaining anonymous
+               key = f"Anonymous"
             results[key] = ballot.choices
-        
         return json.dumps(results, indent=2)
 
-# --- Concrete Poll Implementations ---
+    # --- Concrete Poll Implementations ---
 
 class HousePoll(Poll):
     """
