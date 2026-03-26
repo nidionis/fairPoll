@@ -1,0 +1,214 @@
+Here is a **clean, structured prompt for Claude** (ready to paste). It tightens logic, clarifies constraints, and nudges toward a solid architecture ⚙️
+
+---
+
+## Prompt
+
+You are a senior software architect and full-stack engineer.
+
+Design and implement a **secure voting web application** based on the **Condorcet method**, using a strict **Model–View–Controller (MVC)** architecture.
+
+The system must be clean, modular, and extensible.
+
+---
+
+## Core Requirements
+
+### Entities (Models)
+
+#### `User`
+
+* Unique `pseudo`
+* Verified `email`
+* Authentication:
+
+  * login / signup
+  * password hashing
+  * optional 2FA
+* Can belong to multiple `House`
+
+---
+
+#### `House`
+
+* `name`
+* `creator` (User)
+* `default_deadline`
+* `users` (list of User)
+* `polls` (list of Poll)
+
+Rules:
+
+* Creator is automatically a member
+* Adding/removing users must be done via a **Poll**
+* Deleting a house must be done via a **Poll**
+
+---
+
+#### `_Poll` (abstract class)
+
+Common fields:
+
+* `question`
+* `deadline`
+* `max_participants`
+* `is_ticket_secured` (boolean)
+* `ballots` (stored votes)
+* `status` (active / finished / archived)
+* `ID` (8 char string)
+
+Methods:
+
+* `vote()`
+* `is_finished()`
+* `compute_results()` (Condorcet method)
+* `export_json()`
+
+---
+
+#### `Poll` (inherits `_Poll`)
+
+* Created within a `House`
+* Sends email invitations to all house members
+* Optional **ticket-based security**
+
+---
+
+#### `QuickPoll` (inherits `_Poll`)
+
+* Simpler / faster poll
+* No house required (standalone)
+
+---
+
+## Voting System
+
+### Condorcet Voting
+
+* Users rank choices in order of preference
+* System computes winner using Condorcet pairwise comparison
+
+---
+
+### Voting Rules
+
+#### Standard Poll
+
+* User must be authenticated if not using tickets
+* One vote per user
+
+#### Ticket-Secured Poll
+
+* Creator generates **tickets**
+
+  * One per participant
+  * Format: **12 alphanumeric characters**
+* Tickets must be:
+
+  * Unique
+  * Single-use
+* Voting:
+
+  * No login required if using tickets
+  * User provides:
+    * poll ID
+    * valid unused ticket
+
+---
+
+## Poll Lifecycle
+
+A poll is **finished** when:
+
+* Deadline is reached **OR**
+* or `max_participants` votes collected
+
+After completion:
+
+* Poll becomes **archived**
+* Results are published
+* Ballots and statistics become publicly accessible
+
+---
+
+## Ballot Transparency
+
+Export a JSON file:
+
+```json
+[
+  { "ticket_or_user": "ABC123XYZ789", "choices": ["A", "B", "C"] },
+  ...
+]
+or
+[
+  { "ticket_or_user": null, "choices": ["B", "C", "A"] }
+]
+```
+
+Rules:
+
+* Use ticket if ticket-based
+* Use `null` (or anonymized ID) otherwise
+* Preserve ranking order
+
+---
+
+## Security Requirements
+
+* Password hashing (bcrypt or argon2)
+* Email verification required
+* Optional 2FA
+* Anti double-vote guarantees:
+
+  * user-based OR ticket-based
+* Tickets must be:
+
+  * cryptographically random
+* Protect endpoints against:
+
+  * replay attacks
+  * brute force on tickets
+
+---
+
+## Architecture
+
+* Strict MVC separation:
+
+  * Models: business logic
+  * Views: API or frontend
+  * Controllers: orchestration
+
+* Provide:
+
+  * Class design
+  * Key methods
+  * Data flow
+  * API routes (REST)
+
+---
+
+## Deliverables
+
+1. Class diagram (text or UML-like)
+2. Core class implementations (pseudo-code or real code)
+3. Condorcet algorithm implementation
+4. Ticket generation logic
+5. Example API endpoints
+6. Example JSON export
+7. Security considerations
+
+---
+
+## Constraints
+
+* Keep code modular and readable
+* Avoid hardcoding
+* Use clear abstractions
+* Favor testability
+
+---
+
+If something is ambiguous, make reasonable engineering assumptions and justify them briefly.
+

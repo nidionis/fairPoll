@@ -31,19 +31,23 @@ class House(models.Model):
         """
         # We import here to avoid circular dependencies if polls imports House
         from polls.models import HousePoll
-        
+    
         deadline = timezone.now() + self.default_deadline
-        
+    
         # Max participants is current member count
         max_participants = self.users.count()
+        
+        # Default options for governance polls
+        if options is None:
+            options = ["Approve", "Reject"]
 
         return HousePoll.objects.create(
             house=self,
             question=question,
-            options=["Approve", "Reject"],
+            options=options,
             dead_line=deadline,
             max_participants=max_participants,
-            is_ticket_secured=False, # Governance usually strictly by user, not ticket
+            is_ticket_secured=False,  # Governance usually strictly by user, not ticket
             poll_type=poll_type,
-            creator=self.creator # Or the system/admin
+            creator=self.creator  # Or the system/admin
         )

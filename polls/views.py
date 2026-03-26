@@ -1,305 +1,292 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import json
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
 from django.utils import timezone
-from django.db import models
-from django import forms
-from django.utils import timezone
-from datetime import timedelta
-from .models import HousePoll, QuickPoll, Ticket, Ballot
+from django.db import transaction
+
+from .models import HousePoll, QuickPoll, HouseBallot, QuickBallot, BallotChoice, Ticket
 from .forms import HousePollForm, QuickPollForm, VoteForm
-from houses.models import House
 
-def calculate_condorcet(poll):
-    """
-    Calculates Condorcet head-to-head match-ups for the given poll.
-    """
-    options = poll.options
-    # Initialize matrix: matrix[A][B] = number of times A beats B
-    matrix = {opt1: {opt2: 0 for opt2 in options} for opt1 in options}
-    
-    for ballot in poll.ballots.all():
-        if not isinstance(ballot.choices, dict):
-            continue
-            
-        choices = ballot.choices
-        for i, opt1 in enumerate(options):
-            for j, opt2 in enumerate(options):
-                if i == j:
-                    continue
-                rank1 = choices.get(opt1)
-                rank2 = choices.get(opt2)
-                
-                # If a rank is missing, treat it as worst possible rank (infinity)
-                val1 = float('inf') if rank1 is None else float(rank1)
-                val2 = float('inf') if rank2 is None else float(rank2)
-                
-                if val1 < val2:
-                    matrix[opt1][opt2] += 1
+User = get_user_model()
 
-    wins_count = {opt: 0 for opt in options}
-    losses_count = {opt: 0 for opt in options}
-    ties_count = {opt: 0 for opt in options}
-    
-    for opt1 in options:
-        for opt2 in options:
-            if opt1 == opt2:
-                continue
-            wins = matrix[opt1][opt2]
-            losses = matrix[opt2][opt1]
-            if wins > losses:
-                wins_count[opt1] += 1
-            elif wins < losses:
-                losses_count[opt1] += 1
-            else:
-                ties_count[opt1] += 1
 
-    # A Condorcet winner beats every other option
-    winners = [opt for opt in options if wins_count[opt] == len(options) - 1]
-    
-    return {
-        'matrix': matrix,
-        'winners': winners,
-        'wins_count': wins_count,
-        'losses_count': losses_count,
-        'ties_count': ties_count,
-        'options': options
-    }
-
-def house_poll_create(request, house_pk):
+def quickpoll_list(request):
+    """List all polls for a specific house"""
+    from houses.models import House
     house = get_object_or_404(House, pk=house_pk)
+    
+    # Check if user is a member of the house
+    if request.user not in house.users.all():
+        raise PermissionDenied("You are not a member of this house.")
+    
+    polls = house.polls.all().order_by('-created_at')
+    active_polls = [p for p in polls if not p.is_finished]
+    archived_polls = [p for p in polls if p.is_finished]
+    
+    return render(request, 'polls/house_poll_list.html', {
+        'house': house,
+        'active_polls': active_polls,
+        'archived_polls': archived_polls
+    })
+
+
+@login_required
+def house_poll_create(request, house_pk):
+    """Create a new house poll"""
+    from houses.models import House
+    house = get_object_or_404(House, pk=house_pk)
+    
+    # Check if user is a member of the house
+    if request.user not in house.users.all():
+        raise PermissionDenied("You are not a member of this house.")
+    
     if request.method == 'POST':
         form = HousePollForm(request.POST)
         if form.is_valid():
-            poll = form.save(house=house, creator=request.user)
-            messages.success(request, f"Poll {poll.question} created.")
-            return redirect('polls:house_poll_detail', pk=poll.pk)
+            poll = form.save(commit=False)
+            poll.house = house
+            poll.creator = request.user
+            poll.save()
+            
+            # Generate tickets if needed
+            if poll.is_ticket_secured:
+                tickets = poll.generate_tickets()
+                messages.success(request, f"Poll created with {len(tickets)} tickets generated.")
+                return redirect('polls:house_poll_tickets', poll_pk=poll.pk)
+            else:
+                messages.success(request, "Poll created successfully.")
+                return redirect('polls:house_poll_detail', poll_pk=poll.pk)
     else:
         form = HousePollForm()
-    return render(request, 'polls/house_poll_form.html', {'form': form, 'house': house})
-
-def house_poll_detail(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
     
-    # If the poll is finished, redirect directly to results
-    if poll.is_finished:
-        return redirect('polls:house_poll_results', pk=pk)
-        
-    return render(request, 'polls/house_poll_detail.html', {'poll': poll})
+    return render(request, 'polls/house_poll_create.html', {
+        'form': form,
+        'house': house
+    })
 
-def house_poll_vote(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+
+@login_required
+def house_poll_detail(request, poll_pk):
+    """Detail view for a house poll"""
+    poll = get_object_or_404(HousePoll, pk=poll_pk)
+    
+    # Check if user is a member of the house
+    if request.user not in poll.house.users.all():
+        raise PermissionDenied("You are not a member of this house.")
+    
+    # Check if user has already voted
+    has_voted = poll.ballots.filter(voter=request.user).exists()
+    
+    context = {
+        'poll': poll,
+        'has_voted': has_voted,
+        'can_download_results': poll.is_finished
+    }
+    
+    return render(request, 'polls/house_poll_detail.html', context)
+
+
+@login_required
+def house_poll_vote(request, poll_pk):
+    """Vote in a house poll"""
+    poll = get_object_or_404(HousePoll, pk=poll_pk)
+    
+    # Check if user is a member of the house
+    if request.user not in poll.house.users.all():
+        raise PermissionDenied("You are not a member of this house.")
+    
+    # Check if poll is still active
     if poll.is_finished:
-        messages.error(request, "Poll is closed.")
-        return redirect('polls:house_poll_results', pk=pk)
-        
+        messages.error(request, "This poll has ended.")
+        return redirect('polls:house_poll_detail', poll_pk=poll.pk)
+    
+    # Check if user has already voted
+    if poll.ballots.filter(voter=request.user).exists():
+        messages.error(request, "You have already voted in this poll.")
+        return redirect('polls:house_poll_detail', poll_pk=poll.pk)
+    
     if request.method == 'POST':
         form = VoteForm(request.POST, poll=poll)
         if form.is_valid():
             try:
-                poll.save_ballot(
-                    choices=form.get_ranked_choices(),
-                    user=request.user,
-                    ticket_code=form.cleaned_data.get('ticket_code')
-                )
-                messages.success(request, "Vote cast successfully!")
-                return redirect('polls:house_poll_detail', pk=pk)
-            except ValueError as e:
-                messages.error(request, str(e))
+                with transaction.atomic():
+                    # Create ballot
+                    ballot = HouseBallot.objects.create(
+                        poll=poll,
+                        voter=None if poll.is_ticket_secured else request.user
+                    )
+                    
+                    # Handle ticket if poll is ticket secured
+                    if poll.is_ticket_secured:
+                        ticket_code = form.cleaned_data.get('ticket_code')
+                        ticket = get_object_or_404(Ticket, poll=poll, code=ticket_code)
+                        
+                        if ticket.is_used:
+                            raise ValueError("This ticket has already been used.")
+                        
+                        ticket.is_used = True
+                        ticket.save()
+                        ballot.ticket = ticket
+                        ballot.save()
+                    
+                    # Save choices
+                    choices_data = form.cleaned_data['choices']
+                    for option_index, rank in choices_data.items():
+                        BallotChoice.objects.create(
+                            house_ballot=ballot,
+                            option_index=int(option_index),
+                            rank=rank
+                        )
+                    
+                    messages.success(request, "Your vote has been recorded.")
+                    return redirect('polls:house_poll_detail', poll_pk=poll.pk)
+                    
+            except Exception as e:
+                messages.error(request, f"Error recording vote: {str(e)}")
     else:
         form = VoteForm(poll=poll)
-    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
-
-def house_poll_results(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
-    if not poll.is_finished:
-         messages.info(request, "Poll is still in progress. Check back later.")
-
-    condorcet_stats = calculate_condorcet(poll)
     
-    # Apply governance logic if finished and approved
-    if poll.is_finished:
-        if poll.poll_type == HousePoll.POLL_TYPE_INTEGRATION:
-            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
-                import re
-                from django.contrib.auth import get_user_model
-                User = get_user_model()
-                
-                # Extract the username from the standardized question string
-                match = re.search(r"Should we integrate (.+) into", poll.question)
-                if match:
-                    username = match.group(1)
-                    try:
-                        user = User.objects.get(username=username)
-                        user.houses.add(poll.house)
-                    except User.DoesNotExist:
-                        pass
-                        
-        elif poll.poll_type == HousePoll.POLL_TYPE_BANISHMENT:
-            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
-                import re
-                from django.contrib.auth import get_user_model
-                User = get_user_model()
-                
-                # Extract the username from the standardized question string
-                match = re.search(r"Should we banish (.+) from", poll.question)
-                if match:
-                    username = match.group(1)
-                    try:
-                        user = User.objects.get(username=username)
-                        user.houses.remove(poll.house)
-                    except User.DoesNotExist:
-                        pass
-                        
-        elif poll.poll_type == HousePoll.POLL_TYPE_DELETION:
-            if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
-                # Delete the house (which will cascade and delete its polls)
-                poll.house.delete()
-                messages.warning(request, "The house has been deleted following the successful deletion poll.")
-                return redirect('houses:house_list')
-                     
-    return render(request, 'polls/poll_results.html', {
-        'poll': poll, 
-        'condorcet_stats': condorcet_stats
+    return render(request, 'polls/vote.html', {
+        'form': form,
+        'poll': poll
     })
 
-def house_poll_export(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+
+@login_required
+def house_poll_tickets(request, poll_pk):
+    """View tickets for a ticket-secured poll"""
+    poll = get_object_or_404(HousePoll, pk=poll_pk)
+    
+    # Only creator can view tickets
+    if request.user != poll.creator:
+        raise PermissionDenied("Only the poll creator can view tickets.")
+    
+    if not poll.is_ticket_secured:
+        messages.error(request, "This poll is not ticket-secured.")
+        return redirect('polls:house_poll_detail', poll_pk=poll.pk)
+    
+    tickets = poll.tickets.all()
+    
+    return render(request, 'polls/house_poll_tickets.html', {
+        'poll': poll,
+        'tickets': tickets
+    })
+
+
+@login_required
+def house_poll_results_json(request, poll_pk):
+    """Download poll results as JSON"""
+    poll = get_object_or_404(HousePoll, pk=poll_pk)
+    
+    # Check if user is a member of the house
+    if request.user not in poll.house.users.all():
+        raise PermissionDenied("You are not a member of this house.")
+    
+    # Only allow download if poll is finished
     if not poll.is_finished:
-        return HttpResponse("Poll is not finished.", status=403)
+        messages.error(request, "Poll results are only available after the poll ends.")
+        return redirect('polls:house_poll_detail', poll_pk=poll.pk)
+    
     results = poll.get_results_json()
-    response = HttpResponse(results, content_type='application/json')
-    response['Content-Disposition'] = f'attachment; filename="house_poll_{pk}_results.json"'
+    filename = f"poll_{poll.pk}_results.json"
+    
+    response = HttpResponse(
+        json.dumps(results, indent=2),
+        content_type='application/json'
+    )
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
     return response
 
-# QuickPolls
+
+# QuickPoll views
+def quickpoll_archive(request):
+    """Archive of all quick polls"""
+    polls = QuickPoll.objects.all().order_by('-created_at')
+    return render(request, 'polls/quickpoll_archive.html', {'polls': polls})
+
 
 def quickpoll_create(request):
+    """Create a new quick poll"""
     if request.method == 'POST':
         form = QuickPollForm(request.POST)
         if form.is_valid():
             poll = form.save(commit=False)
-            poll.options = form.cleaned_data['options_text']
             if request.user.is_authenticated:
-                poll.owner = request.user
+                poll.creator = request.user
             poll.save()
-            messages.success(request, f"QuickPoll created. ID: {poll.external_id}")
             
-            # Save the created poll's ID in the session
-            created_polls = request.session.get('created_quickpolls', [])
-            created_polls.append(str(poll.external_id))
-            request.session['created_quickpolls'] = created_polls
-            
-            return redirect('polls:quickpoll_detail', external_id=poll.external_id)
+            messages.success(request, f"QuickPoll created! Share this ID: {poll.poll_id}")
+            return redirect('polls:quickpoll_detail', poll_id=poll.poll_id)
     else:
         form = QuickPollForm()
-    return render(request, 'polls/quickpoll_form.html', {'form': form})
-
-def quickpoll_detail(request, external_id):
-    poll = get_object_or_404(QuickPoll, external_id=external_id)
     
-    # If the poll is finished, redirect directly to results
-    if poll.is_finished:
-        return redirect('polls:quickpoll_results', external_id=external_id)
+    return render(request, 'polls/quickpoll_create.html', {'form': form})
+
+
+def quickpoll_detail(request, poll_id):
+    """Detail view for a quick poll"""
+    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
     
-    # Check if the user created this poll
-    is_creator = False
-    if request.user.is_authenticated and poll.owner == request.user:
-        is_creator = True
-    elif str(external_id) in request.session.get('created_quickpolls', []):
-        is_creator = True
-        
-    return render(request, 'polls/quickpoll_detail.html', {'poll': poll, 'is_creator': is_creator})
-
-def quickpoll_vote(request, external_id):
-    poll = get_object_or_404(QuickPoll, external_id=external_id)
-    if poll.is_finished:
-        messages.error(request, "Poll is closed.")
-        return redirect('polls:quickpoll_results', external_id=external_id)
-        
-    # Check session to prevent duplicate voting from the same computer
-    voted_polls = request.session.get('voted_quickpolls', [])
-    if str(external_id) in voted_polls:
-        messages.error(request, "You have already voted in this poll from this device.")
-        return redirect('polls:quickpoll_detail', external_id=external_id)
-
-    if request.method == 'POST':
-        form = VoteForm(request.POST, poll=poll)
-        if form.is_valid():
-            try:
-                poll.save_ballot(
-                    choices=form.get_ranked_choices(),
-                    user=request.user if request.user.is_authenticated else None,
-                    ticket_code=form.cleaned_data.get('ticket_code')
-                )
-                
-                # Record the vote in the session
-                voted_polls.append(str(external_id))
-                request.session['voted_quickpolls'] = voted_polls
-                
-                messages.success(request, "Vote cast successfully!")
-                return redirect('polls:quickpoll_detail', external_id=external_id)
-            except ValueError as e:
-                messages.error(request, str(e))
-    else:
-        form = VoteForm(poll=poll)
-    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
-
-def quickpoll_results(request, external_id):
-    poll = get_object_or_404(QuickPoll, external_id=external_id)
-    condorcet_stats = calculate_condorcet(poll)
+    # Check if user has already voted (if logged in)
+    has_voted = False
+    if request.user.is_authenticated:
+        has_voted = poll.ballots.filter(voter=request.user).exists()
     
-    return render(request, 'polls/poll_results.html', {
-        'poll': poll, 
-        'condorcet_stats': condorcet_stats
+    return render(request, 'polls/quickpoll_detail.html', {
+        'poll': poll,
+        'has_voted': has_voted
     })
 
-def quickpoll_export(request, external_id):
-    poll = get_object_or_404(QuickPoll, external_id=external_id)
-    if not poll.is_finished:
-        return HttpResponse("Poll is not finished.", status=403)
-    results = poll.get_results_json()
-    response = HttpResponse(results, content_type='application/json')
-    response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_results.json"'
-    return response
 
-def quickpoll_tickets_export(request, external_id):
-    poll = get_object_or_404(QuickPoll, external_id=external_id)
+def quickpoll_vote(request, poll_id):
+    """Vote in a quick poll"""
+    poll = get_object_or_404(QuickPoll, poll_id=poll_id)
     
-    # Check if user is the creator (via auth or session) and poll is still active
-    is_creator = False
-    if request.user.is_authenticated and poll.owner == request.user:
-        is_creator = True
-    elif str(external_id) in request.session.get('created_quickpolls', []):
-        is_creator = True
-
-    if not (poll.is_ticket_secured and not poll.is_finished and is_creator):
-        return HttpResponse("Unauthorized or poll finished.", status=403)
-        
-    tickets = [ticket.code for ticket in poll.tickets.all() if not ticket.is_used]
-    response = HttpResponse('\n'.join(tickets), content_type='text/plain')
-    response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_tickets.txt"'
-    return response
-
-def quickpoll_archive(request):
-    # Wait, queryset for is_finished is hard to do directly in filter for properties.
-    # Let's just grab all and filter in python for now or use annotation if needed.
-    all_polls = QuickPoll.objects.annotate(
-        ballot_count=models.Count('ballots')
-    ).order_by('-dead_line')
-    finished_polls = [p for p in all_polls if p.is_finished]
-    return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
-
-def quickpoll_join(request):
+    # Check if poll is still active
+    if poll.is_finished:
+        messages.error(request, "This poll has ended.")
+        return redirect('polls:quickpoll_detail', poll_id=poll_id)
+    
+    # Check if user has already voted (if logged in)
+    if request.user.is_authenticated and poll.ballots.filter(voter=request.user).exists():
+        messages.error(request, "You have already voted in this poll.")
+        return redirect('polls:quickpoll_detail', poll_id=poll_id)
+    
     if request.method == 'POST':
-        poll_id = request.POST.get('poll_id', '').strip()
-        if poll_id:
+        form = VoteForm(request.POST, poll=poll, is_quick_poll=True)
+        if form.is_valid():
             try:
-                poll = QuickPoll.objects.get(external_id=poll_id)
-                return redirect('polls:quickpoll_detail', external_id=poll.external_id)
-            except (QuickPoll.DoesNotExist, ValidationError, ValueError):
-                messages.error(request, "Poll not found. Please check the ID.")
+                with transaction.atomic():
+                    # Create ballot
+                    ballot = QuickBallot.objects.create(
+                        poll=poll,
+                        voter=request.user if request.user.is_authenticated else None
+                    )
+                    
+                    # Save choices
+                    choices_data = form.cleaned_data['choices']
+                    for option_index, rank in choices_data.items():
+                        BallotChoice.objects.create(
+                            quick_ballot=ballot,
+                            option_index=int(option_index),
+                            rank=rank
+                        )
+                    
+                    messages.success(request, "Your vote has been recorded.")
+                    return redirect('polls:quickpoll_detail', poll_id=poll_id)
+                    
+            except Exception as e:
+                messages.error(request, f"Error recording vote: {str(e)}")
+    else:
+        form = VoteForm(poll=poll, is_quick_poll=True)
     
-    # If it's a GET request or the form had errors, return to home
-    return redirect('home')
+    return render(request, 'polls/vote.html', {
+        'form': form,
+        'poll': poll,
+        'is_quick_poll': True
+    })

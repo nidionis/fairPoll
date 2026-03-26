@@ -1,201 +1,240 @@
-import uuid
+import datetime
 import random
 import string
-import json
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
 
-# --- Utilities ---
-
-def generate_ticket_code():
-    """Generates an 8-char alphanumeric string."""
-    chars = string.ascii_uppercase + string.digits
-    return ''.join(random.choice(chars) for _ in range(8))
-
-# --- Supporting Models ---
-
-class Ticket(models.Model):
-    """
-    Represents a secure access token for a poll.
-    Linked generically so it works for HousePoll or QuickPoll.
-    """
-    code = models.CharField(max_length=8, default=generate_ticket_code, unique=True)
-    is_used = models.BooleanField(default=False)
-    
-    # Generic relation to Poll
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    poll = GenericForeignKey('content_type', 'object_id')
-
-    def __str__(self):
-        return f"Ticket {self.code} ({'Used' if self.is_used else 'Available'})"
-
-class Ballot(models.Model):
-    """
-    Stores a single vote.
-    Choices are stored as JSON: {'choice_id': rank} or ['choice1', 'choice2']
-    depending on your specific Condorcet implementation.
-    """
-    # Generic relation to Poll
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    poll = GenericForeignKey('content_type', 'object_id')
-
-    # The actual vote data
-    choices = models.JSONField(default=dict)
-    
-    # If ticket secured, we link the ticket. If not, we track the user.
-    ticket = models.OneToOneField(Ticket, null=True, blank=True, on_delete=models.SET_NULL)
-    voter = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
-    
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-# --- Abstract Base Poll ---
 
 class Poll(models.Model):
-    question = models.CharField(max_length=255)
-    options = models.JSONField(default=list, help_text="List of choices for the poll.")
+    """Abstract base class for all poll types"""
+    question = models.TextField()
     dead_line = models.DateTimeField()
     max_participants = models.PositiveIntegerField()
     is_ticket_secured = models.BooleanField(default=False)
-    
-    # Generic relation to access tickets/ballots easily
-    tickets = GenericRelation(Ticket)
-    ballots = GenericRelation(Ballot)
+    created_at = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="created_%(class)s_polls"
+    )
 
     class Meta:
         abstract = True
 
     @property
     def is_finished(self):
-        """Poll is finished if deadline passed OR max participants reached."""
+        """Check if the poll is finished (deadline passed or max participants reached)"""
         now = timezone.now()
-        count = self.ballots.count()
-        return now > self.dead_line or count >= self.max_participants
+        ballot_count = self.ballots.count()
+        return now > self.dead_line or ballot_count >= self.max_participants
 
     def generate_tickets(self):
-        """Generates tickets equal to max_participants."""
+        """Generate tickets for ticket-secured polls"""
         if not self.is_ticket_secured:
-            return
-            
-        # Clear existing unused tickets if re-generating? 
-        # For safety, let's just ensure we have enough.
-        current_count = self.tickets.count()
-        needed = self.max_participants - current_count
+            return []
         
-        for _ in range(needed):
-            Ticket.objects.create(poll=self)
-
-    def save_ballot(self, choices, user=None, ticket_code=None):
-        """
-        Validates and saves a vote.
-        Returns the created Ballot or raises ValueError.
-        """
-        if self.is_finished:
-            raise ValueError("Poll is closed.")
-
-        ticket_obj = None
-
-        if self.is_ticket_secured:
-            if not ticket_code:
-                raise ValueError("Ticket required.")
-            try:
-                ticket_obj = self.tickets.get(code=ticket_code, is_used=False)
-            except Ticket.DoesNotExist:
-                raise ValueError("Invalid or used ticket.")
+        tickets = []
+        for i in range(self.max_participants):
+            ticket = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            # Make sure ticket is unique within this poll
+            while Ticket.objects.filter(poll=self, code=ticket).exists():
+                ticket = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
             
-            ticket_obj.is_used = True
-            ticket_obj.save()
-        else:
-            # If not secured, user must be logged in and unique only for HousePoll
-            if hasattr(self, 'house'):
-                if not user or not user.is_authenticated:
-                    raise ValueError("User must be logged in.")
-                if self.ballots.filter(voter=user).exists():
-                    raise ValueError("User already voted.")
-            else:
-                # For QuickPoll, only check for double voting if they are authenticated
-                if user and user.is_authenticated:
-                    if self.ballots.filter(voter=user).exists():
-                        raise ValueError("User already voted.")
-
-        # Ensure we don't pass an unauthenticated User object to the voter ForeignKey
-        real_voter = user if (user and user.is_authenticated and not self.is_ticket_secured) else None
-
-        ballot = Ballot.objects.create(
-            poll=self,
-            choices=choices,
-            ticket=ticket_obj,
-            voter=real_voter
-        )
-        return ballot
+            ticket_obj = Ticket.objects.create(poll=self, code=ticket)
+            tickets.append(ticket_obj)
+        
+        return tickets
 
     def get_results_json(self):
-        """
-        Returns JSON format for verification:
-        {{ticket/None: choices...}, ...}
-        """
+        """Return results as JSON for download (only if poll is finished)"""
         if not self.is_finished:
-            return None # Or raise error
-            
-        results = {}
+            return None
+        
+        results = []
         for ballot in self.ballots.all():
-            if ballot.ticket:
-               key = ballot.ticket.code
-            else:
-                # Use the ballot's primary key to ensure uniqueness while remaining anonymous
-               key = f"Anonymous"
-            results[key] = ballot.choices
-        return json.dumps(results, indent=2)
+            ballot_data = {
+                "ticket": ballot.ticket.code if ballot.ticket else None,
+                "choices": ballot.get_choices_ordered()
+            }
+            results.append(ballot_data)
+        
+        return results
 
-    # --- Concrete Poll Implementations ---
 
 class HousePoll(Poll):
-    """
-    A poll attached to a House.
-    """
-    POLL_TYPE_STANDARD = 'standard'
-    POLL_TYPE_INTEGRATION = 'integration'
-    POLL_TYPE_BANISHMENT = 'banishment'
-    POLL_TYPE_DELETION = 'deletion'
+    """Poll associated with a house"""
+    house = models.ForeignKey(
+        "houses.House",
+        on_delete=models.CASCADE,
+        related_name="polls"
+    )
+    options = models.JSONField(default=list)  # List of poll options
     
-    TYPE_CHOICES = [
-        (POLL_TYPE_STANDARD, 'Standard Vote'),
-        (POLL_TYPE_INTEGRATION, 'Member Integration'),
-        (POLL_TYPE_BANISHMENT, 'Member Banishment'),
-        (POLL_TYPE_DELETION, 'House Deletion'),
+    POLL_TYPES = [
+        ("governance", "Governance Poll"),
+        ("custom", "Custom Poll"),
+        ("banishment", "Banishment"),
+        ("integration", "Integration"),
+        ("deletion", "Deletion"),
     ]
+    poll_type = models.CharField(max_length=20, choices=POLL_TYPES, default="custom")
 
-    house = models.ForeignKey('houses.House', on_delete=models.CASCADE, related_name='polls')
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    poll_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default=POLL_TYPE_STANDARD)
+    def __str__(self):
+        return f"{self.house.name}: {self.question[:50]}..."
 
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-        if is_new and self.is_ticket_secured:
-            self.generate_tickets()
 
 class QuickPoll(Poll):
-    """
-    A standalone poll accessible via ID.
-    """
-    # QuickPolls identify by a short alphanumeric ID
-    external_id = models.CharField(max_length=8, default=generate_ticket_code, unique=True, editable=False)
+    """Quick poll not tied to any house"""
+    options = models.JSONField(default=list)  # List of poll options
+    poll_id = models.CharField(max_length=20, unique=True, blank=True)
     
-    # Optional owner, but not required
-    owner = models.ForeignKey(
+    def save(self, *args, **kwargs):
+        if not self.poll_id:
+            self.poll_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            # Ensure uniqueness
+            while QuickPoll.objects.filter(poll_id=self.poll_id).exists():
+                self.poll_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Quick Poll {self.poll_id}: {self.question[:50]}..."
+
+
+class Ticket(models.Model):
+    """Ticket for secure voting"""
+    poll = models.ForeignKey('HousePoll', on_delete=models.CASCADE, related_name='tickets')
+    code = models.CharField(max_length=8)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['poll', 'code']
+
+    def __str__(self):
+        return f"Ticket {self.code} for {self.poll}"
+
+
+class Ballot(models.Model):
+    """Abstract base class for ballots"""
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        abstract = True
+
+    def get_choices_ordered(self):
+        """Return the choices in order for Condorcet method"""
+        choices = []
+        for choice in self.choices.all().order_by('rank'):
+            choices.append(choice.option_index)
+        return choices
+
+
+class HouseBallot(Ballot):
+    """Ballot for house polls"""
+    poll = models.ForeignKey(HousePoll, on_delete=models.CASCADE, related_name='ballots')
+    voter = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True
     )
+    ticket = models.ForeignKey(
+        Ticket, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+    )
 
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-        if is_new and self.is_ticket_secured:
-            self.generate_tickets()
+    class Meta:
+        # Each user can vote only once per poll, or each ticket can be used only once
+        constraints = [
+            models.UniqueConstraint(
+                fields=['poll', 'voter'],
+                condition=models.Q(voter__isnull=False),
+                name='unique_voter_per_house_poll'
+            ),
+            models.UniqueConstraint(
+                fields=['poll', 'ticket'],
+                condition=models.Q(ticket__isnull=False),
+                name='unique_ticket_per_house_poll'
+            )
+        ]
+
+    def __str__(self):
+        if self.ticket:
+            return f"Ballot (Ticket {self.ticket.code}) for {self.poll}"
+        return f"Ballot by {self.voter} for {self.poll}"
+
+
+class QuickBallot(Ballot):
+    """Ballot for quick polls"""
+    poll = models.ForeignKey(QuickPoll, on_delete=models.CASCADE, related_name='ballots')
+    voter = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+    )
+    ticket = models.ForeignKey(
+        Ticket, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='quick_ballots'
+    )
+
+    def __str__(self):
+        if self.ticket:
+            return f"Quick Ballot (Ticket {self.ticket.code}) for {self.poll}"
+        return f"Quick Ballot by {self.voter} for {self.poll}"
+
+
+class BallotChoice(models.Model):
+    """Individual choice within a ballot (for Condorcet ranking)"""
+    house_ballot = models.ForeignKey(
+        HouseBallot, 
+        on_delete=models.CASCADE, 
+        related_name='choices',
+        null=True,
+        blank=True
+    )
+    quick_ballot = models.ForeignKey(
+        QuickBallot, 
+        on_delete=models.CASCADE, 
+        related_name='choices',
+        null=True,
+        blank=True
+    )
+    option_index = models.PositiveIntegerField()  # Index in the poll's options list
+    rank = models.PositiveIntegerField()  # 1 = most preferred, 2 = second, etc.
+
+    class Meta:
+        # Each option can only appear once per ballot
+        constraints = [
+            models.UniqueConstraint(
+                fields=['house_ballot', 'option_index'],
+                condition=models.Q(house_ballot__isnull=False),
+                name='unique_option_per_house_ballot'
+            ),
+            models.UniqueConstraint(
+                fields=['quick_ballot', 'option_index'],
+                condition=models.Q(quick_ballot__isnull=False),
+                name='unique_option_per_quick_ballot'
+            ),
+            models.UniqueConstraint(
+                fields=['house_ballot', 'rank'],
+                condition=models.Q(house_ballot__isnull=False),
+                name='unique_rank_per_house_ballot'
+            ),
+            models.UniqueConstraint(
+                fields=['quick_ballot', 'rank'],
+                condition=models.Q(quick_ballot__isnull=False),
+                name='unique_rank_per_quick_ballot'
+            )
+        ]
+
+    def __str__(self):
+        ballot = self.house_ballot or self.quick_ballot
+        return f"Choice #{self.option_index} (Rank {self.rank}) for {ballot}"

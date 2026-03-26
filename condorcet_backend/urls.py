@@ -19,5 +19,5 @@ urlpatterns = [
     path("", include((tf_urls[0], "two_factor"), namespace="two_factor")),
     path("users/", include("users.urls")),
     path("houses/", include("houses.urls")),
-    path("polls/", include("polls.urls")),
+    # path("polls/", include("polls.urls")),  # Temporarily commented out
 ]
