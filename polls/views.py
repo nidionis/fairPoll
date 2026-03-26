@@ -11,6 +11,62 @@ from .models import HousePoll, QuickPoll, Ticket, Ballot
 from .forms import HousePollForm, QuickPollForm, VoteForm
 from houses.models import House
 
+def calculate_condorcet(poll):
+    """
+    Calculates Condorcet head-to-head match-ups for the given poll.
+    """
+    options = poll.options
+    # Initialize matrix: matrix[A][B] = number of times A beats B
+    matrix = {opt1: {opt2: 0 for opt2 in options} for opt1 in options}
+    
+    for ballot in poll.ballots.all():
+        if not isinstance(ballot.choices, dict):
+            continue
+            
+        choices = ballot.choices
+        for i, opt1 in enumerate(options):
+            for j, opt2 in enumerate(options):
+                if i == j:
+                    continue
+                rank1 = choices.get(opt1)
+                rank2 = choices.get(opt2)
+                
+                # If a rank is missing, treat it as worst possible rank (infinity)
+                val1 = float('inf') if rank1 is None else float(rank1)
+                val2 = float('inf') if rank2 is None else float(rank2)
+                
+                if val1 < val2:
+                    matrix[opt1][opt2] += 1
+
+    wins_count = {opt: 0 for opt in options}
+    losses_count = {opt: 0 for opt in options}
+    ties_count = {opt: 0 for opt in options}
+    
+    for opt1 in options:
+        for opt2 in options:
+            if opt1 == opt2:
+                continue
+            wins = matrix[opt1][opt2]
+            losses = matrix[opt2][opt1]
+            if wins > losses:
+                wins_count[opt1] += 1
+            elif wins < losses:
+                losses_count[opt1] += 1
+            else:
+                ties_count[opt1] += 1
+
+    # A Condorcet winner beats every other option
+    winners = [opt for opt in options if wins_count[opt] == len(options) - 1]
+    
+    return {
+        'matrix': matrix,
+        'winners': winners,
+        'wins_count': wins_count,
+        'losses_count': losses_count,
+        'ties_count': ties_count,
+        'options': options
+    }
+
 def house_poll_create(request, house_pk):
     house = get_object_or_404(House, pk=house_pk)
     if request.method == 'POST':
@@ -54,18 +110,13 @@ def house_poll_results(request, pk):
     poll = get_object_or_404(HousePoll, pk=pk)
     if not poll.is_finished:
          messages.info(request, "Poll is still in progress. Check back later.")
-    
-    stats = {}
-    for ballot in poll.ballots.all():
-        # Find choices with the best (minimum) rank in this ballot
-        if isinstance(ballot.choices, dict):
-             best_rank = min(ballot.choices.values()) if ballot.choices else None
-             if best_rank is not None:
-                 for choice, rank in ballot.choices.items():
-                     if rank == best_rank:
-                         stats[choice] = stats.get(choice, 0) + 1
-                         
-    return render(request, 'polls/poll_results.html', {'poll': poll, 'stats': stats})
+
+    condorcet_stats = calculate_condorcet(poll)
+                     
+    return render(request, 'polls/poll_results.html', {
+        'poll': poll, 
+        'condorcet_stats': condorcet_stats
+    })
 
 def house_poll_export(request, pk):
     poll = get_object_or_404(HousePoll, pk=pk)
@@ -117,6 +168,12 @@ def quickpoll_vote(request, external_id):
         messages.error(request, "Poll is closed.")
         return redirect('polls:quickpoll_results', external_id=external_id)
         
+    # Check session to prevent duplicate voting from the same computer
+    voted_polls = request.session.get('voted_quickpolls', [])
+    if str(external_id) in voted_polls:
+        messages.error(request, "You have already voted in this poll from this device.")
+        return redirect('polls:quickpoll_detail', external_id=external_id)
+
     if request.method == 'POST':
         form = VoteForm(request.POST, poll=poll)
         if form.is_valid():
@@ -126,6 +183,11 @@ def quickpoll_vote(request, external_id):
                     user=request.user if request.user.is_authenticated else None,
                     ticket_code=form.cleaned_data.get('ticket_code')
                 )
+                
+                # Record the vote in the session
+                voted_polls.append(str(external_id))
+                request.session['voted_quickpolls'] = voted_polls
+                
                 messages.success(request, "Vote cast successfully!")
                 return redirect('polls:quickpoll_detail', external_id=external_id)
             except ValueError as e:
@@ -136,15 +198,12 @@ def quickpoll_vote(request, external_id):
 
 def quickpoll_results(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
-    stats = {}
-    for ballot in poll.ballots.all():
-        if isinstance(ballot.choices, dict):
-            best_rank = min(ballot.choices.values()) if ballot.choices else None
-            if best_rank is not None:
-                for choice, rank in ballot.choices.items():
-                    if rank == best_rank:
-                        stats[choice] = stats.get(choice, 0) + 1
-    return render(request, 'polls/poll_results.html', {'poll': poll, 'stats': stats})
+    condorcet_stats = calculate_condorcet(poll)
+    
+    return render(request, 'polls/poll_results.html', {
+        'poll': poll, 
+        'condorcet_stats': condorcet_stats
+    })
 
 def quickpoll_export(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
