@@ -1,4 +1,6 @@
 from django import forms
+from django.utils import timezone
+from datetime import timedelta
 from .models import HousePoll, QuickPoll
 
 class HousePollForm(forms.ModelForm):
@@ -21,6 +23,14 @@ class HousePollForm(forms.ModelForm):
         if len(options) < 2:
             raise forms.ValidationError("Please provide at least two options.")
         return options
+
+    def clean_dead_line(self):
+        dead_line = self.cleaned_data.get('dead_line')
+        if dead_line:
+            min_deadline = timezone.now() + timedelta(minutes=1)
+            if dead_line < min_deadline:
+                raise forms.ValidationError("The deadline must be at least 1 minute from now.")
+        return dead_line
 
     def save(self, commit=True, house=None, creator=None):
         instance = super().save(commit=False)
@@ -53,6 +63,14 @@ class QuickPollForm(forms.ModelForm):
         if len(options) < 2:
             raise forms.ValidationError("Please provide at least two options.")
         return options
+
+    def clean_dead_line(self):
+        dead_line = self.cleaned_data.get('dead_line')
+        if dead_line:
+            min_deadline = timezone.now() + timedelta(minutes=1)
+            if dead_line < min_deadline:
+                raise forms.ValidationError("The deadline must be at least 1 minute from now.")
+        return dead_line
 
     def save(self, commit=True, owner=None):
         instance = super().save(commit=False)
