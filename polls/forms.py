@@ -12,7 +12,7 @@ class HousePollForm(forms.ModelForm):
 
     class Meta:
         model = HousePoll
-        fields = ['question', 'dead_line', 'max_participants', 'is_ticket_secured']
+        fields = ['question', 'dead_line', 'is_ticket_secured']
         widgets = {
             'dead_line': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
@@ -36,6 +36,7 @@ class HousePollForm(forms.ModelForm):
         instance = super().save(commit=False)
         if house:
             instance.house = house
+            instance.max_participants = house.users.count()
         if creator:
             instance.creator = creator
         instance.options = self.cleaned_data['options_text']

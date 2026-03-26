@@ -25,7 +25,11 @@ def house_create(request):
 @login_required
 def house_detail(request, pk):
     house = get_object_or_404(House, pk=pk)
-    return render(request, 'houses/house_detail.html', {'house': house})
+    return render(request, 'houses/house_detail.html', {
+        'house': house,
+        'members': house.users,
+        'polls': house.polls.all()
+    })
 
 @login_required
 def create_integration_poll(request, pk):
