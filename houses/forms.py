@@ -6,10 +6,10 @@ User = get_user_model()
 
 class HouseForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(house__isnull=True),
+        queryset=User.objects.all(),
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        help_text="Select users to add to this house. Only users not already in a house are listed."
+        help_text="Select users to add to this house."
     )
 
     class Meta:
@@ -24,19 +24,20 @@ class HouseForm(forms.ModelForm):
             instance.save()
             # Add creator to house
             if creator:
-                creator.house = instance
-                creator.save()
+                creator.houses.add(instance)
             # Add selected members
             for user in self.cleaned_data['members']:
-                user.house = instance
-                user.save()
+                user.houses.add(instance)
         return instance
 
 class IntegrationPollForm(forms.Form):
-    target_user = forms.ModelChoiceField(
-        queryset=User.objects.filter(house__isnull=True),
-        label="User to integrate"
-    )
+    def __init__(self, *args, **kwargs):
+        house = kwargs.pop('house')
+        super().__init__(*args, **kwargs)
+        self.fields['target_user'] = forms.ModelChoiceField(
+            queryset=User.objects.exclude(houses=house),
+            label="User to integrate"
+        )
 
 class BanishmentPollForm(forms.Form):
     def __init__(self, *args, **kwargs):

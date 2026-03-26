@@ -81,6 +81,11 @@ def house_poll_create(request, house_pk):
 
 def house_poll_detail(request, pk):
     poll = get_object_or_404(HousePoll, pk=pk)
+    
+    # If the poll is finished, redirect directly to results
+    if poll.is_finished:
+        return redirect('polls:house_poll_results', pk=pk)
+        
     return render(request, 'polls/house_poll_detail.html', {'poll': poll})
 
 def house_poll_vote(request, pk):
@@ -152,6 +157,10 @@ def quickpoll_create(request):
 
 def quickpoll_detail(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
+    
+    # If the poll is finished, redirect directly to results
+    if poll.is_finished:
+        return redirect('polls:quickpoll_results', external_id=external_id)
     
     # Check if the user created this poll
     is_creator = False
@@ -235,7 +244,9 @@ def quickpoll_tickets_export(request, external_id):
 def quickpoll_archive(request):
     # Wait, queryset for is_finished is hard to do directly in filter for properties.
     # Let's just grab all and filter in python for now or use annotation if needed.
-    all_polls = QuickPoll.objects.all().order_by('-dead_line')
+    all_polls = QuickPoll.objects.annotate(
+        ballot_count=models.Count('ballots')
+    ).order_by('-dead_line')
     finished_polls = [p for p in all_polls if p.is_finished]
     return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
 

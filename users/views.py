@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -13,8 +15,18 @@ def account(request):
     return render(request, "users/account.html")
 
 
+@login_required
 def homepage(request):
-    return render(request, "users/user_homepage.html")
+    pending_polls = []
+    
+    # Check if the user belongs to a house and find polls they haven't voted in yet
+    if hasattr(request.user, 'house') and request.user.house:
+        house_polls = request.user.house.polls.all()
+        for poll in house_polls:
+            if not poll.is_finished and not poll.ballots.filter(voter=request.user).exists():
+                pending_polls.append(poll)
+                
+    return render(request, "home.html", {"pending_polls": pending_polls})
 
 
 def user_homepage_by_id(request, user_id: int):

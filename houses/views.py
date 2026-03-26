@@ -12,10 +12,6 @@ def house_list(request):
 
 @login_required
 def house_create(request):
-    if request.user.house:
-        messages.error(request, "You already belong to a house.")
-        return redirect('houses:house_detail', pk=request.user.house.pk)
-        
     if request.method == 'POST':
         form = HouseForm(request.POST)
         if form.is_valid():
@@ -29,12 +25,7 @@ def house_create(request):
 @login_required
 def house_detail(request, pk):
     house = get_object_or_404(House, pk=pk)
-    polls = house.polls.all().order_by('-id')
-    return render(request, 'houses/house_detail.html', {
-        'house': house,
-        'polls': polls,
-        'members': house.members.all()
-    })
+    return render(request, 'houses/house_detail.html', {'house': house})
 
 @login_required
 def create_integration_poll(request, pk):
@@ -44,18 +35,16 @@ def create_integration_poll(request, pk):
          return redirect('houses:house_detail', pk=pk)
 
     if request.method == 'POST':
-        form = IntegrationPollForm(request.POST)
+        form = IntegrationPollForm(request.POST, house=house)
         if form.is_valid():
             target_user = form.cleaned_data['target_user']
             question = f"Should we integrate {target_user.username} into {house.name}?"
             # We add target_user_id as extra info in question or poll?
             # For now, let's keep it simple.
-            poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_INTEGRATION)
-            # We should probably store target user id somewhere, but for now we'll rely on poll type logic later
             messages.success(request, f"Integration poll for {target_user.username} created.")
             return redirect('houses:house_detail', pk=pk)
     else:
-        form = IntegrationPollForm()
+        form = IntegrationPollForm(house=house)
     return render(request, 'houses/governance_poll_form.html', {'form': form, 'house': house, 'type': 'Integration'})
 
 @login_required

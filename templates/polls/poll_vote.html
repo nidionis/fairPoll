@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h3>ID: {{ poll.external_id }}</h3>
+
+
 <h2>Vote: {{ poll.question }}</h2>
 <p>Please rank the choices (lower number = higher preference). If two choices have the same rank, they are considered equal in your preference.</p>
 

@@ -183,8 +183,8 @@ class QuickPoll(Poll):
     """
     A standalone poll accessible via ID.
     """
-    # QuickPolls might identify by a UUID or a short ID
-    external_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    # QuickPolls identify by a short alphanumeric ID
+    external_id = models.CharField(max_length=8, default=generate_ticket_code, unique=True, editable=False)
     
     # Optional owner, but not required
     owner = models.ForeignKey(

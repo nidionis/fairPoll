@@ -3,11 +3,29 @@
 {% load account %}
 
 {% block content %}
-  <h1>{% trans "Sign In" %}</h1>
-  <p>Choose your action:</p>
+
+    {% if user.is_authenticated %}
+      <h1>Polls Waiting For You</h1>
+      {% if pending_polls %}
+          <ul>
+              {% for poll in pending_polls %}
+                  <li>
+                      <a href="{% url 'polls:house_poll_detail' poll.pk %}">{{ poll.question }}</a>
+                      (Deadline: {{ poll.dead_line }})
+                  </li>
+              {% endfor %}
+          </ul>
+      {% else %}
+          <p>You have no pending polls to vote on right now.</p>
+      {% endif %}
+    {% endif %}
+
   <ul>
-      <li><a href="{% url 'two_factor:login' %}">{% trans "Sign In" %}</a></li>
-      <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
-      <li><a href="{% url 'polls:quickpoll_archive' %}">Quick polls</a></li>
+    <li><a href="{% url 'polls:quickpoll_archive' %}">Quick polls</a></li>
+    <li><a href="{% url 'polls:quickpoll_create' %}">New QuickPoll</a></li>
+    <li><a href="{% url 'houses:house_list' %}">Houses</a></li>
+    <li><a href="{% url 'houses:house_create' %}">New House</a></li>
   </ul>
+
+
 {% endblock %}

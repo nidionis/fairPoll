@@ -9,13 +9,10 @@ class User(AbstractUser):
     For now it behaves like Django's default user, but having this model
     lets us extend it later (roles, ticket bindings, etc.) without pain.
     """
-
     # Users belong to houses (membership).
-    house = models.ForeignKey(
+    houses = models.ManyToManyField(
         "houses.House",
-        null=True,
         blank=True,
-        on_delete=models.SET_NULL,
         related_name="members",
     )
 

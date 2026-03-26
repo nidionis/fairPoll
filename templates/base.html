@@ -7,9 +7,14 @@
 <body>
     <header>
         <nav>
-            <a href="{% url 'users:user_homepage' %}">Home</a>
+            <a href="/">Home</a>
             | <a href="{% url 'about' %}">How to</a>
-        
+            |
+            <form action="{% url 'polls:quickpoll_join' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="text" name="poll_id" placeholder="Enter Poll ID" required>
+                <button type="submit">Join Poll</button>
+            </form>
             {% if user.is_authenticated %}
                 | <a href="{% url 'users:account' %}">Account</a>
             {% else %}
@@ -17,12 +22,6 @@
                 | <a href="{% url 'account_signup' %}">Sign Up</a>
             {% endif %}
 
-            |
-            <form action="{% url 'polls:quickpoll_join' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="text" name="poll_id" placeholder="Enter Poll ID" required>
-                <button type="submit">Join Poll</button>
-            </form>
         </nav>
     </header>
     <main>
