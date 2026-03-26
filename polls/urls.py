@@ -15,6 +15,7 @@ urlpatterns = [
     path('quickpoll/<uuid:external_id>/vote/', views.quickpoll_vote, name='quickpoll_vote'),
     path('quickpoll/<uuid:external_id>/results/', views.quickpoll_results, name='quickpoll_results'),
     path('quickpoll/<uuid:external_id>/export/', views.quickpoll_export, name='quickpoll_export'),
+    path('quickpoll/<uuid:external_id>/tickets/', views.quickpoll_tickets_export, name='quickpoll_tickets_export'),
     path('quickpoll/archive/', views.quickpoll_archive, name='quickpoll_archive'),
     path('quickpoll/join/', views.quickpoll_join, name='quickpoll_join'),
 ]

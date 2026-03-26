@@ -85,6 +85,12 @@ def quickpoll_create(request):
                 poll.owner = request.user
             poll.save()
             messages.success(request, f"QuickPoll created. ID: {poll.external_id}")
+            
+            # Save the created poll's ID in the session
+            created_polls = request.session.get('created_quickpolls', [])
+            created_polls.append(str(poll.external_id))
+            request.session['created_quickpolls'] = created_polls
+            
             return redirect('polls:quickpoll_detail', external_id=poll.external_id)
     else:
         form = QuickPollForm()
@@ -92,7 +98,15 @@ def quickpoll_create(request):
 
 def quickpoll_detail(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
-    return render(request, 'polls/quickpoll_detail.html', {'poll': poll})
+    
+    # Check if the user created this poll
+    is_creator = False
+    if request.user.is_authenticated and poll.owner == request.user:
+        is_creator = True
+    elif str(external_id) in request.session.get('created_quickpolls', []):
+        is_creator = True
+        
+    return render(request, 'polls/quickpoll_detail.html', {'poll': poll, 'is_creator': is_creator})
 
 def quickpoll_vote(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
@@ -136,6 +150,24 @@ def quickpoll_export(request, external_id):
     results = poll.get_results_json()
     response = HttpResponse(results, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_results.json"'
+    return response
+
+def quickpoll_tickets_export(request, external_id):
+    poll = get_object_or_404(QuickPoll, external_id=external_id)
+    
+    # Check if user is the creator (via auth or session) and poll is still active
+    is_creator = False
+    if request.user.is_authenticated and poll.owner == request.user:
+        is_creator = True
+    elif str(external_id) in request.session.get('created_quickpolls', []):
+        is_creator = True
+
+    if not (poll.is_ticket_secured and not poll.is_finished and is_creator):
+        return HttpResponse("Unauthorized or poll finished.", status=403)
+        
+    tickets = [ticket.code for ticket in poll.tickets.all() if not ticket.is_used]
+    response = HttpResponse('\n'.join(tickets), content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_tickets.txt"'
     return response
 
 def quickpoll_archive(request):
