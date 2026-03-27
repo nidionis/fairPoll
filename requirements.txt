@@ -3,5 +3,6 @@ django-allauth
 django-otp
 django-two-factor-auth
 gunicorn
+python-dotenv
 qrcode
 pillow

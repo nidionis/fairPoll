@@ -12,9 +12,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env file
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,8 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-key")
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 # Application definition
@@ -133,6 +137,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -158,9 +166,8 @@ LOGIN_URL = 'two_factor:login'
 LOGIN_REDIRECT_URL = "users:user_homepage"
 LOGOUT_REDIRECT_URL = "home"
 
-# Email settings (for testing, use console backend)
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# Email settings
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.example.com")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
