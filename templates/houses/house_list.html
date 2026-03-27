@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>All Houses</h2>
+<h2>My Houses</h2>
 <ul>
-    {% for house in houses %}
+    {% for house in my_houses %}
         <li><a href="{% url 'houses:house_detail' house.pk %}">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
     {% empty %}
-        <li>No houses yet.</li>
+        <li>You don't belong to any houses yet.</li>
     {% endfor %}
 </ul>
-{% if not user.house %}
-    <a href="{% url 'houses:house_create' %}" class="btn btn-primary">Create a House</a>
-{% endif %}
+
+<h2>Other Houses</h2>
+<ul>
+    {% for house in other_houses %}
+        <li><a href="{% url 'houses:house_detail' house.pk %}">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
+    {% empty %}
+        <li>No other houses yet.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'houses:house_create' %}" class="btn btn-primary">Create a House</a>
 {% endblock %}

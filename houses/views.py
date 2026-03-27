@@ -7,8 +7,12 @@ from polls.models import HousePoll
 
 @login_required
 def house_list(request):
-    houses = House.objects.all()
-    return render(request, 'houses/house_list.html', {'houses': houses})
+    my_houses = request.user.houses.all()
+    other_houses = House.objects.exclude(id__in=my_houses.values_list('id', flat=True))
+    return render(request, 'houses/house_list.html', {
+        'my_houses': my_houses,
+        'other_houses': other_houses
+    })
 
 @login_required
 def house_create(request):

@@ -10,6 +10,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from .models import HousePoll, QuickPoll, Ticket, Ballot
 from .forms import HousePollForm, QuickPollForm, VoteForm
+from polls.models import HousePoll
 from houses.models import House
 
 def calculate_condorcet(poll):
