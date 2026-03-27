@@ -19,10 +19,9 @@ def account(request):
 def homepage(request):
     pending_polls = []
     
-    # Check if the user belongs to a house and find polls they haven't voted in yet
-    if hasattr(request.user, 'house') and request.user.house:
-        house_polls = request.user.house.polls.all()
-        for poll in house_polls:
+    # Check if the user belongs to houses and find polls they haven't voted in yet
+    for house in request.user.houses.all():
+        for poll in house.polls.all():
             if not poll.is_finished and not poll.ballots.filter(voter=request.user).exists():
                 pending_polls.append(poll)
                 

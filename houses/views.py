@@ -62,7 +62,7 @@ def create_integration_poll(request, pk):
             poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_INTEGRATION)
             
             messages.success(request, f"Integration poll for {target_user.username} created.")
-            return redirect('houses:house_detail', pk=pk)
+            return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = IntegrationPollForm(house=house)
     return render(request, 'houses/governance_poll_form.html', {'form': form, 'house': house, 'type': 'Integration'})
@@ -86,7 +86,7 @@ def create_banishment_poll(request, pk):
             question = f"Should we banish {target_user.username} from {house.name}?"
             poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_BANISHMENT)
             messages.success(request, f"Banishment poll for {target_user.username} created.")
-            return redirect('houses:house_detail', pk=pk)
+            return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = BanishmentPollForm(house=house)
     return render(request, 'houses/governance_poll_form.html', {'form': form, 'house': house, 'type': 'Banishment'})
@@ -106,4 +106,4 @@ def create_deletion_poll(request, pk):
     question = f"Should we delete the house {house.name}?"
     poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_DELETION)
     messages.success(request, f"Deletion poll created.")
-    return redirect('houses:house_detail', pk=pk)
+    return redirect('polls:house_poll_detail', external_id=poll.external_id)
