@@ -2,6 +2,10 @@
 
 {% block content %}
 <h2>Results: {{ poll.question }}</h2>
+{% if poll.house %}
+    <p>House: {{ poll.house.name }}</p>
+{% endif %}
+<p>Deadline: {{ poll.dead_line }}</p>
 <p>Status: {% if poll.is_finished %}Finished{% else %}Active{% endif %}</p>
 
 <h3>Summary</h3>
@@ -84,6 +88,13 @@
     {% endif %}
 {% else %}
     <p>The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted.</p>
+    {% if poll.is_ticket_secured and is_creator %}
+        {% if poll.house %}
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+        {% else %}
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+        {% endif %}
+    {% endif %}
 {% endif %}
 
 <hr>

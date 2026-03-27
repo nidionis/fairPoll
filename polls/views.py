@@ -84,11 +84,11 @@ def house_poll_create(request, house_pk):
 def house_poll_detail(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
     
-    # If the poll is finished, redirect directly to results
-    if poll.is_finished:
+    # If the poll is finished or user has already voted, redirect to results
+    if poll.is_finished or (request.user.is_authenticated and poll.ballots.filter(voter=request.user).exists()):
         return redirect('polls:house_poll_results', external_id=external_id)
         
-    return render(request, 'polls/house_poll_detail.html', {'poll': poll})
+    return redirect('polls:house_poll_vote', external_id=external_id)
 
 def house_poll_vote(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
@@ -106,12 +106,17 @@ def house_poll_vote(request, external_id):
                     ticket_code=form.cleaned_data.get('ticket_code')
                 )
                 messages.success(request, "Vote cast successfully!")
-                return redirect('polls:house_poll_detail', external_id=external_id)
+                return redirect('polls:house_poll_results', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
     else:
         form = VoteForm(poll=poll)
-    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
+    
+    is_creator = False
+    if poll.creator == request.user:
+        is_creator = True
+
+    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll, 'is_creator': is_creator})
 
 def house_poll_results(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
@@ -161,9 +166,14 @@ def house_poll_results(request, external_id):
                 messages.warning(request, "The house has been deleted following the successful deletion poll.")
                 return redirect('houses:house_list')
                      
+    is_creator = False
+    if poll.creator == request.user:
+        is_creator = True
+
     return render(request, 'polls/poll_results.html', {
         'poll': poll, 
-        'condorcet_stats': condorcet_stats
+        'condorcet_stats': condorcet_stats,
+        'is_creator': is_creator
     })
 
 def house_poll_export(request, external_id):
@@ -213,18 +223,12 @@ def quickpoll_create(request):
 def quickpoll_detail(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
     
-    # If the poll is finished, redirect directly to results
-    if poll.is_finished:
+    # If the poll is finished or user has already voted, redirect to results
+    voted_polls = request.session.get('voted_quickpolls', [])
+    if poll.is_finished or str(external_id) in voted_polls or (request.user.is_authenticated and poll.ballots.filter(voter=request.user).exists()):
         return redirect('polls:quickpoll_results', external_id=external_id)
     
-    # Check if the user created this poll
-    is_creator = False
-    if request.user.is_authenticated and poll.owner == request.user:
-        is_creator = True
-    elif str(external_id) in request.session.get('created_quickpolls', []):
-        is_creator = True
-        
-    return render(request, 'polls/quickpoll_detail.html', {'poll': poll, 'is_creator': is_creator})
+    return redirect('polls:quickpoll_vote', external_id=external_id)
 
 def quickpoll_vote(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
@@ -253,20 +257,36 @@ def quickpoll_vote(request, external_id):
                 request.session['voted_quickpolls'] = voted_polls
                 
                 messages.success(request, "Vote cast successfully!")
-                return redirect('polls:quickpoll_detail', external_id=external_id)
+                return redirect('polls:quickpoll_results', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
     else:
         form = VoteForm(poll=poll)
-    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
+    
+    # Check if the user created this poll
+    is_creator = False
+    if request.user.is_authenticated and poll.owner == request.user:
+        is_creator = True
+    elif str(external_id) in request.session.get('created_quickpolls', []):
+        is_creator = True
+
+    return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll, 'is_creator': is_creator})
 
 def quickpoll_results(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
     condorcet_stats = calculate_condorcet(poll)
     
+    # Check if the user created this poll
+    is_creator = False
+    if request.user.is_authenticated and poll.owner == request.user:
+        is_creator = True
+    elif str(external_id) in request.session.get('created_quickpolls', []):
+        is_creator = True
+
     return render(request, 'polls/poll_results.html', {
         'poll': poll, 
-        'condorcet_stats': condorcet_stats
+        'condorcet_stats': condorcet_stats,
+        'is_creator': is_creator
     })
 
 def quickpoll_export(request, external_id):

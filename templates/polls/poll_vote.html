@@ -5,6 +5,10 @@
 
 
 <h2>Vote: {{ poll.question }}</h2>
+{% if poll.house %}
+    <p>House: {{ poll.house.name }}</p>
+{% endif %}
+<p>Deadline: {{ poll.dead_line }}</p>
 <p>Please rank the choices (lower number = higher preference). If two choices have the same rank, they are considered equal in your preference.</p>
 
 <form method="post">
@@ -30,6 +34,13 @@
         {% endfor %}
     </ul>
     <button type="submit" class="btn">Cast Vote</button>
+    {% if poll.is_ticket_secured %}
+        {% if poll.house and user == poll.creator %}
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+        {% elif not poll.house and is_creator %}
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+        {% endif %}
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>

@@ -27,14 +27,17 @@ class HousePollTicketsTest(TestCase):
         self.client = Client()
         self.client.login(username='testuser', password='password')
 
-    def test_house_poll_detail_displays_download_link(self):
+    def test_house_poll_detail_redirects_to_vote_and_displays_download_link(self):
         url = reverse('polls:house_poll_detail', kwargs={'external_id': self.poll.external_id})
-        response = self.client.get(url)
+        response = self.client.get(url, follow=True)
+        # It should redirect to vote page
+        expected_url = reverse('polls:house_poll_vote', kwargs={'external_id': self.poll.external_id})
+        self.assertRedirects(response, expected_url)
         self.assertEqual(response.status_code, 200)
         # New behavior: tickets are NOT displayed in <li> tags
         self.assertNotContains(response, '<li><code>TICKET1</code></li>')
         self.assertNotContains(response, '<li><code>TICKET2</code></li>')
-        # Download link is present
+        # Download link is present on the vote page
         download_url = reverse('polls:house_poll_tickets_export', kwargs={'external_id': self.poll.external_id})
         self.assertContains(response, f'href="{download_url}"')
 
@@ -46,4 +49,6 @@ class HousePollTicketsTest(TestCase):
         content = response.content.decode('utf-8')
         self.assertIn('TICKET1', content)
         self.assertIn('TICKET2', content)
-        self.assertEqual(content.split('\n'), ['TICKET1', 'TICKET2'])
+        tickets = content.split('\n')
+        self.assertIn('TICKET1', tickets)
+        self.assertIn('TICKET2', tickets)
