@@ -9,7 +9,8 @@ urlpatterns = [
     path('house_poll/<str:external_id>/vote/', views.house_poll_vote, name='house_poll_vote'),
     path('house_poll/<str:external_id>/results/', views.house_poll_results, name='house_poll_results'),
     path('house_poll/<str:external_id>/export/', views.house_poll_export, name='house_poll_export'),
-    
+    path('house_poll/<str:external_id>/tickets/', views.house_poll_tickets_export, name='house_poll_tickets_export'),
+
     path('quickpoll/create/', views.quickpoll_create, name='quickpoll_create'),
     path('quickpoll/archive/', views.quickpoll_archive, name='quickpoll_archive'),
     path('quickpoll/<str:external_id>/', views.quickpoll_detail, name='quickpoll_detail'),

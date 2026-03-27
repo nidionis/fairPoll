@@ -1,41 +1,52 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}FairPoll{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            | <a href="{% url 'about' %}">How to</a>
-            |
-            <form action="{% url 'polls:poll_join' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="text" name="poll_id" placeholder="Enter Poll ID" required>
-                <button type="submit">Join Poll</button>
-            </form>
-            {% if user.is_authenticated %}
-                | <a href="{% url 'users:account' %}">Account</a>
-            {% else %}
-                | <a href="{% url 'two_factor:login' %}">Login</a>
-                | <a href="{% url 'account_signup' %}">Sign Up</a>
+    <div class="main-wrapper">
+        <header>
+            <nav>
+                <form action="{% url 'polls:poll_join' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="poll_id" placeholder="Poll ID" required>
+                    <button type="submit">Join</button>
+                </form>
+                <a href="/">Home</a>
+                <a href="{% url 'about' %}">How to</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'users:account' %}">Account</a>
+                {% else %}
+                    <a href="{% url 'two_factor:login' %}">Login</a>
+                    <a href="{% url 'account_signup' %}">Sign Up</a>
+                {% endif %}
+            </nav>
+        </header>
+        <main>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message{% if message.tags %} {{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
 
-        </nav>
-    </header>
-    <main>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="message{% if message.tags %} {{ message.tags }}{% endif %}">
-                        {{ message }}
-                    </li>
-                {% endfor %}
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            <ul>
+                <li><a href="{% url 'polls:quickpoll_archive' %}">Quick polls</a></li>
+                <li><a href="{% url 'polls:quickpoll_create' %}">New QuickPoll</a></li>
+                <li><a href="{% url 'houses:house_list' %}">Houses</a></li>
+                <li><a href="{% url 'houses:house_create' %}">New House</a></li>
             </ul>
-        {% endif %}
-
-        {% block content %}{% endblock %}
-    </main>
+        </footer>
+    </div>
 </body>
 </html>

@@ -175,6 +175,18 @@ def house_poll_export(request, external_id):
     response['Content-Disposition'] = f'attachment; filename="house_poll_{external_id}_results.json"'
     return response
 
+def house_poll_tickets_export(request, external_id):
+    poll = get_object_or_404(HousePoll, external_id=external_id)
+    
+    # Check if user is the creator and poll is still active
+    if not (poll.is_ticket_secured and not poll.is_finished and request.user == poll.creator):
+        return HttpResponse("Unauthorized or poll finished.", status=403)
+        
+    tickets = [ticket.code for ticket in poll.tickets.all() if not ticket.is_used]
+    response = HttpResponse('\n'.join(tickets), content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="house_poll_{external_id}_tickets.txt"'
+    return response
+
 # QuickPolls
 
 def quickpoll_create(request):

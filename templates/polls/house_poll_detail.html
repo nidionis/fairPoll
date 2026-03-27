@@ -21,13 +21,7 @@
     <hr>
     <h3>Available Tickets</h3>
     <p>Distribute these tickets randomly to voters:</p>
-    <ul>
-        {% for ticket in poll.tickets.all %}
-            {% if not ticket.is_used %}
-                <li><code>{{ ticket.code }}</code></li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">Download Tickets</a>
 {% endif %}
 
 <hr>

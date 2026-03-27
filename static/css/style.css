@@ -1,0 +1,344 @@
+:root {
+    --bg-color: #fdfcf9; /* Warm off-white zen */
+    --container-bg: #ffffff;
+    --text-color: #34495e;
+    --secondary-text: #7f8c8d;
+    --accent-color: #48a9a6; /* Soft Teal Accent */
+    --accent-hover: #3a8b89;
+    --error-color: #e67e22;
+    --success-color: #48a9a6;
+    --border-radius: 44px;
+    --input-radius: 50px;
+    --card-radius: 32px;
+    --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --shadow: 0 12px 40px rgba(72, 169, 166, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 80px 20px;
+    line-height: 1.7;
+}
+
+/* Global list reset - remove all bullets as requested */
+ul, ol {
+    list-style: none !important;
+    padding: 0 !important;
+}
+
+.main-wrapper {
+    width: 100%;
+    max-width: 900px;
+    background-color: var(--container-bg);
+    padding: 80px 100px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(72, 169, 166, 0.05);
+}
+
+header {
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 1.05rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--secondary-text);
+    transition: var(--transition);
+    padding: 10px 20px;
+    border-radius: var(--input-radius);
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: var(--accent-color);
+    background-color: #f1f5f9;
+}
+
+.nav-separator {
+    color: #e2e8f0;
+    user-select: none;
+    font-size: 0.9rem;
+}
+
+h1, h2, h3 {
+    font-weight: 500;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.8em;
+    letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.6rem; color: var(--accent-color); }
+h2 { font-size: 2rem; margin-top: 2em; color: #34495e; }
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+button, input[type="submit"], .btn, .button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white !important;
+    border: none;
+    padding: 16px 36px;
+    border-radius: var(--input-radius);
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: var(--transition);
+    box-shadow: 0 6px 15px rgba(72, 169, 166, 0.2);
+    text-align: center;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+button:hover, input[type="submit"]:hover, .btn:hover, .button:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(72, 169, 166, 0.25);
+}
+
+input[type="text"], input[type="password"], input[type="email"], select, textarea {
+    width: 100%;
+    padding: 16px 28px;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--input-radius);
+    background-color: #f8fafc;
+    margin-bottom: 24px;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+    color: var(--text-color);
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border-color: var(--accent-color);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+    padding-left: 20px;
+    font-weight: 500;
+}
+
+form p {
+    margin-bottom: 30px;
+}
+
+/* Lists styling */
+main ul li, main ol li {
+    background: #fdfdfd;
+    margin-bottom: 20px;
+    padding: 28px 40px;
+    border-radius: var(--card-radius);
+    border: 1px solid #f1f1f1;
+    transition: var(--transition);
+    position: relative;
+    list-style: none !important; /* Force no bullets */
+}
+
+main ul li:hover, main ol li:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.03);
+}
+
+main ol {
+    counter-reset: step-counter;
+}
+
+main ol li {
+    padding-left: 70px;
+}
+
+main ol li::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(72, 169, 166, 0.1);
+    color: var(--accent-color);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sortable-list {
+    margin: 2em 0;
+    padding: 0;
+}
+
+.sortable-item {
+    background: #ffffff;
+    border: 1px solid #f1f1f1;
+    border-radius: var(--card-radius);
+    margin-bottom: 12px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    cursor: grab;
+    transition: var(--transition);
+    list-style: none !important;
+}
+
+.sortable-item:active {
+    cursor: grabbing;
+}
+
+.sortable-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.03);
+    transform: translateY(-2px);
+}
+
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: var(--bg-color);
+    border: 2px dashed var(--accent-color);
+}
+
+.handle {
+    margin-right: 20px;
+    color: var(--secondary-text);
+    cursor: grab;
+    font-size: 1.4rem;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+}
+
+.messages {
+    margin-bottom: 40px;
+}
+
+.message {
+    padding: 18px 32px;
+    border-radius: var(--input-radius);
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.message.success {
+    background-color: rgba(72, 169, 166, 0.1);
+    color: #2c6e6c;
+}
+
+.message.error, .message.danger {
+    background-color: #fff2e6;
+    color: #d35400;
+}
+
+nav form {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 10px;
+}
+
+nav form input {
+    margin-bottom: 0 !important;
+    padding: 10px 20px !important;
+    font-size: 0.95rem !important;
+    width: 160px !important;
+    background-color: #fcfcfc !important;
+}
+
+nav form button {
+    padding: 10px 22px !important;
+    font-size: 0.95rem !important;
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+
+@media (max-width: 768px) {
+    .main-wrapper {
+        padding: 40px 30px;
+        border-radius: 30px;
+    }
+    
+    h1 { font-size: 1.8rem; }
+    
+    nav form {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+}
+
+/* Footer styling */
+footer {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid #f1f5f9;
+}
+
+footer ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+footer a {
+    text-decoration: none;
+    color: var(--secondary-text);
+    transition: var(--transition);
+    padding: 8px 16px;
+    border-radius: var(--input-radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+footer a:hover {
+    color: var(--accent-color);
+    background-color: #f1f5f9;
+}

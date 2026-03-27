@@ -16,24 +16,48 @@
         <p>{{ form.ticket_code.label_tag }} {{ form.ticket_code }}</p>
     {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Option</th>
-                <th>Rank</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for field in form %}
-                {% if field.name != "ticket_code" %}
-                    <tr>
-                        <td>{{ field.label }}</td>
-                        <td>{{ field }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-primary">Cast Vote</button>
+    <ul id="sortable-options" class="sortable-list">
+        {% for field in form %}
+            {% if field.name != "ticket_code" %}
+                <li class="sortable-item" data-id="{{ field.name }}">
+                    <span class="handle">⠿</span>
+                    <div style="flex-grow: 1;">
+                        {{ field.label }}
+                    </div>
+                    {{ field.as_hidden }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <button type="submit" class="btn">Cast Vote</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('sortable-options');
+            if (el) {
+                var sortable = Sortable.create(el, {
+                    animation: 150,
+                    handle: '.handle',
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                        updateRanks();
+                    }
+                });
+
+                function updateRanks() {
+                    var items = el.getElementsByClassName('sortable-item');
+                    for (var i = 0; i < items.length; i++) {
+                        var input = items[i].querySelector('input[type="hidden"]');
+                        if (input) {
+                            input.value = i + 1;
+                        }
+                    }
+                }
+                // Initialize ranks based on initial order
+                updateRanks();
+            }
+        });
+    </script>
 </form>
 {% endblock %}

@@ -97,7 +97,7 @@ class VoteForm(forms.Form):
         # Let's say it's comma-separated ranks: "choice1, choice2, choice3"
         for i, option in enumerate(poll.options):
             self.fields[f'rank_{i}'] = forms.IntegerField(
-                label=f"Rank for {option}",
+                label=option,
                 min_value=1,
                 max_value=len(poll.options),
                 initial=i+1
