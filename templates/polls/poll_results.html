@@ -78,7 +78,7 @@
 {% if poll.is_finished %}
     <p>Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable).</p>
     {% if poll.house %}
-        <a href="{% url 'polls:house_poll_export' poll.pk %}" class="btn btn-secondary">Download JSON Results</a>
+        <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
     {% else %}
         <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
     {% endif %}
@@ -88,7 +88,7 @@
 
 <hr>
 {% if poll.house %}
-    <a href="{% url 'polls:house_poll_detail' poll.pk %}" class="btn btn-primary">Back to Poll</a>
+    <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="btn btn-primary">Back to Poll</a>
 {% else %}
     <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="btn btn-primary">Back to Poll</a>
 {% endif %}

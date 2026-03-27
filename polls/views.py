@@ -7,6 +7,7 @@ from django.db import models
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
+from django.core.exceptions import ValidationError
 from .models import HousePoll, QuickPoll, Ticket, Ballot
 from .forms import HousePollForm, QuickPollForm, VoteForm
 from houses.models import House
@@ -74,25 +75,25 @@ def house_poll_create(request, house_pk):
         if form.is_valid():
             poll = form.save(house=house, creator=request.user)
             messages.success(request, f"Poll {poll.question} created.")
-            return redirect('polls:house_poll_detail', pk=poll.pk)
+            return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = HousePollForm()
     return render(request, 'polls/house_poll_form.html', {'form': form, 'house': house})
 
-def house_poll_detail(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+def house_poll_detail(request, external_id):
+    poll = get_object_or_404(HousePoll, external_id=external_id)
     
     # If the poll is finished, redirect directly to results
     if poll.is_finished:
-        return redirect('polls:house_poll_results', pk=pk)
+        return redirect('polls:house_poll_results', external_id=external_id)
         
     return render(request, 'polls/house_poll_detail.html', {'poll': poll})
 
-def house_poll_vote(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+def house_poll_vote(request, external_id):
+    poll = get_object_or_404(HousePoll, external_id=external_id)
     if poll.is_finished:
         messages.error(request, "Poll is closed.")
-        return redirect('polls:house_poll_results', pk=pk)
+        return redirect('polls:house_poll_results', external_id=external_id)
         
     if request.method == 'POST':
         form = VoteForm(request.POST, poll=poll)
@@ -104,15 +105,15 @@ def house_poll_vote(request, pk):
                     ticket_code=form.cleaned_data.get('ticket_code')
                 )
                 messages.success(request, "Vote cast successfully!")
-                return redirect('polls:house_poll_detail', pk=pk)
+                return redirect('polls:house_poll_detail', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
     else:
         form = VoteForm(poll=poll)
     return render(request, 'polls/poll_vote.html', {'form': form, 'poll': poll})
 
-def house_poll_results(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+def house_poll_results(request, external_id):
+    poll = get_object_or_404(HousePoll, external_id=external_id)
     if not poll.is_finished:
          messages.info(request, "Poll is still in progress. Check back later.")
 
@@ -164,13 +165,13 @@ def house_poll_results(request, pk):
         'condorcet_stats': condorcet_stats
     })
 
-def house_poll_export(request, pk):
-    poll = get_object_or_404(HousePoll, pk=pk)
+def house_poll_export(request, external_id):
+    poll = get_object_or_404(HousePoll, external_id=external_id)
     if not poll.is_finished:
         return HttpResponse("Poll is not finished.", status=403)
     results = poll.get_results_json()
     response = HttpResponse(results, content_type='application/json')
-    response['Content-Disposition'] = f'attachment; filename="house_poll_{pk}_results.json"'
+    response['Content-Disposition'] = f'attachment; filename="house_poll_{external_id}_results.json"'
     return response
 
 # QuickPolls
@@ -291,15 +292,23 @@ def quickpoll_archive(request):
     finished_polls = [p for p in all_polls if p.is_finished]
     return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
 
-def quickpoll_join(request):
+def poll_join(request):
     if request.method == 'POST':
         poll_id = request.POST.get('poll_id', '').strip()
         if poll_id:
             try:
+                # Try QuickPoll first
                 poll = QuickPoll.objects.get(external_id=poll_id)
                 return redirect('polls:quickpoll_detail', external_id=poll.external_id)
-            except (QuickPoll.DoesNotExist, ValidationError, ValueError):
-                messages.error(request, "Poll not found. Please check the ID.")
+            except QuickPoll.DoesNotExist:
+                try:
+                    # Then try HousePoll
+                    poll = HousePoll.objects.get(external_id=poll_id)
+                    return redirect('polls:house_poll_detail', external_id=poll.external_id)
+                except HousePoll.DoesNotExist:
+                    messages.error(request, "Poll not found. Please check the ID.")
+            except (ValidationError, ValueError):
+                messages.error(request, "Invalid Poll ID.")
     
     # If it's a GET request or the form had errors, return to home
     return redirect('home')

@@ -10,7 +10,7 @@
             <a href="/">Home</a>
             | <a href="{% url 'about' %}">How to</a>
             |
-            <form action="{% url 'polls:quickpoll_join' %}" method="post" style="display:inline;">
+            <form action="{% url 'polls:poll_join' %}" method="post" style="display:inline;">
                 {% csrf_token %}
                 <input type="text" name="poll_id" placeholder="Enter Poll ID" required>
                 <button type="submit">Join Poll</button>

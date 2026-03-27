@@ -56,6 +56,8 @@ class Ballot(models.Model):
 # --- Abstract Base Poll ---
 
 class Poll(models.Model):
+    # All poll and quickpoll are identified by a random and unic 8 char long ID
+    external_id = models.CharField(max_length=8, default=generate_ticket_code, unique=True, editable=False)
     question = models.CharField(max_length=255)
     options = models.JSONField(default=list, help_text="List of choices for the poll.")
     dead_line = models.DateTimeField()
@@ -183,9 +185,6 @@ class QuickPoll(Poll):
     """
     A standalone poll accessible via ID.
     """
-    # QuickPolls identify by a short alphanumeric ID
-    external_id = models.CharField(max_length=8, default=generate_ticket_code, unique=True, editable=False)
-    
     # Optional owner, but not required
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
