@@ -60,13 +60,22 @@ def calculate_condorcet(poll):
     # A Condorcet winner beats every other option
     winners = [opt for opt in options if wins_count[opt] == len(options) - 1]
     
+    # Sort options by preference
+    # 1. Copeland score (Wins - Losses) descending
+    # 2. Least losses ascending
+    # 3. Original order in poll.options
+    sorted_options = sorted(
+        options,
+        key=lambda opt: (-(wins_count[opt] - losses_count[opt]), losses_count[opt], options.index(opt))
+    )
+
     return {
         'matrix': matrix,
         'winners': winners,
         'wins_count': wins_count,
         'losses_count': losses_count,
         'ties_count': ties_count,
-        'options': options
+        'options': sorted_options
     }
 
 def house_poll_create(request, house_pk):
