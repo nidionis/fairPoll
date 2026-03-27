@@ -7,6 +7,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.core.mail import send_mail
+from django.urls import reverse
 
 # --- Utilities ---
 
@@ -180,6 +182,26 @@ class HousePoll(Poll):
         super().save(*args, **kwargs)
         if is_new and self.is_ticket_secured:
             self.generate_tickets()
+        
+        # Send an email to all members of the house if the poll is newly created
+        if is_new:
+            recipient_list = [user.email for user in self.house.users.all() if user.email]
+            if recipient_list:
+                poll_path = reverse('polls:house_poll_detail', kwargs={'external_id': self.external_id})
+                # If you have a configured SITE_URL in settings, you can prefix it here. 
+                # e.g., link = f"{settings.SITE_URL}{poll_path}"
+                link = f"http://127.0.0.1:8000{poll_path}"
+                
+                subject = f"New Poll in House {self.house.name}: {self.question}"
+                message = (
+                    f"A new poll has been created in the house '{self.house.name}'.\n\n"
+                    f"Question: {self.question}\n"
+                    f"Poll ID: {self.external_id}\n\n"
+                    f"You can view and vote on the poll here: {link}\n"
+                )
+                
+                from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@fairpoll.com')
+                send_mail(subject, message, from_email, recipient_list, fail_silently=True)
 
 class QuickPoll(Poll):
     """
