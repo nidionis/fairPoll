@@ -9,7 +9,7 @@ class HouseForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         required=False,
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'scrollable-list'}),
         help_text="Select users to add to this house."
     )
     
