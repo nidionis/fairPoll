@@ -10,7 +10,7 @@
     <ul>
         {% for poll in active_polls %}
             <li>
-                <a href="{% url 'polls:house_poll_detail' poll.external_id %}">{{ poll.question }}</a>
+                <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a>
                 ({{ poll.poll_type }})
             </li>
             {% empty %}
@@ -38,7 +38,7 @@
     <ul>
         {% for poll in archived_polls %}
             <li>
-                <a href="{% url 'polls:house_poll_detail' poll.external_id %}">{{ poll.question }}</a>
+                <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a>
                 ({{ poll.poll_type }})
             </li>
             {% empty %}

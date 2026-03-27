@@ -10,7 +10,7 @@
           <ul>
               {% for poll in pending_polls %}
                   <li>
-                      <a href="{% url 'polls:house_poll_detail' poll.external_id %}">{{ poll.question }}</a>
+                      <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a>
                       (Deadline: {{ poll.dead_line }})
                   </li>
               {% endfor %}

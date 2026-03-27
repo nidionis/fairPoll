@@ -6,7 +6,7 @@
 <ul>
     {% for poll in polls %}
         <li>
-            <a href="{% url 'polls:quickpoll_detail' poll.external_id %}">{{ poll.question }}</a> 
+            <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a> 
             ({{ poll.ballot_count }} votes) - Finished: {{ poll.dead_line|date:"F j, Y, g:i a" }}
         </li>
     {% empty %}
