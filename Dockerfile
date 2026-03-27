@@ -20,7 +20,7 @@ FROM python:3.14-slim
 WORKDIR /app
 
 # Create a non-root user
-RUN addgroup --system django && adduser --system --group django
+RUN addgroup --system django && adduser --system --group django --home /home/django
 
 # Copy wheels and install
 COPY --from=builder /app/wheels /wheels
