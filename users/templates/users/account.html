@@ -6,7 +6,8 @@
   <h1>Account</h1>
 
   <ul>
-    <li><a href="{% url 'two_factor:profile' %}" class="stretched-link">2FA</a></li>
-    <li><a href="{% url 'account_logout' %}" class="stretched-link">Modify/Sign Out</a></li>
+    <li><a href="{% url 'users:profile_update' %}" class="stretched-link">Modify Profile</a></li>
+    <li><a href="{% url 'two_factor:profile' %}" class="stretched-link">Security (2FA)</a></li>
+    <li><a href="{% url 'account_logout' %}" class="stretched-link">Sign Out</a></li>
   </ul>
 {% endblock %}

@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from .forms import UserProfileForm
 
 User = get_user_model()
 
@@ -26,6 +28,19 @@ def homepage(request):
                 pending_polls.append(poll)
                 
     return render(request, "home.html", {"pending_polls": pending_polls})
+
+
+@login_required
+def profile_update(request):
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated!")
+            return redirect("users:account")
+    else:
+        form = UserProfileForm(instance=request.user)
+    return render(request, "users/profile_update.html", {"form": form})
 
 
 def user_homepage_by_id(request, user_id: int):
