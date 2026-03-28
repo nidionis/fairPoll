@@ -6,7 +6,7 @@ from .models import HousePoll, QuickPoll
 class HousePollForm(forms.ModelForm):
     options_text = forms.CharField(
         widget=forms.Textarea,
-        help_text="Enter choices separated by commas (e.g., choice1, choice2, choice3).",
+        help_text="Enter choices, one per line.",
         label="Choices"
     )
 
@@ -19,7 +19,7 @@ class HousePollForm(forms.ModelForm):
 
     def clean_options_text(self):
         data = self.cleaned_data['options_text']
-        options = [o.strip() for o in data.split(',') if o.strip()]
+        options = [o.strip() for o in data.splitlines() if o.strip()]
         if len(options) < 2:
             raise forms.ValidationError("Please provide at least two options.")
         return options
@@ -47,7 +47,7 @@ class HousePollForm(forms.ModelForm):
 class QuickPollForm(forms.ModelForm):
     options_text = forms.CharField(
         widget=forms.Textarea,
-        help_text="Enter choices separated by commas (e.g., choice1, choice2, choice3).",
+        help_text="Enter choices, one per line.",
         label="Choices"
     )
 
@@ -60,7 +60,7 @@ class QuickPollForm(forms.ModelForm):
 
     def clean_options_text(self):
         data = self.cleaned_data['options_text']
-        options = [o.strip() for o in data.split(',') if o.strip()]
+        options = [o.strip() for o in data.splitlines() if o.strip()]
         if len(options) < 2:
             raise forms.ValidationError("Please provide at least two options.")
         return options

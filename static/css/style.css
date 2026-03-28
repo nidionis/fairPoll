@@ -5,7 +5,7 @@
     --secondary-text: #7f8c8d;
     --accent-color: #48a9a6; /* Soft Teal Accent */
     --accent-hover: #3a8b89;
-    --error-color: #e67e22;
+    --error-color: #ef4444;
     --success-color: #48a9a6;
     --border-radius: 44px;
     --input-radius: 50px;
@@ -260,6 +260,12 @@ main ol li::before {
     width: 30px;
 }
 
+.errorlist {
+    color: var(--error-color);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
 .messages {
     margin-bottom: 40px;
 }
@@ -271,7 +277,9 @@ main ol li::before {
     text-align: center;
     font-weight: 500;
     font-size: 1.05rem;
-    border: 1px solid transparent;
+    border: 1px solid #f8b4b4;
+    background-color: #fde8e8;
+    color: #c81e1e;
 }
 
 .message.success, .alert-success {
@@ -280,22 +288,10 @@ main ol li::before {
     border-color: rgba(72, 169, 166, 0.2);
 }
 
-.message.error, .message.danger, .alert-danger, .alert-error {
-    background-color: #fff2e6;
-    color: #d35400;
-    border-color: #ffd9b3;
-}
-
-.alert-info {
-    background-color: #f1f5f9;
-    color: #475569;
-    border-color: #e2e8f0;
-}
-
-.alert-warning {
-    background-color: #fffbeb;
-    color: #92400e;
-    border-color: #fef3c7;
+.message.error, .message.danger, .alert-danger, .alert-error, .alert-info, .alert-warning {
+    background-color: #fde8e8;
+    color: #c81e1e;
+    border-color: #f8b4b4;
 }
 
 /* Button variants */
