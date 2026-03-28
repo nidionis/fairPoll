@@ -179,3 +179,8 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@example.com")
 
 # Tell Django to trust the X-Forwarded-Proto header from the reverse proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Assure que les cookies de session ne transitent qu'en HTTPS
+SESSION_COOKIE_SECURE = True
+# Assure que les cookies CSRF ne transitent qu'en HTTPS
+CSRF_COOKIE_SECURE = True
