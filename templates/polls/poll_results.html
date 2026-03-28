@@ -99,8 +99,8 @@
 
 <hr>
 {% if poll.house %}
-    <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="btn btn-primary">Back to Poll</a>
+    <a href="{% url 'houses:house_detail' poll.house.pk %}" class="btn btn-primary">Back to House</a>
 {% else %}
-    <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="btn btn-primary">Back to Poll</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
 {% endif %}
 {% endblock %}
