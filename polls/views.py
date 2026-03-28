@@ -131,8 +131,9 @@ def house_poll_results(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
     if not poll.is_finished:
          messages.info(request, "Poll is still in progress. Check back later.")
-
-    condorcet_stats = calculate_condorcet(poll)
+         condorcet_stats = None
+    else:
+         condorcet_stats = calculate_condorcet(poll)
     
     # Apply governance logic if finished and approved
     if poll.is_finished:
@@ -141,7 +142,7 @@ def house_poll_results(request, external_id):
                 import re
                 from django.contrib.auth import get_user_model
                 User = get_user_model()
-                
+            
                 # Extract the username from the standardized question string
                 match = re.search(r"Should we integrate (.+) into", poll.question)
                 if match:
@@ -151,13 +152,13 @@ def house_poll_results(request, external_id):
                         user.houses.add(poll.house)
                     except User.DoesNotExist:
                         pass
-                        
+                    
         elif poll.poll_type == HousePoll.POLL_TYPE_BANISHMENT:
             if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
                 import re
                 from django.contrib.auth import get_user_model
                 User = get_user_model()
-                
+            
                 # Extract the username from the standardized question string
                 match = re.search(r"Should we banish (.+) from", poll.question)
                 if match:
@@ -167,14 +168,14 @@ def house_poll_results(request, external_id):
                         user.houses.remove(poll.house)
                     except User.DoesNotExist:
                         pass
-                        
+                    
         elif poll.poll_type == HousePoll.POLL_TYPE_DELETION:
             if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
                 # Delete the house (which will cascade and delete its polls)
                 poll.house.delete()
                 messages.warning(request, "The house has been deleted following the successful deletion poll.")
                 return redirect('houses:house_list')
-                     
+                 
     is_creator = False
     if poll.creator == request.user:
         is_creator = True
@@ -283,7 +284,12 @@ def quickpoll_vote(request, external_id):
 
 def quickpoll_results(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
-    condorcet_stats = calculate_condorcet(poll)
+    
+    if not poll.is_finished:
+        messages.info(request, "Poll is still in progress. Check back later.")
+        condorcet_stats = None
+    else:
+        condorcet_stats = calculate_condorcet(poll)
     
     # Check if the user created this poll
     is_creator = False
