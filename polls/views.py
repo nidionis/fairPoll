@@ -13,6 +13,14 @@ from .forms import HousePollForm, QuickPollForm, VoteForm
 from polls.models import HousePoll
 from houses.models import House
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 def calculate_condorcet(poll):
     """
     Calculates Condorcet head-to-head match-ups for the given poll.
@@ -112,13 +120,15 @@ def house_poll_vote(request, external_id):
                 poll.save_ballot(
                     choices=form.get_ranked_choices(),
                     user=request.user,
-                    ticket_code=form.cleaned_data.get('ticket_code')
+                    ticket_code=form.cleaned_data.get('ticket_code'),
+                    ip_address=get_client_ip(request)
                 )
                 messages.success(request, "Vote cast successfully!")
                 return redirect('polls:house_poll_results', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
     else:
+        poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
         form = VoteForm(poll=poll)
     
     is_creator = False
@@ -129,6 +139,7 @@ def house_poll_vote(request, external_id):
 
 def house_poll_results(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
+    poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
     if not poll.is_finished:
          messages.info(request, "Poll is still in progress. Check back later.")
          condorcet_stats = None
@@ -259,7 +270,8 @@ def quickpoll_vote(request, external_id):
                 poll.save_ballot(
                     choices=form.get_ranked_choices(),
                     user=request.user if request.user.is_authenticated else None,
-                    ticket_code=form.cleaned_data.get('ticket_code')
+                    ticket_code=form.cleaned_data.get('ticket_code'),
+                    ip_address=get_client_ip(request)
                 )
                 
                 # Record the vote in the session
@@ -271,6 +283,7 @@ def quickpoll_vote(request, external_id):
             except ValueError as e:
                 messages.error(request, str(e))
     else:
+        poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
         form = VoteForm(poll=poll)
     
     # Check if the user created this poll
@@ -284,6 +297,7 @@ def quickpoll_vote(request, external_id):
 
 def quickpoll_results(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
+    poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
     
     if not poll.is_finished:
         messages.info(request, "Poll is still in progress. Check back later.")

@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>QuickPoll Archive</h2>
-
 <div class="text-center mb-4">
     <a href="{% url 'polls:quickpoll_create' %}" class="btn">New Quickpoll</a>
 </div>
+<h2>QuickPoll Archive</h2>
 <ul>
     {% for poll in polls %}
         <li>

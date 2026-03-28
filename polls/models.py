@@ -55,6 +55,27 @@ class Ballot(models.Model):
     
     timestamp = models.DateTimeField(auto_now_add=True)
 
+class PollLog(models.Model):
+    """
+    Logs events related to polls, such as visits and votes.
+    """
+    ACTION_TYPES = (
+        ('VISIT', 'Visit'),
+        ('VOTE', 'Vote'),
+    )
+    
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    poll = GenericForeignKey('content_type', 'object_id')
+    
+    action_type = models.CharField(max_length=10, choices=ACTION_TYPES)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.action_type} on {self.poll} at {self.timestamp}"
+
 # --- Abstract Base Poll ---
 
 class Poll(models.Model):
@@ -69,6 +90,18 @@ class Poll(models.Model):
     # Generic relation to access tickets/ballots easily
     tickets = GenericRelation(Ticket)
     ballots = GenericRelation(Ballot)
+    logs = GenericRelation(PollLog)
+
+    def log_action(self, action_type, user=None, ip_address=None):
+        """
+        Creates a PollLog entry for this poll.
+        """
+        PollLog.objects.create(
+            poll=self,
+            action_type=action_type,
+            user=user if user and user.is_authenticated else None,
+            ip_address=ip_address
+        )
 
     class Meta:
         abstract = True
@@ -93,7 +126,7 @@ class Poll(models.Model):
         for _ in range(needed):
             Ticket.objects.create(poll=self)
 
-    def save_ballot(self, choices, user=None, ticket_code=None):
+    def save_ballot(self, choices, user=None, ticket_code=None, ip_address=None):
         """
         Validates and saves a vote.
         Returns the created Ballot or raises ValueError.
@@ -135,6 +168,7 @@ class Poll(models.Model):
             ticket=ticket_obj,
             voter=real_voter
         )
+        self.log_action('VOTE', user=user, ip_address=ip_address)
         return ballot
 
     def get_results_json(self):
