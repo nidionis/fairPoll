@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ viewed_user.username }}'s Homepage{% endblock %}
+
+{% block content %}
+  <h1>{{ viewed_user.username }}</h1>
+  <p>Welcome to {{ viewed_user.username }}'s public profile.</p>
+
+  <div class="mt-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+  </div>
+{% endblock %}

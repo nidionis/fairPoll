@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% block title %}{% trans "Two-factor Authentication Enabled" %}{% endblock %}</h1>
+  <p>{% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor
+    authentication.{% endblocktrans %}</p>
+  <div class="mt-4">
+    <a href="{% url 'two_factor:profile' %}" class="btn">{% trans "Back to Account Security" %}</a>
+  </div>
+{% endblock %}

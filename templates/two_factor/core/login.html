@@ -13,10 +13,8 @@
   {% endif %}
 
   <form action="" method="post">{% csrf_token %}
-    <table>
-      {{ wizard.management_form }}
-      {{ wizard.form.as_table }}
-    </table>
+    {{ wizard.management_form }}
+    {{ wizard.form.as_p }}
 
     {# submit button for the wizard #}
     {% if wizard.steps.prev %}

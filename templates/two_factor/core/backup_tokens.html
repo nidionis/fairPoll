@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% block title %}{% trans "Backup Tokens" %}{% endblock %}</h1>
+  <p>{% blocktrans trimmed %}Backup tokens can be used when your primary and backup
+    phone numbers aren't available. The tokens should be kept in a safe
+    place.{% endblocktrans %}</p>
+
+  {% if device.token_set.count %}
+    <ul class="scrollable-list">
+      {% for token in device.token_set.all %}
+        <li><code>{{ token.token }}</code></li>
+      {% endfor %}
+    </ul>
+    <p>{% blocktrans %}Print these tokens and keep them in a safe place.{% endblocktrans %}</p>
+  {% else %}
+    <p class="alert alert-warning">{% trans "You don't have any backup tokens yet." %}</p>
+  {% endif %}
+
+  <form method="post">{% csrf_token %}
+    <button type="submit" class="btn">{% trans "Generate New Tokens" %}</button>
+  </form>
+
+  <div class="mt-4">
+    <a href="{% url 'two_factor:profile' %}" class="btn btn-secondary">{% trans "Back to Account Security" %}</a>
+  </div>
+{% endblock %}
