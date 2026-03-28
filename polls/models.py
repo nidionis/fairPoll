@@ -190,7 +190,7 @@ class HousePoll(Poll):
                 poll_path = reverse('polls:house_poll_detail', kwargs={'external_id': self.external_id})
                 # If you have a configured SITE_URL in settings, you can prefix it here. 
                 # e.g., link = f"{settings.SITE_URL}{poll_path}"
-                link = f"http://127.0.0.1:8000{poll_path}"
+                link = f"https://fairpoll.org{poll_path}"
                 
                 subject = f"New Poll in House {self.house.name}: {self.question}"
                 message = (
