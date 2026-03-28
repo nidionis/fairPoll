@@ -9,7 +9,7 @@
     <p>House: {{ poll.house.name }}</p>
 {% endif %}
 <p>Deadline: {{ poll.dead_line }}</p>
-<p>Please rank the choices (lower number = higher preference). If two choices have the same rank, they are considered equal in your preference.</p>
+<p>Rank the choices (drag and drop)</p>
 
 <form method="post">
     {% csrf_token %}
