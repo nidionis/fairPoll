@@ -3,19 +3,17 @@
 {% block title %}About | FairPoll{% endblock %}
 
 {% block content %}
-  <h1>About FairPoll</h1>
-
-  <p>Welcome to FairPoll!</p>
+  <p>Fair enough to be the best</p>
 
   <section>
     <h2>Quick & Simple Voting</h2>
     <p>
-      For everyday decisions or informal voting, use <strong>QuickPoll</strong>. Simply create your poll and share the poll ID with your participants.
+        For everyday decisions or informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and share the poll ID with your participants.
     </p>
   </section>
 
   <section>
-    <h2>Secure House Voting</h2>
+    <h2>Secure Voting</h2>
     <p>
       For more important decisions where you need to prevent ballot stuffing, mistakes, or server-side monitoring concerns, we recommend our secure House voting system.
     </p>
@@ -24,9 +22,7 @@
     <ol>
       <li><strong>Gather your voters:</strong> All voters must belong to the House.</li>
       <li>
-        <strong>Create the House:</strong> Set up your House with all its members. 
-        <br>
-        <em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em>
+          <a href="{% url 'houses:house_create' %}">create an house</a> and set it up with all its voting members<b><em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em>
       </li>
       <li><strong>Create the Poll:</strong> Initiate a new poll from within the House.</li>
       <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a hat).</li>
