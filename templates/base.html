@@ -4,6 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}The best and fairly secured voting app. Take it easy using quick poll{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}condorcet, democracy, secured, polling, voting, secure, polls, fairpoll, quick, easy, decision, choice{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FairPoll">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}Condorcet Poll{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}FairPoll is a secure and transparent condorcet polling platform.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="FairPoll">
+    <!-- Ajoutez ici un lien vers une image pour l'aperçu sur les réseaux sociaux -->
+    <!-- <meta property="og:image" content="{% static 'static/favicon.ico' %}"> -->
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}FairPoll{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent polls with FairPoll.{% endblock %}">
+
     <title>{% block title %}FairPoll{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
