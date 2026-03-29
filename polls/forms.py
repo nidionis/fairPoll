@@ -73,6 +73,12 @@ class QuickPollForm(forms.ModelForm):
                 raise forms.ValidationError("The deadline must be at least 1 minute from now.")
         return dead_line
 
+    def clean_max_participants(self):
+        max_participants = self.cleaned_data.get('max_participants')
+        if max_participants is not None and max_participants < 1:
+            raise forms.ValidationError("A poll must have at least 1 participant.")
+        return max_participants
+
     def save(self, commit=True, owner=None):
         instance = super().save(commit=False)
         if owner and owner.is_authenticated:

@@ -3,7 +3,8 @@
 {% block title %}About FairPoll{% endblock %}
 
 {% block content %}
-  <p>Fair enough to be the best, hack it please</p>
+  <p>Fair enough to be the best.</p>
+  <p>Welcome to hack it</p>
 
   <section>
     <h2>Quick & Simple Voting</h2>
@@ -24,13 +25,13 @@
       <li>
           <a href="{% url 'houses:house_create' %}">Create an house</a> : and set it up with all its voting members.
 
-          <b><em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em></b>
+          <p>To prevent ballot stuffing, <b><em>you cannot add new voters after the House is created.</em></b></p>
       </li>
       <li><strong>Create the Poll:</strong> Initiate a new poll from within the House.</li>
       <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a hat).</li>
-      <li><strong>Cast Votes:</strong> Each voter uses their unique ticket to cast their vote anonymously.</li>
-      <li><strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can also be downloaded for independent verification.</li>
-    </ol>
+      <li><strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no signin requiered when voting a ticket poll).</li>
+      <li><strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.</li>
+    </ol><b><em>
   </section>
 
   <section>
