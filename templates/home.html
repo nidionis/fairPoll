@@ -2,7 +2,15 @@
 {% load i18n %}
 {% load account %}
 
+{% block meta_description %}A free and secure Condorcet voting and polling system{% endblock %}
+
 {% block content %}
+
+    <div class="hero-section text-center">
+        <h3>Welcome to FairPoll</h3>
+        <p class="lead">A free and secure Condorcet voting and polling system</p>
+    </div>
+
 
     {% if user.is_authenticated %}
       <h1>Polls Waiting For You</h1>
