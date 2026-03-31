@@ -7,13 +7,13 @@
 {% block content %}
 
     <div class="hero-section text-center">
-        <h3>Welcome to FairPoll</h3>
+        <h1>Welcome to FairPoll</h1>
         <p class="lead">A free and secure Condorcet voting and polling system</p>
     </div>
 
 
     {% if user.is_authenticated %}
-      <h1>Polls Waiting For You</h1>
+      <h2>Polls Waiting For You</h2>
       {% if pending_polls %}
           <ul>
               {% for poll in pending_polls %}
