@@ -350,7 +350,7 @@ def quickpoll_archive(request):
     # Let's just grab all and filter in python for now or use annotation if needed.
     all_polls = QuickPoll.objects.annotate(
         ballot_count=models.Count('ballots')
-    ).order_by('-dead_line')
+    ).order_by('-ballot_count_time')[:20]
     finished_polls = [p for p in all_polls if p.is_finished]
     return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
 

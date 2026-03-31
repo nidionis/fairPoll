@@ -86,6 +86,7 @@ class Poll(models.Model):
     dead_line = models.DateTimeField()
     max_participants = models.PositiveIntegerField()
     is_ticket_secured = models.BooleanField(default=False)
+    ballot_count_time = models.DateTimeField(null=True, blank=True)
     
     # Generic relation to access tickets/ballots easily
     tickets = GenericRelation(Ticket)
@@ -105,6 +106,11 @@ class Poll(models.Model):
 
     class Meta:
         abstract = True
+
+    def save(self, *args, **kwargs):
+        if self.pk is None and not self.ballot_count_time:
+            self.ballot_count_time = self.dead_line
+        super().save(*args, **kwargs)
 
     @property
     def is_finished(self):
@@ -168,6 +174,8 @@ class Poll(models.Model):
             ticket=ticket_obj,
             voter=real_voter
         )
+        self.ballot_count_time = timezone.now()
+        self.save()
         self.log_action('VOTE', user=user, ip_address=ip_address)
         return ballot
 

@@ -29,7 +29,7 @@ def house_create(request):
 @login_required
 def house_detail(request, pk):
     house = get_object_or_404(House, pk=pk)
-    all_polls = house.polls.all()
+    all_polls = house.polls.all().order_by('-ballot_count_time')[:100]
     
     active_polls = [p for p in all_polls if not p.is_finished]
     archived_polls = [p for p in all_polls if p.is_finished]
