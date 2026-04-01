@@ -3,11 +3,13 @@
 {% load account %}
 
 {% block content %}
+<div class="form-container">
   <h1>{% trans "Sign Up" %}</h1>
   <form method="post" action="{% url 'account_signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{% trans "Sign Up" %}</button>
+    <button type="submit" class="w-100">{% trans "Sign Up" %}</button>
   </form>
-  <p>Already have an account? <a href="{% url 'two_factor:login' %}">Log in</a>.</p>
+  <p class="text-center mt-4">Already have an account? <a href="{% url 'two_factor:login' %}">Log in</a>.</p>
+</div>
 {% endblock %}

@@ -444,8 +444,37 @@ footer a:hover {
     text-decoration: underline;
 }
 
-.footer-help a:hover {
-    color: var(--accent-color);
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.gap-2 {
+    gap: 0.5rem;
 }
 
 /* Scrollable lists */
