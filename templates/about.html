@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}About FairPoll | How to Use Our Secure Voting System{% endblock %}
+{% block title %}About FairPoll | How to Use Our Secure Condorcet Voting System{% endblock %}
 
-{% block meta_description %}Learn how to use FairPoll for quick decisions or secure, official digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results.{% endblock %}
+{% block meta_description %}Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results.{% endblock %}
 
 {% block content %}
   <section>
@@ -27,12 +27,20 @@
           <p>To prevent ballot stuffing, <b><em>you cannot add new voters after the House is created.</em></b></p>
       </li>
       <li><strong>Create the Poll:</strong> Initiate a new poll from within the House.</li>
-      <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a hat).</li>
+      <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).</li>
       <li><strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no signin requiered when voting a ticket poll).</li>
       <li><strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.</li>
     </ol><b><em>
   </section>
-
+  <section>
+    <h2>Security concept</h2>
+    <p>
+  The distribution of unique physical tokens is handled by you (random draw): the server cannot link a ballot to a person, ensuring the vote is anonymous.
+    </p>
+    <p>
+    The results are published and verifiable: even the most skeptical can confirm how their vote is counted, as well as the calculations.
+    </p>
+  </section>
   <section>
     <h2>Group Autonomy</h2>
     <p>
