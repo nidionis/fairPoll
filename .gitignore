@@ -3,3 +3,4 @@
 certificate
 **__pycache__**
 db.*
+condorcet_backend/settings.py
