@@ -34,10 +34,20 @@ def robots_txt(request):
     lines = [
         "User-Agent: *",
         "Disallow: /admin/",
+        "Disallow: /account/",
+        "Disallow: /users/",
+        "Disallow: /houses/create/",
+        "Disallow: /polls/*/create/",
+        "Disallow: /polls/*/export/",
+        "Disallow: /polls/*/tickets/",
         "Allow: /",
         f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}"
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def robot_redirect(request):
+    return redirect("robots_txt", permanent=True)
 
 
 urlpatterns = [
@@ -51,4 +61,5 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     path("robots.txt", robots_txt, name="robots_txt"),
+    path("robot.txt", robot_redirect),
 ]
