@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block title %}{% trans "Verify Your E-mail Address" %} | FairPoll{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+    <p>
+        {% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process.{% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans %}If you do not receive an e-mail within a few minutes, check your spam folder.{% endblocktrans %}
+    </p>
+</div>
+{% endblock %}
