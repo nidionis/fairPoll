@@ -41,6 +41,7 @@ def robots_txt(request):
         "Disallow: /polls/*/export/",
         "Disallow: /polls/*/tickets/",
         "Allow: /",
+        "Crawl-delay: 10",
         f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}"
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
