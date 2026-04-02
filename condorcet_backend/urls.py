@@ -51,6 +51,7 @@ def robot_redirect(request):
 
 
 urlpatterns = [
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     path("", root_home, name="home"),
     path("about/", TemplateView.as_view(template_name="about.html"), name="about"),
     path("admin/", admin.site.urls),
@@ -59,7 +60,6 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("houses/", include("houses.urls")),
     path("polls/", include("polls.urls")),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     path("robots.txt", robots_txt, name="robots_txt"),
     path("robot.txt", robot_redirect),
 ]
