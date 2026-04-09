@@ -1,20 +1,47 @@
 {% extends "base.html" %}
 
-{% block extra_head %}
-    {{ form.media.css }}
-{% endblock %}
-
 {% block content %}
-    <div class="form-container">
-        <h1>{% trans "Create a House" %}</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary w-100">{% trans "Create House" %}</button>
-        </form>
-    </div>
-{% endblock %}
+<h2>Create a House</h2>
 
-{% block extra_js %}
-    {{ form.media.js }}
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create House</button>
+</form>
+
+<!-- Include Select2 JS and initialize it manually for the autocomplete field -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var $select = $('#id_members');
+        var autocompleteUrl = $select.data('autocomplete-light-url');
+
+        $select.select2({
+            width: '100%',
+            placeholder: "Search for users...",
+            allowClear: true,
+            ajax: {
+                url: autocompleteUrl,
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term // search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1
+        });
+    });
+</script>
+
 {% endblock %}
