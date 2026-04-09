@@ -83,6 +83,12 @@
             </p>
         </footer>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        // Ensure django.jQuery is available for DAL (django-autocomplete-light)
+        window.django = window.django || {};
+        window.django.jQuery = window.jQuery;
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
