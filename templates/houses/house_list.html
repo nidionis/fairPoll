@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>My Houses</h2>
-<ul>
-    {% for house in my_houses %}
-        <li><a href="{% url 'houses:house_detail' house.pk %}" class="stretched-link">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
-    {% empty %}
-        <li>You don't belong to any houses yet.</li>
-    {% endfor %}
-</ul>
+    <h1>My Houses</h1>
+    <ul>
+        {% for house in my_houses %}
+            <li><a href="{% url 'houses:house_detail' house.pk %}" class="stretched-link">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
+        {% empty %}
+            <li>You don't belong to any houses yet.</li>
+        {% endfor %}
+    </ul>
 
-<h2>Other Houses</h2>
-<ul>
-    {% for house in other_houses %}
-        <li><a href="{% url 'houses:house_detail' house.pk %}" class="stretched-link">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
-    {% empty %}
-        <li>No other houses yet.</li>
-    {% endfor %}
-</ul>
+    <h1>Other Houses</h1>
+    <ul>
+        {% for house in other_houses %}
+            <li><a href="{% url 'houses:house_detail' house.pk %}" class="stretched-link">{{ house.name }}</a> (Creator: {{ house.creator.username }})</li>
+        {% empty %}
+            <li>No other houses yet.</li>
+        {% endfor %}
+    </ul>
 
-<a href="{% url 'houses:house_create' %}" class="btn btn-primary">Create a House</a>
+    <div class="mt-4 text-center">
+        <a href="{% url 'houses:house_create' %}" class="btn btn-primary">Create a House</a>
+    </div>
 {% endblock %}
