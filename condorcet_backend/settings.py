@@ -34,6 +34,8 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").sp
 # Application definition
 
 INSTALLED_APPS = [
+    "dal",
+    "dal_select2",
     # django defaults...
     "django.contrib.admin",
     "django.contrib.auth",

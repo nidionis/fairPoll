@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from dal import autocomplete
 from .models import House
 import datetime
 
@@ -9,7 +10,7 @@ class HouseForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'scrollable-list'}),
+        widget=autocomplete.ModelSelect2Multiple(url='houses:user-autocomplete'),
         help_text="Select users to add to this house."
     )
     
