@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:pk>/integrate/', views.create_integration_poll, name='create_integration_poll'),
     path('<int:pk>/banish/', views.create_banishment_poll, name='create_banishment_poll'),
     path('<int:pk>/delete/', views.create_deletion_poll, name='create_deletion_poll'),
+    path('user-autocomplete/', views.UserAutocomplete.as_view(), name='user-autocomplete'),
 ]

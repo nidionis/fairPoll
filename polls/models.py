@@ -87,7 +87,8 @@ class Poll(models.Model):
     max_participants = models.PositiveIntegerField()
     is_ticket_secured = models.BooleanField(default=False)
     ballot_count_time = models.DateTimeField(null=True, blank=True)
-    
+    created_at = models.DateTimeField(default=timezone.now)
+
     # Generic relation to access tickets/ballots easily
     tickets = GenericRelation(Ticket)
     ballots = GenericRelation(Ballot)

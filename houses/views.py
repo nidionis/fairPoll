@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.db import models
+from dal import autocomplete
 from .models import House
 from .forms import HouseForm, IntegrationPollForm, BanishmentPollForm
 from polls.models import HousePoll
@@ -40,6 +43,22 @@ def house_detail(request, pk):
         'active_polls': active_polls,
         'archived_polls': archived_polls
     })
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return get_user_model().objects.none()
+
+        qs = get_user_model().objects.all()
+
+        if self.q:
+            qs = qs.filter(
+                models.Q(username__icontains=self.q) | 
+                models.Q(email__icontains=self.q)
+            )
+
+        return qs
 
 @login_required
 def create_integration_poll(request, pk):
