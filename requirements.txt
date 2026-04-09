@@ -7,3 +7,4 @@ gunicorn
 python-dotenv
 qrcode
 pillow
+django-autocomplete-light
