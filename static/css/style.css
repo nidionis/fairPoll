@@ -33,7 +33,7 @@ body {
 }
 
 /* Global list reset - remove all bullets as requested */
-ul, ol {
+ul:not(.select2-results__options):not(.select2-selection__rendered), ol {
     list-style: none !important;
     padding: 0 !important;
 }
@@ -160,7 +160,8 @@ form p {
 }
 
 /* Lists styling */
-main ul li, main ol li {
+main ul:not([class*="select2"]) > li:not([class*="select2"]), 
+main ol:not([class*="select2"]) > li:not([class*="select2"]) {
     background: #252525;
     margin-bottom: 20px;
     padding: 28px 40px;
@@ -514,4 +515,111 @@ footer a:hover {
     width: auto;
     margin-bottom: 0;
     vertical-align: middle;
+}
+
+/* --- Select2 & DAL Custom Theme & Fixes --- */
+/* Match site's dark mode and accent color */
+
+.select2-container {
+    width: 100% !important;
+    margin-bottom: 24px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    background-color: #2c2c2c !important;
+    border: 1px solid #444 !important;
+    border-radius: var(--input-radius) !important;
+    min-height: 58px !important;
+    padding: 6px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    transition: var(--transition) !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 4px rgba(72, 169, 166, 0.1) !important;
+    background-color: #333 !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--accent-color) !important;
+    border: none !important;
+    border-radius: 20px !important;
+    color: white !important;
+    padding: 6px 14px !important;
+    margin: 4px !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white !important;
+    margin-right: 8px !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding-right: 8px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    width: auto !important;
+    min-width: 120px !important;
+    color: var(--text-color) !important;
+    font-size: 1rem !important;
+    font-family: inherit !important;
+}
+
+.select2-dropdown {
+    background-color: #1e1e1e !important;
+    border: 1px solid #444 !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow) !important;
+    margin-top: 4px !important;
+    z-index: 9999 !important;
+    overflow: hidden !important;
+}
+
+.select2-results__option {
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
+    color: var(--text-color) !important;
+    background: transparent !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    transition: none !important;
+    position: static !important;
+    list-style: none !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--accent-color) !important;
+    color: white !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #2c2c2c !important;
+    color: var(--accent-color) !important;
+}
+
+.select2-selection__placeholder {
+    color: var(--secondary-text) !important;
+    font-size: 0.95rem !important;
+}
+
+.select2-results__message {
+    padding: 12px 24px !important;
+    color: var(--secondary-text) !important;
+    text-align: center !important;
 }

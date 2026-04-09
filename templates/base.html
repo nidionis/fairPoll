@@ -31,6 +31,7 @@
 
     <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     <div class="main-wrapper">
@@ -82,5 +83,6 @@
             </p>
         </footer>
     </div>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
