@@ -28,7 +28,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-key")
 #DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 DEBUG = False
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost", "votecondorcet.com").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,fairpoll.org,www.fairpoll.org,votecondorcet.com,www.votecondorcet.com").split(",")
 
 
 # Application definition
