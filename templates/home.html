@@ -12,6 +12,7 @@
     </div>
     <div class="text-center mb-4">
         <a href="{% url 'polls:quickpoll_create' %}" class="btn">New Quickpoll</a>
+        <a href="{% url 'polls:quickpoll_archive' %}" class="btn">Results</a>
     </div>
 
     {% if user.is_authenticated %}
