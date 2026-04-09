@@ -8,15 +8,14 @@
   <section>
     <h2>Quick & Simple Voting</h2>
     <p>
-        For everyday decisions or informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and share the poll ID with your participants.<br>
+      <ul>
+      <li>For everyday decisions or informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and share the poll ID with your participants.<br></li>
         For several votes from the same device, use private navigation.<br>
-        A "quickpoll" using tickets is actually quite secure if:
-
-    <ul>
+        A "quickpoll" using tickets is actually quite secure if :
         <li>each ticket is strictly one per user (ensure it cannot be copied, such as by taking a picture or drawing twice).</li>
         <li>the tickets are kept secret until they are randomly assigned to users (e.g., drawing them from a box).</li>
     </ul>
-      </p>
+  </p>
   </section>
 
   <section>
@@ -26,7 +25,7 @@
     </p>
     
     <h3>How it works:</h3>
-    <ol>
+    <ul>
       <li><strong>Gather your voters:</strong> All voters must belong to the House.</li>
       <li>
           <a href="{% url 'houses:house_create' %}">Create an house</a> : and set it up with all its voting members.
@@ -37,6 +36,6 @@
       <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).</li>
       <li><strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no signin requiered when voting a ticket poll).</li>
       <li><strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.</li>
-    </ol>
+    </ul>
   </section>
 {% endblock %}
