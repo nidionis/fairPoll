@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir /wheels/*
 COPY . .
 
 # Create directories for static, media and database files
-RUN mkdir -p /app/staticfiles /app/media /app/db && \
+RUN mkdir -p /app/static /app/media /app/data && \
     chown -R django:django /app
 
 # Switch to non-root user

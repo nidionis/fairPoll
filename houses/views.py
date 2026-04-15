@@ -1,9 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.contrib import messages
+from dal import autocomplete
 from .models import House
 from .forms import HouseForm, IntegrationPollForm, BanishmentPollForm
 from polls.models import HousePoll
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Only authenticated users should be able to access this view.
+        if not self.request.user.is_authenticated:
+            return get_user_model().objects.none()
+
+        qs = get_user_model().objects.all()
+
+        if self.q:
+            qs = qs.filter(Q(username__icontains=self.q) | Q(email__icontains=self.q))
+
+        return qs
 
 @login_required
 def house_list(request):

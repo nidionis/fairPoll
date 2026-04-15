@@ -31,6 +31,7 @@
 
     <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     <div class="main-wrapper">
@@ -66,7 +67,7 @@
         </main>
         <footer data-nosnippet>
             <ul>
-                <li><a href="{% url 'polls:quickpoll_archive' %}">Quick polls</a></li>
+                <li><a href="{% url 'polls:quickpoll_archive' %}">Quickpoll Results</a></li>
                 <li><a href="{% url 'polls:quickpoll_create' %}">New QuickPoll</a></li>
                 <li><a href="{% url 'houses:house_list' %}">Houses</a></li>
                 <li><a href="{% url 'houses:house_create' %}">New House</a></li>
@@ -82,5 +83,12 @@
             </p>
         </footer>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        // Ensure django.jQuery is available for DAL (django-autocomplete-light)
+        window.django = window.django || {};
+        window.django.jQuery = window.jQuery;
+    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

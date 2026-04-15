@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Create Poll in {{ house.name }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create Poll</button>
-</form>
+    <div class="form-container">
+        <h1>Create Poll</h1>
+        <p class="text-center">{{ house.name }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">Create Poll</button>
+        </form>
+    </div>
 {% endblock %}

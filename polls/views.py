@@ -13,6 +13,8 @@ from .forms import HousePollForm, QuickPollForm, VoteForm
 from polls.models import HousePoll
 from houses.models import House
 
+MAX_QUICKPOLL = 30
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -229,6 +231,12 @@ def quickpoll_create(request):
             if request.user.is_authenticated:
                 poll.owner = request.user
             poll.save()
+            
+            if QuickPoll.objects.count() > MAX_QUICKPOLL:
+                oldest_poll = QuickPoll.objects.order_by('created_at').first()
+                if oldest_poll:
+                    oldest_poll.delete()
+
             messages.success(request, f"QuickPoll created. ID: {poll.external_id}")
             
             # Save the created poll's ID in the session
@@ -350,7 +358,7 @@ def quickpoll_archive(request):
     # Let's just grab all and filter in python for now or use annotation if needed.
     all_polls = QuickPoll.objects.annotate(
         ballot_count=models.Count('ballots')
-    ).order_by('-ballot_count_time')[:20]
+    ).order_by('-ballot_count_time')[:MAX_QUICKPOLL]
     finished_polls = [p for p in all_polls if p.is_finished]
     return render(request, 'polls/quickpoll_archive.html', {'polls': finished_polls})
 
