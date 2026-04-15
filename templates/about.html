@@ -4,38 +4,50 @@
 
 {% block meta_description %}Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results.{% endblock %}
 
-{% block content %}
-  <section>
-    <h2>Quick & Simple Voting</h2>
-    <p>
-      <ul>
-      <li>For everyday decisions or informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and share the poll ID with your participants.<br></li>
-        For several votes from the same device, use private navigation.<br>
-        A "quick poll" using tickets is actually quite secure if :
-        <li>the tickets are kept secret until they are randomly assigned to users (drawing them from a box).</li>
-        <li>each ticket is strictly one per user (ensure it cannot be copied, such as by taking a picture or taking two of them).</li>
-    </ul>
-  </p>
-  </section>
+    {% block content %}
+      <section class="mb-5">
+        <h2>Quick & Simple Voting</h2>
+        <ul>
+            <li class="mb-3">
+                <strong>Everyday Decisions:</strong> For informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and share the poll ID with your participants.
+            </li>
+            <li class="mb-3">
+                <strong>Important Decisions:</strong> Use <a href="{% url 'polls:quickpoll_create' %}">new quickpoll</a> and select ticket secure.
+            </li>
+            <li class="mb-3">
+                <strong>Idea:</strong> For several votes from the same device, use private navigation.
+            </li>
+        </ul>
+      </section>
 
-  <section>
-    <h2>Secure Voting</h2>
-    <p>
-      For more important decisions where you need to prevent ballot stuffing, mistakes, or server-side monitoring concerns, we recommend our secure House voting system.
-    </p>
+      <section>
+        <h2>Secure House Voting</h2>
+        <p class="mb-4">
+            <strong>Regular decisions:</strong> We recommend our secure House voting system (sending automatic emails).
+        </p>
     
-    <h3>How it works:</h3>
-    <ul>
-      <li><strong>Gather your voters:</strong> All voters must belong to the House.</li>
-      <li>
-          <a href="{% url 'houses:house_create' %}">Create an house</a> : and set it up with all its voting members.
-
-          <p>To prevent ballot stuffing, <b><em>you cannot add new voters after the House is created.</em></b></p>
-      </li>
-      <li><strong>Create the Poll:</strong> Initiate a new poll from within the House. An email is sent to each voter.</li>
-      <li><strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).</li>
-      <li><strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no signin requiered when voting a ticket poll).</li>
-      <li><strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.</li>
-    </ul>
-  </section>
-{% endblock %}
+        <h3 class="mb-3">How it works:</h3>
+        <ol>
+          <li class="mb-3">
+            <strong>Gather your voters:</strong> All voters must belong to the House.
+          </li>
+          <li class="mb-3">
+              <strong><a href="{% url 'houses:house_create' %}">Create a house</a>:</strong> Set it up with all its voting members.
+              <br>
+              <em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em>
+          </li>
+          <li class="mb-3">
+            <strong>Create the Poll:</strong> Initiate a new poll from within the House.
+          </li>
+          <li class="mb-3">
+            <strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).
+          </li>
+          <li class="mb-3">
+            <strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll).
+          </li>
+          <li class="mb-3">
+            <strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.
+          </li>
+        </ol>
+      </section>
+    {% endblock %}
