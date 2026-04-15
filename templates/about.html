@@ -20,34 +20,34 @@
         </ul>
       </section>
 
-      <section>
-        <h2>Secure House Voting</h2>
+      <section class="mb-5">
+        <h2>Regular Decisions</h2>
         <p class="mb-4">
-            <strong>Regular decisions:</strong> We recommend our secure House voting system (sending automatic emails).
+            For recurring or official decisions, we recommend our secure <strong>House</strong> voting system. It includes advanced features like automatic email notifications to all members.
         </p>
-    
+
         <h3 class="mb-3">How it works:</h3>
-        <ol>
+        <ul style="list-style-type: none; padding-left: 0;">
           <li class="mb-3">
-            <strong>Gather your voters:</strong> All voters must belong to the House.
+            <strong>1. Gather your voters:</strong> All voters must belong to the House.
           </li>
           <li class="mb-3">
-              <strong><a href="{% url 'houses:house_create' %}">Create a house</a>:</strong> Set it up with all its voting members.
+              <strong>2. <a href="{% url 'houses:house_create' %}">Create a house</a>:</strong> Set it up with all its voting members.
               <br>
-              <em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em>
+              <small style="color: #6c757d;"><em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em></small>
           </li>
           <li class="mb-3">
-            <strong>Create the Poll:</strong> Initiate a new poll from within the House.
+            <strong>3. Create the Poll:</strong> Initiate a new poll from within the House.
           </li>
           <li class="mb-3">
-            <strong>Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).
+            <strong>4. Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).
           </li>
           <li class="mb-3">
-            <strong>Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll).
+            <strong>5. Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll).
           </li>
           <li class="mb-3">
-            <strong>Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.
+            <strong>6. Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.
           </li>
-        </ol>
+        </ul>
       </section>
     {% endblock %}
