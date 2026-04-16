@@ -5,10 +5,12 @@ from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.db import models
 from django import forms
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from datetime import timedelta
 from django.core.exceptions import ValidationError
-from .models import HousePoll, QuickPoll, Ticket, Ballot
+from .models import HousePoll, QuickPoll, Ticket, Ballot, PollLog
 from .forms import HousePollForm, QuickPollForm, VoteForm
 from polls.models import HousePoll
 from houses.models import House
@@ -382,3 +384,39 @@ def poll_join(request):
     
     # If it's a GET request or the form had errors, return to home
     return redirect('home')
+
+def statistics(request):
+    # Calculate visitor history for the last 7 days
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    
+    visitors_history = (
+        PollLog.objects.filter(action_type='VISIT', timestamp__gte=seven_days_ago)
+        .annotate(date=TruncDate('timestamp'))
+        .values('date')
+        .annotate(count=Count('ip_address', distinct=True))
+        .order_by('date')
+    )
+    
+    # Fill missing dates with 0 for the chart
+    history_dict = {item['date']: item['count'] for item in visitors_history if item['date']}
+    dates = [(timezone.now() - timedelta(days=i)).date() for i in range(6, -1, -1)]
+    chart_labels = [d.strftime('%Y-%m-%d') for d in dates]
+    chart_data = [history_dict.get(d, 0) for d in dates]
+
+    number_of_visitors = PollLog.objects.filter(action_type='VISIT').values('ip_address').distinct().count()
+    number_of_votes = Ballot.objects.count()
+    
+    all_polls = list(HousePoll.objects.all()) + list(QuickPoll.objects.all())
+    polls_done = sum(1 for p in all_polls if p.is_finished)
+    polls_running = len(all_polls) - polls_done
+
+    context = {
+        'chart_labels': chart_labels,
+        'chart_data': chart_data,
+        'number_of_visitors': number_of_visitors,
+        'number_of_votes': number_of_votes,
+        'number_of_ballots': number_of_votes, # Synonymous in this context
+        'polls_done': polls_done,
+        'polls_running': polls_running,
+    }
+    return render(request, 'polls/statistics.html', context)
