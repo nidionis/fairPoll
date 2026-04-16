@@ -56,7 +56,7 @@ urlpatterns = [
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     path("", root_home, name="home"),
     path("about/", TemplateView.as_view(template_name="about.html"), name="about"),
-    path("statistics/", polls_views.statistics, name="statistics"),
+    path("statistics", polls_views.statistics, name="statistics"),
     path("admin/", admin.site.urls),
     path("account/", include("allauth.urls")),
     path("", include((tf_urls[0], "two_factor"), namespace="two_factor")),
