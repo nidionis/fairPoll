@@ -11,14 +11,14 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}condorcet voting system, democracy tool, secured voting, vote numérique, scrutin officialisable, online poll, sondage sécurisé{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% trans "FairPoll: The secured Condorcet voting system and democracy tool. Create secure, official digital votes and polls easily and safely." %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% trans "condorcet voting system, democracy tool, secured voting, digital vote, official poll, online poll, secure survey" %}{% endblock %}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FairPoll">
 
     <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}FairPoll - Secured Condorcet Voting System & Democracy Tool{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}FairPoll is a secured and transparent condorcet voting platform for official and digital elections.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% trans "FairPoll - Secured Condorcet Voting System & Democracy Tool" %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% trans "FairPoll is a secured and transparent condorcet voting platform for official and digital elections." %}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="FairPoll">
@@ -27,10 +27,10 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}FairPoll - Digital Democracy Tool{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% trans "FairPoll - Digital Democracy Tool" %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% trans "Create secure and transparent Condorcet polls and votes. Secured digital voting." %}{% endblock %}">
 
-    <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
+    <title>{% block title %}{% trans "FairPoll | Secured Condorcet Voting System & Democracy Tool" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
@@ -110,8 +110,8 @@
                         <div class="footer-help mt-3" style="margin-top: 25px; color: #666; font-size: 0.9em;">
                             <p><strong>{% trans "Want to help?" %}</strong></p>
                         <p>
-                            <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">Buy me a coffee</a> |
-                            <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">GitHub</a>
+                            <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">{% trans "Buy me a coffee" %}</a> |
+                            <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">{% trans "GitHub" %}</a>
                         </p>
                     </div>
                     <p style="margin-top: 15px; color: #888; font-size: 0.85em;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
