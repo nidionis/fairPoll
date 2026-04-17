@@ -64,22 +64,22 @@ msgid "Regular Decisions"
 msgstr "Décisions régulières"
 
 msgid "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members."
-msgstr "Pour les décisions récurrentes ou officielles, nous recommandons notre système de vote sécurisé par \"House\". Il comprend des fonctionnalités avancées comme des notifications automatiques par e-mail à tous les membres."
+msgstr "Pour les décisions récurrentes ou officielles, nous recommandons notre système de vote sécurisé par Maison. Il comprend des fonctionnalités avancées comme des notifications automatiques par e-mail à tous les membres."
 
 msgid "How it works:"
 msgstr "Comment ça marche :"
 
 msgid "1. Gather your voters: All voters must belong to the House."
-msgstr "1. Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la House."
+msgstr "1. Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la Maison."
 
 msgid "2. Create a house: Set it up with all its voting members."
-msgstr "2. Créez une House : Configurez-la avec tous ses membres votants."
+msgstr "2. Créez une Maison : Configurez-la avec tous ses membres votants."
 
 msgid "Note: To prevent ballot stuffing, you cannot add new voters after the House is created."
-msgstr "Note : Pour éviter le bourrage d'urnes, vous ne pouvez pas ajouter de nouveaux électeurs après la création de la House."
+msgstr "Note : Pour éviter le bourrage d'urnes, vous ne pouvez pas ajouter de nouveaux électeurs après la création de la Maison."
 
 msgid "3. Create the Poll: Initiate a new poll from within the House."
-msgstr "3. Créez le scrutin : Initiez un nouveau scrutin à partir de la House."
+msgstr "3. Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
 
 msgid "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)."
 msgstr "4. Distribuez les tickets : Le créateur du scrutin doit imprimer, découper et distribuer au hasard les tickets de vote (par exemple, en les faisant tirer au sort dans une boîte par les membres)."
@@ -88,7 +88,7 @@ msgid "5. Cast Votes: Each voter joins the poll using the poll ID, and uses thei
 msgstr "5. Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin et utilise son ticket unique pour voter anonymement (aucune connexion requise lors d'un vote par ticket)."
 
 msgid "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification."
-msgstr "6. Examinez les résultats : Une fois le vote terminé, les résultats sont stockés dans les archives de la House. Le bulletin complet peut être téléchargé pour une vérification indépendante."
+msgstr "6. Examinez les résultats : Une fois le vote terminé, les résultats sont stockés dans les archives de la Maison. Le bulletin complet peut être téléchargé pour une vérification indépendante."
 
 msgid "Poll ID"
 msgstr "ID du scrutin"
@@ -131,3 +131,344 @@ msgstr "Arabe"
 
 msgid "Japanese"
 msgstr "Japonais"
+
+msgid "Houses"
+msgstr "Maisons"
+
+msgid "New House"
+msgstr "Nouvelle Maison"
+
+msgid "My Houses"
+msgstr "Mes Maisons"
+
+msgid "Other Houses"
+msgstr "Autres Maisons"
+
+msgid "Create a House"
+msgstr "Créer une Maison"
+
+msgid "Create House"
+msgstr "Créer la Maison"
+
+msgid "Creator"
+msgstr "Créateur"
+
+msgid "You don't belong to any houses yet."
+msgstr "Vous n'appartenez encore à aucune Maison."
+
+msgid "No other houses yet."
+msgstr "Aucune autre Maison pour le moment."
+
+msgid "Default Deadline"
+msgstr "Date limite par défaut"
+
+msgid "Active Polls"
+msgstr "Scrutins actifs"
+
+msgid "No active polls."
+msgstr "Aucun scrutin actif."
+
+msgid "Create New Poll"
+msgstr "Créer un nouveau scrutin"
+
+msgid "Governance Actions"
+msgstr "Actions de gouvernance"
+
+msgid "Integrate New Member"
+msgstr "Intégrer un nouveau membre"
+
+msgid "Banish Member"
+msgstr "Bannir un membre"
+
+msgid "Start Deletion Poll"
+msgstr "Lancer un scrutin de suppression"
+
+msgid "Start a poll to delete this house?"
+msgstr "Lancer un scrutin pour supprimer cette Maison ?"
+
+msgid "Members"
+msgstr "Membres"
+
+msgid "No members."
+msgstr "Aucun membre."
+
+msgid "Archive"
+msgstr "Archive"
+
+msgid "No archived polls."
+msgstr "Aucun scrutin archivé."
+
+msgid "You are not a member of this house."
+msgstr "Vous n'êtes pas membre de cette Maison."
+
+msgid "Poll"
+msgstr "Scrutin"
+
+msgid "House"
+msgstr "Maison"
+
+msgid "Deadline"
+msgstr "Date limite"
+
+msgid "Max Participants"
+msgstr "Participants max"
+
+msgid "Current Votes"
+msgstr "Votes actuels"
+
+msgid "Ticket Secured"
+msgstr "Sécurisé par ticket"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+msgid "This poll is finished."
+msgstr "Ce scrutin est terminé."
+
+msgid "View Results"
+msgstr "Voir les résultats"
+
+msgid "Download JSON Results"
+msgstr "Télécharger les résultats JSON"
+
+msgid "Vote Now"
+msgstr "Voter maintenant"
+
+msgid "Available Tickets"
+msgstr "Tickets disponibles"
+
+msgid "Distribute these tickets randomly to voters"
+msgstr "Distribuez ces tickets au hasard aux électeurs"
+
+msgid "Download Tickets"
+msgstr "Télécharger les tickets"
+
+msgid "Back to House"
+msgstr "Retour à la Maison"
+
+msgid "Create Poll"
+msgstr "Créer le scrutin"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Finished"
+msgstr "Terminé"
+
+msgid "Active"
+msgstr "Actif"
+
+msgid "Summary"
+msgstr "Résumé"
+
+msgid "Total Ballots"
+msgstr "Total des bulletins"
+
+msgid "Condorcet Results"
+msgstr "Résultats Condorcet"
+
+msgid "Condorcet Winner(s):"
+msgstr "Gagnant(s) Condorcet :"
+
+msgid "No strict Condorcet winner"
+msgstr "Pas de gagnant Condorcet strict"
+
+msgid "voting cycle / tie detected"
+msgstr "cycle de vote / égalité détecté"
+
+msgid "Head-to-Head Statistics"
+msgstr "Statistiques face-à-face"
+
+msgid "How many times the option in the row beat the option in the column."
+msgstr "Nombre de fois où l'option en ligne a battu l'option en colonne."
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Wins"
+msgstr "Victoires"
+
+msgid "Losses"
+msgstr "Défaites"
+
+msgid "Ties"
+msgstr "Égalités"
+
+msgid "Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable)."
+msgstr "Les données de vérification sont disponibles au téléchargement ci-dessous. Ces données contiennent tous les bulletins individuels avec leurs rangs et le ticket/nom d'utilisateur utilisé (le cas échéant)."
+
+msgid "The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted."
+msgstr "Le scrutin est toujours actif. Les résultats seront affichés une fois la date limite atteinte ou lorsque le nombre maximum de participants aura voté."
+
+msgid "Back to Home"
+msgstr "Retour à l'accueil"
+
+msgid "Vote"
+msgstr "Vote"
+
+msgid "Rank the choices (drag and drop)"
+msgstr "Classez les choix (glisser-déposer)"
+
+msgid "This poll is ticket secured. Please enter your 8-character ticket code."
+msgstr "Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 caractères."
+
+msgid "Cast Vote"
+msgstr "Voter"
+
+msgid "Want to help?"
+msgstr "Vous voulez aider ?"
+
+msgid "About FairPoll | How to Use Our Secure Condorcet Voting System"
+msgstr "À propos de FairPoll | Comment utiliser notre système de vote Condorcet sécurisé"
+
+msgid "Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results."
+msgstr "Apprenez à utiliser FairPoll pour des décisions rapides ou des votes numériques Condorcet officiels et sécurisés. Découvrez notre système de vote Condorcet avec des tickets anonymes et des résultats vérifiables."
+
+msgid "Account"
+msgstr "Compte"
+
+msgid "Modify Profile"
+msgstr "Modifier le profil"
+
+msgid "Security (2FA)"
+msgstr "Sécurité (A2F)"
+
+msgid "Sign Out"
+msgstr "Se déconnecter"
+
+msgid "Update Profile"
+msgstr "Mettre à jour le profil"
+
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+msgid "Back to Account"
+msgstr "Retour au compte"
+
+msgid "House %(name)s created successfully."
+msgstr "La Maison %(name)s a été créée avec succès."
+
+msgid "Only members can start governance polls."
+msgstr "Seuls les membres peuvent lancer des scrutins de gouvernance."
+
+msgid "An active integration poll already exists."
+msgstr "Un scrutin d'intégration actif existe déjà."
+
+msgid "Should we integrate %(username)s into %(house_name)s?"
+msgstr "Devons-nous intégrer %(username)s dans %(house_name)s ?"
+
+msgid "Integration poll for %(username)s created."
+msgstr "Scrutin d'intégration pour %(username)s créé."
+
+msgid "An active banishment poll already exists."
+msgstr "Un scrutin de bannissement actif existe déjà."
+
+msgid "Should we banish %(username)s from %(house_name)s?"
+msgstr "Devons-nous bannir %(username)s de %(house_name)s ?"
+
+msgid "Banishment poll for %(username)s created."
+msgstr "Scrutin de bannissement pour %(username)s créé."
+
+msgid "An active deletion poll already exists."
+msgstr "Un scrutin de suppression actif existe déjà."
+
+msgid "Should we delete the house %(name)s?"
+msgstr "Devons-nous supprimer la Maison %(name)s ?"
+
+msgid "Deletion poll created."
+msgstr "Scrutin de suppression créé."
+
+msgid "Standard Vote"
+msgstr "Vote standard"
+
+msgid "Member Integration"
+msgstr "Intégration de membre"
+
+msgid "Member Banishment"
+msgstr "Bannissement de membre"
+
+msgid "House Deletion"
+msgstr "Suppression de la Maison"
+
+msgid "New Poll in House %(name)s: %(question)s"
+msgstr "Nouveau scrutin dans la Maison %(name)s : %(question)s"
+
+msgid ""
+"A new poll has been created in the house '%(name)s'.\n\n"
+"Question: %(question)s\n"
+"Poll ID: %(external_id)s\n\n"
+"You can view and vote on the poll here: %(link)s\n"
+msgstr ""
+"Un nouveau scrutin a été créé dans la Maison '%(name)s'.\n\n"
+"Question : %(question)s\n"
+"ID du scrutin : %(external_id)s\n\n"
+"Vous pouvez voir et voter sur le scrutin ici : %(link)s\n"
+
+msgid "Type username or email..."
+msgstr "Tapez le nom d'utilisateur ou l'e-mail..."
+
+msgid "Select users to add to this house."
+msgstr "Sélectionnez les utilisateurs à ajouter à cette Maison."
+
+msgid "Default Deadline (in days)"
+msgstr "Date limite par défaut (en jours)"
+
+msgid "Duration for governance polls."
+msgstr "Durée des scrutins de gouvernance."
+
+msgid "User to integrate"
+msgstr "Utilisateur à intégrer"
+
+msgid "Member to banish"
+msgstr "Membre à bannir"
+
+msgid "Enter choices, one per line."
+msgstr "Entrez les choix, un par ligne."
+
+msgid "Choices"
+msgstr "Choix"
+
+msgid "The deadline must be at least 1 minute from now."
+msgstr "La date limite doit être à au moins 1 minute d'ici."
+
+msgid "A poll must have at least 1 participant."
+msgstr "Un scrutin doit avoir au moins 1 participant."
+
+msgid "Ticket Code"
+msgstr "Code du ticket"
+
+msgid "%(username)s's Homepage"
+msgstr "Page d'accueil de %(username)s"
+
+msgid "Welcome to %(username)s's public profile."
+msgstr "Bienvenue sur le profil public de %(username)s."
+
+msgid "Unauthorized or poll finished."
+msgstr "Non autorisé ou scrutin terminé."
+
+msgid "Poll not found. Please check the ID."
+msgstr "Scrutin introuvable. Veuillez vérifier l'ID."
+
+msgid "Invalid Poll ID."
+msgstr "ID de scrutin invalide."
+
+msgid "Poll is still in progress. Check back later."
+msgstr "Le scrutin est toujours en cours. Revenez plus tard."
+
+msgid "The house has been deleted following the successful deletion poll."
+msgstr "La Maison a été supprimée suite au scrutin de suppression réussi."
+
+msgid "Poll is closed."
+msgstr "Le scrutin est fermé."
+
+msgid "You have already voted in this poll from this device."
+msgstr "Vous avez déjà voté dans ce scrutin depuis cet appareil."
+
+msgid "QuickPoll created. ID: %(external_id)s"
+msgstr "QuickPoll créé. ID : %(external_id)s"
+
+msgid "Poll %(question)s created."
+msgstr "Scrutin %(question)s créé."

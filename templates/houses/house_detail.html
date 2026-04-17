@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>{{ house.name }}</h1>
-    <p class="text-center">Creator: {{ house.creator.username }}</p>
-    <p class="text-center">Default Deadline: {{ house.default_deadline }}</p>
+    <p class="text-center">{% trans "Creator" %}: {{ house.creator.username }}</p>
+    <p class="text-center">{% trans "Default Deadline" %}: {{ house.default_deadline }}</p>
 
     {% if user in members or user == house.creator %}
-        <h2>Active Polls</h2>
+        <h2>{% trans "Active Polls" %}</h2>
         <ul>
             {% for poll in active_polls %}
                 <li>
@@ -14,31 +14,31 @@
                     ({{ poll.poll_type }})
                 </li>
             {% empty %}
-                <li>No active polls.</li>
+                <li>{% trans "No active polls." %}</li>
             {% endfor %}
         </ul>
         <div class="mt-4 mb-4">
-            <a href="{% url 'polls:house_poll_create' house.pk %}" class="btn btn-primary">Create New Poll</a>
+            <a href="{% url 'polls:house_poll_create' house.pk %}" class="btn btn-primary">{% trans "Create New Poll" %}</a>
         </div>
 
-        <h2>Governance Actions</h2>
+        <h2>{% trans "Governance Actions" %}</h2>
         <div class="mt-4 mb-4 text-center">
-            <a href="{% url 'houses:create_integration_poll' house.pk %}" class="btn btn-secondary">Integrate New Member</a>
-            <a href="{% url 'houses:create_banishment_poll' house.pk %}" class="btn btn-secondary">Banish Member</a>
+            <a href="{% url 'houses:create_integration_poll' house.pk %}" class="btn btn-secondary">{% trans "Integrate New Member" %}</a>
+            <a href="{% url 'houses:create_banishment_poll' house.pk %}" class="btn btn-secondary">{% trans "Banish Member" %}</a>
             <a href="{% url 'houses:create_deletion_poll' house.pk %}" class="btn btn-danger"
-               onclick="return confirm('Start a poll to delete this house?')">Start Deletion Poll</a>
+               onclick="return confirm('{% trans "Start a poll to delete this house?" %}')">{% trans "Start Deletion Poll" %}</a>
         </div>
 
-        <h2>Members</h2>
+        <h2>{% trans "Members" %}</h2>
         <ul class="scrollable-list">
             {% for member in members %}
                 <li>{{ member.username }}</li>
             {% empty %}
-                <li>No members.</li>
+                <li>{% trans "No members." %}</li>
             {% endfor %}
         </ul>
 
-        <h2>Archive</h2>
+        <h2>{% trans "Archive" %}</h2>
         <ul>
             {% for poll in archived_polls %}
                 <li>
@@ -46,12 +46,12 @@
                     ({{ poll.poll_type }})
                 </li>
             {% empty %}
-                <li>No archived polls.</li>
+                <li>{% trans "No archived polls." %}</li>
             {% endfor %}
         </ul>
 
     {% else %}
-        <p class="alert alert-warning">You are not a member of this house.</p>
+        <p class="alert alert-warning">{% trans "You are not a member of this house." %}</p>
     {% endif %}
 
 {% endblock %}

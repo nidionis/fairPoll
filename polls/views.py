@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.db import models
@@ -96,7 +97,7 @@ def house_poll_create(request, house_pk):
         form = HousePollForm(request.POST)
         if form.is_valid():
             poll = form.save(house=house, creator=request.user)
-            messages.success(request, f"Poll {poll.question} created.")
+            messages.success(request, _("Poll %(question)s created.") % {'question': poll.question})
             return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = HousePollForm()
@@ -114,7 +115,7 @@ def house_poll_detail(request, external_id):
 def house_poll_vote(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
     if poll.is_finished:
-        messages.error(request, "Poll is closed.")
+        messages.error(request, _("Poll is closed."))
         return redirect('polls:house_poll_results', external_id=external_id)
         
     if request.method == 'POST':
@@ -127,7 +128,7 @@ def house_poll_vote(request, external_id):
                     ticket_code=form.cleaned_data.get('ticket_code'),
                     ip_address=get_client_ip(request)
                 )
-                messages.success(request, "Vote cast successfully!")
+                messages.success(request, _("Vote cast successfully!"))
                 return redirect('polls:house_poll_results', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
@@ -145,7 +146,7 @@ def house_poll_results(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
     poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
     if not poll.is_finished:
-         messages.info(request, "Poll is still in progress. Check back later.")
+         messages.info(request, _("Poll is still in progress. Check back later."))
          condorcet_stats = None
     else:
          condorcet_stats = calculate_condorcet(poll)
@@ -188,7 +189,7 @@ def house_poll_results(request, external_id):
             if 'Approve' in condorcet_stats['winners'] and len(condorcet_stats['winners']) == 1:
                 # Delete the house (which will cascade and delete its polls)
                 poll.house.delete()
-                messages.warning(request, "The house has been deleted following the successful deletion poll.")
+                messages.warning(request, _("The house has been deleted following the successful deletion poll."))
                 return redirect('houses:house_list')
                  
     is_creator = False
@@ -204,7 +205,7 @@ def house_poll_results(request, external_id):
 def house_poll_export(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
     if not poll.is_finished:
-        return HttpResponse("Poll is not finished.", status=403)
+        return HttpResponse(_("Poll is not finished."), status=403)
     results = poll.get_results_json()
     response = HttpResponse(results, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="house_poll_{external_id}_results.json"'
@@ -239,7 +240,7 @@ def quickpoll_create(request):
                 if oldest_poll:
                     oldest_poll.delete()
 
-            messages.success(request, f"QuickPoll created. ID: {poll.external_id}")
+            messages.success(request, _("QuickPoll created. ID: %(external_id)s") % {'external_id': poll.external_id})
             
             # Save the created poll's ID in the session
             created_polls = request.session.get('created_quickpolls', [])
@@ -264,13 +265,13 @@ def quickpoll_detail(request, external_id):
 def quickpoll_vote(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
     if poll.is_finished:
-        messages.error(request, "Poll is closed.")
+        messages.error(request, _("Poll is closed."))
         return redirect('polls:quickpoll_results', external_id=external_id)
         
     # Check session to prevent duplicate voting from the same computer
     voted_polls = request.session.get('voted_quickpolls', [])
     if str(external_id) in voted_polls:
-        messages.error(request, "You have already voted in this poll from this device.")
+        messages.error(request, _("You have already voted in this poll from this device."))
         return redirect('polls:quickpoll_detail', external_id=external_id)
 
     if request.method == 'POST':
@@ -288,7 +289,7 @@ def quickpoll_vote(request, external_id):
                 voted_polls.append(str(external_id))
                 request.session['voted_quickpolls'] = voted_polls
                 
-                messages.success(request, "Vote cast successfully!")
+                messages.success(request, _("Vote cast successfully!"))
                 return redirect('polls:quickpoll_results', external_id=external_id)
             except ValueError as e:
                 messages.error(request, str(e))
@@ -310,7 +311,7 @@ def quickpoll_results(request, external_id):
     poll.log_action('VISIT', user=request.user, ip_address=get_client_ip(request))
     
     if not poll.is_finished:
-        messages.info(request, "Poll is still in progress. Check back later.")
+        messages.info(request, _("Poll is still in progress. Check back later."))
         condorcet_stats = None
     else:
         condorcet_stats = calculate_condorcet(poll)
@@ -331,7 +332,7 @@ def quickpoll_results(request, external_id):
 def quickpoll_export(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)
     if not poll.is_finished:
-        return HttpResponse("Poll is not finished.", status=403)
+        return HttpResponse(_("Poll is not finished."), status=403)
     results = poll.get_results_json()
     response = HttpResponse(results, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="quickpoll_{external_id}_results.json"'
@@ -348,7 +349,7 @@ def quickpoll_tickets_export(request, external_id):
         is_creator = True
 
     if not (poll.is_ticket_secured and not poll.is_finished and is_creator):
-        return HttpResponse("Unauthorized or poll finished.", status=403)
+        return HttpResponse(_("Unauthorized or poll finished."), status=403)
         
     tickets = [ticket.code for ticket in poll.tickets.all() if not ticket.is_used]
     response = HttpResponse('\n'.join(tickets), content_type='text/plain')
@@ -378,9 +379,9 @@ def poll_join(request):
                     poll = HousePoll.objects.get(external_id=poll_id)
                     return redirect('polls:house_poll_detail', external_id=poll.external_id)
                 except HousePoll.DoesNotExist:
-                    messages.error(request, "Poll not found. Please check the ID.")
+                    messages.error(request, _("Poll not found. Please check the ID."))
             except (ValidationError, ValueError):
-                messages.error(request, "Invalid Poll ID.")
+                messages.error(request, _("Invalid Poll ID."))
     
     # If it's a GET request or the form had errors, return to home
     return redirect('home')

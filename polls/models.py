@@ -3,6 +3,7 @@ import random
 import string
 import json
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -210,10 +211,10 @@ class HousePoll(Poll):
     POLL_TYPE_DELETION = 'deletion'
     
     TYPE_CHOICES = [
-        (POLL_TYPE_STANDARD, 'Standard Vote'),
-        (POLL_TYPE_INTEGRATION, 'Member Integration'),
-        (POLL_TYPE_BANISHMENT, 'Member Banishment'),
-        (POLL_TYPE_DELETION, 'House Deletion'),
+        (POLL_TYPE_STANDARD, _('Standard Vote')),
+        (POLL_TYPE_INTEGRATION, _('Member Integration')),
+        (POLL_TYPE_BANISHMENT, _('Member Banishment')),
+        (POLL_TYPE_DELETION, _('House Deletion')),
     ]
 
     house = models.ForeignKey('houses.House', on_delete=models.CASCADE, related_name='polls')
@@ -235,13 +236,13 @@ class HousePoll(Poll):
                 # e.g., link = f"{settings.SITE_URL}{poll_path}"
                 link = f"https://fairpoll.org{poll_path}"
                 
-                subject = f"New Poll in House {self.house.name}: {self.question}"
-                message = (
-                    f"A new poll has been created in the house '{self.house.name}'.\n\n"
-                    f"Question: {self.question}\n"
-                    f"Poll ID: {self.external_id}\n\n"
-                    f"You can view and vote on the poll here: {link}\n"
-                )
+                subject = _("New Poll in House %(name)s: %(question)s") % {'name': self.house.name, 'question': self.question}
+                message = _(
+                    "A new poll has been created in the house '%(name)s'.\n\n"
+                    "Question: %(question)s\n"
+                    "Poll ID: %(external_id)s\n\n"
+                    "You can view and vote on the poll here: %(link)s\n"
+                ) % {'name': self.house.name, 'question': self.question, 'external_id': self.external_id, 'link': link}
                 
                 from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@fairpoll.com')
                 send_mail(subject, message, from_email, recipient_list, fail_silently=True)
