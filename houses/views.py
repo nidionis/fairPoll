@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.contrib import messages
+from django.utils.translation import gettext as _, gettext_lazy as _l
 from dal import autocomplete
 from .models import House
 from .forms import HouseForm, IntegrationPollForm, BanishmentPollForm
@@ -36,7 +36,7 @@ def house_create(request):
         form = HouseForm(request.POST)
         if form.is_valid():
             house = form.save(creator=request.user)
-            messages.success(request, f"House {house.name} created successfully.")
+            messages.success(request, _("House %(name)s created successfully.") % {'name': house.name})
             return redirect('houses:house_detail', pk=house.pk)
     else:
         form = HouseForm()
@@ -61,23 +61,23 @@ def house_detail(request, pk):
 def create_integration_poll(request, pk):
     house = get_object_or_404(House, pk=pk)
     if request.user not in house.users:
-         messages.error(request, "Only members can start governance polls.")
+         messages.error(request, _("Only members can start governance polls."))
          return redirect('houses:house_detail', pk=pk)
          
     active_integration_polls = [p for p in house.polls.filter(poll_type=HousePoll.POLL_TYPE_INTEGRATION) if not p.is_finished]
     if active_integration_polls:
-         messages.error(request, "An active integration poll already exists.")
+         messages.error(request, _("An active integration poll already exists."))
          return redirect('houses:house_detail', pk=pk)
 
     if request.method == 'POST':
         form = IntegrationPollForm(request.POST, house=house)
         if form.is_valid():
             target_user = form.cleaned_data['target_user']
-            question = f"Should we integrate {target_user.username} into {house.name}?"
+            question = _("Should we integrate %(username)s into %(house_name)s?") % {'username': target_user.username, 'house_name': house.name}
             
             poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_INTEGRATION)
             
-            messages.success(request, f"Integration poll for {target_user.username} created.")
+            messages.success(request, _("Integration poll for %(username)s created.") % {'username': target_user.username})
             return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = IntegrationPollForm(house=house)
@@ -87,21 +87,21 @@ def create_integration_poll(request, pk):
 def create_banishment_poll(request, pk):
     house = get_object_or_404(House, pk=pk)
     if request.user not in house.users and request.user != house.creator:
-         messages.error(request, "Only members can start governance polls.")
+         messages.error(request, _("Only members can start governance polls."))
          return redirect('houses:house_detail', pk=pk)
 
     active_banishment_polls = [p for p in house.polls.filter(poll_type=HousePoll.POLL_TYPE_BANISHMENT) if not p.is_finished]
     if active_banishment_polls:
-         messages.error(request, "An active banishment poll already exists.")
+         messages.error(request, _("An active banishment poll already exists."))
          return redirect('houses:house_detail', pk=pk)
 
     if request.method == 'POST':
         form = BanishmentPollForm(request.POST, house=house)
         if form.is_valid():
             target_user = form.cleaned_data['target_user']
-            question = f"Should we banish {target_user.username} from {house.name}?"
+            question = _("Should we banish %(username)s from %(house_name)s?") % {'username': target_user.username, 'house_name': house.name}
             poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_BANISHMENT)
-            messages.success(request, f"Banishment poll for {target_user.username} created.")
+            messages.success(request, _("Banishment poll for %(username)s created.") % {'username': target_user.username})
             return redirect('polls:house_poll_detail', external_id=poll.external_id)
     else:
         form = BanishmentPollForm(house=house)
@@ -111,15 +111,15 @@ def create_banishment_poll(request, pk):
 def create_deletion_poll(request, pk):
     house = get_object_or_404(House, pk=pk)
     if request.user not in house.users and request.user != house.creator:
-         messages.error(request, "Only members can start governance polls.")
+         messages.error(request, _("Only members can start governance polls."))
          return redirect('houses:house_detail', pk=pk)
 
     active_deletion_polls = [p for p in house.polls.filter(poll_type=HousePoll.POLL_TYPE_DELETION) if not p.is_finished]
     if active_deletion_polls:
-         messages.error(request, "An active deletion poll already exists.")
+         messages.error(request, _("An active deletion poll already exists."))
          return redirect('houses:house_detail', pk=pk)
 
-    question = f"Should we delete the house {house.name}?"
+    question = _("Should we delete the house %(name)s?") % {'name': house.name}
     poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_DELETION)
-    messages.success(request, f"Deletion poll created.")
+    messages.success(request, _("Deletion poll created."))
     return redirect('polls:house_poll_detail', external_id=poll.external_id)

@@ -30,7 +30,8 @@ COPY . .
 
 # Create directories for static, media and database files
 RUN mkdir -p /app/static /app/media /app/data && \
-    chown -R django:django /app
+    chown -R django:django /app && \
+    apt install gettext
 
 # Switch to non-root user
 USER django

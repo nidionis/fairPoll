@@ -1,6 +1,7 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,56 +40,73 @@
             <nav>
                 <form action="{% url 'polls:poll_join' %}" method="post">
                     {% csrf_token %}
-                    <input type="text" name="poll_id" placeholder="Poll ID" required>
-                    <button type="submit">Join</button>
+                    <input type="text" name="poll_id" placeholder="{% trans 'Poll ID' %}" required>
+                    <button type="submit">{% trans "Join" %}</button>
                 </form>
-                <a href="/">Home</a>
-                <a href="{% url 'about' %}">How to</a>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'users:account' %}">Account</a>
-                {% else %}
-                    <a href="{% url 'two_factor:login' %}">Login</a>
-                    <a href="{% url 'account_signup' %}">Sign Up</a>
-                {% endif %}
+
+                <!-- Language Switcher -->
+                <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                {{ language.name_local }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+                
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                    <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'users:user_homepage' %}">{% trans "Dashboard" %}</a></li>
+                        <li>
+                            <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="link-btn">{% trans "Logout" %}</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
+                        <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
+                    {% endif %}
+                </ul>
             </nav>
         </header>
+
         <main>
             {% if messages %}
-                <div class="messages">
+                <ul class="messages">
                     {% for message in messages %}
-                        <div class="message{% if message.tags %} {{ message.tags }}{% endif %}">
-                            {{ message }}
-                        </div>
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% endblock %}
         </main>
-        <footer data-nosnippet>
-            <ul>
-                <li><a href="{% url 'polls:quickpoll_archive' %}">Results</a></li>
-                <li><a href="{% url 'polls:quickpoll_create' %}">New Poll</a></li>
-                <li><a href="{% url 'houses:house_list' %}">Houses</a></li>
-                <li><a href="{% url 'houses:house_create' %}">New House</a></li>
-            </ul>
-            <p class="footer-help">
-                want to help ?
-            </p>
-            <p class="footer-help">
-                <a href="https://buymeacoffee.com/buymeacoffuh">https://buymeacoffee.com/buymeacoffuh</a>
-            </p>
-            <p class="footer-help">
-                <a href="https://github.com/nidionis/fairPoll/">https://github.com/nidionis/fairPoll/</a>
-            </p>
-        </footer>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script>
-        // Ensure django.jQuery is available for DAL (django-autocomplete-light)
-        window.django = window.django || {};
-        window.django.jQuery = window.jQuery;
-    </script>
-    {% block extra_js %}{% endblock %}
-</body>
+
+            <footer data-nosnippet>
+                <div class="footer-nav">
+                    <a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a> | 
+                    <a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a> | 
+                    <a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a> | 
+                    <a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a>
+                </div>
+                <div class="footer-help mt-3">
+                    <p><strong>{% trans "Want to help?" %}</strong></p>
+                    <p>
+                        <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener">Buy me a coffee</a> | 
+                        <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener">GitHub</a>
+                    </p>
+                </div>
+                <p>&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
+            </footer>
+        </div>
+    </body>
 </html>

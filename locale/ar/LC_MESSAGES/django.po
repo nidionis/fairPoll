@@ -1,0 +1,133 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FairPoll\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 17:07+0000\n"
+"PO-Revision-Date: 2026-04-17 17:07+0000\n"
+"Last-Translator: Junie\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+msgid "Welcome to FairPoll"
+msgstr "مرحبًا بكم في FairPoll"
+
+msgid "A free and secure Condorcet voting and polling system"
+msgstr "نظام مجاني وآمن للتصويت والاقتراع بطريقة كوندورسيه (Condorcet)"
+
+msgid "New Poll"
+msgstr "استطلاع جديد"
+
+msgid "Results"
+msgstr "النتائج"
+
+msgid "Polls Waiting For You"
+msgstr "استطلاعات في انتظارك"
+
+msgid "You have no pending polls to vote on right now."
+msgstr "ليس لديك استطلاعات معلقة للتصويت عليها الآن."
+
+msgid "Security Concept"
+msgstr "مفهوم الأمان"
+
+msgid "Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person."
+msgstr "التصويت المجهول: أنت تتولى توزيع الرموز المادية الفريدة (على سبيل المثال، عبر القرعة العشوائية). لا يمكن للخادم ربط ورقة الاقتراع بشخص معين."
+
+msgid "Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations."
+msgstr "نتائج قابلة للتحقق: النتائج منشورة وقابلة للتحقق. حتى أكثر الناخبين تشككًا يمكنهم التأكد من كيفية احتساب أصواتهم ومراجعة الحسابات."
+
+msgid "Group Autonomy"
+msgstr "الاستقلالية الجماعية"
+
+msgid "You Remain in Control: FairPoll provides the tools, but your group decides the outcome."
+msgstr "أنت تظل في كوكبة القيادة: يوفر FairPoll الأدوات، لكن مجموعتك هي التي تقرر النتيجة."
+
+msgid "Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption)."
+msgstr "قواعد مخصصة: المجموعة حرة تمامًا في إبطال صوت وفقًا لقواعدها المتفق عليها (مثل حالات التعادل أو فساد أوراق الاقتراع)."
+
+msgid "Quick & Simple Voting"
+msgstr "تصويت سريع وبسيط"
+
+msgid "Everyday Decisions: For informal voting, use new poll and share the poll ID with your participants."
+msgstr "قرارات يومية: للتصويت غير الرسمي، استخدم \"استطلاع جديد\" وشارك معرف الاستطلاع مع المشاركين."
+
+msgid "Important Decisions: Use new poll and select ticket secure."
+msgstr "قرارات هامة: استخدم \"استطلاع جديد\" واختر \"تذكرة آمنة\" (ticket secure)."
+
+msgid "Idea: For several votes from the same device (polling station), use private navigation."
+msgstr "فكرة: لإجراء عدة عمليات تصويت من نفس الجهاز (محطة اقتراع)، استخدم التصفح الخاص."
+
+msgid "Regular Decisions"
+msgstr "قرارات منتظمة"
+
+msgid "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members."
+msgstr "للقرارات المتكررة أو الرسمية، نوصي بنظام تصويت \"البيت\" (House) الآمن الخاص بنا. يتضمن ميزات متقدمة مثل إشعارات البريد الإلكتروني التلقائية لجميع الأعضاء."
+
+msgid "How it works:"
+msgstr "كيف يعمل:"
+
+msgid "1. Gather your voters: All voters must belong to the House."
+msgstr "1. اجمع ناخبيك: يجب أن ينتمي جميع الناخبين إلى \"البيت\" (House)."
+
+msgid "2. Create a house: Set it up with all its voting members."
+msgstr "2. أنشئ بيتًا: قم بإعداده مع جميع أعضائه المصوتين."
+
+msgid "Note: To prevent ballot stuffing, you cannot add new voters after the House is created."
+msgstr "ملاحظة: لمنع حشو صناديق الاقتراع، لا يمكنك إضافة ناخبين جدد بعد إنشاء \"البيت\"."
+
+msgid "3. Create the Poll: Initiate a new poll from within the House."
+msgstr "3. أنشئ الاستطلاع: ابدأ استطلاعًا جديدًا من داخل \"البيت\"."
+
+msgid "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)."
+msgstr "4. توزيع التذاكر: يجب على منشئ الاستطلاع طباعة تذاكر التصويت وقصها وتوزيعها عشوائيًا (على سبيل المثال، عن طريق سحب الأعضاء لها من صندوق)."
+
+msgid "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)."
+msgstr "5. الإدلاء بالأصوات: ينضم كل ناخب إلى الاستطلاع باستخدام معرف الاستطلاع، ويستخدم تذكرته الفريدة للإدلاء بصوته بشكل مجهول (لا يتطلب تسجيل الدخول عند التصويت في استطلاع تذاكر)."
+
+msgid "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification."
+msgstr "6. مراجعة النتائج: بمجرد انتهاء التصويت، يتم تخزين النتائج في أرشيفات \"البيت\". يمكن تنزيل الاقتراع الكامل للتحقق المستقل."
+
+msgid "Poll ID"
+msgstr "معرف الاستطلاع"
+
+msgid "Join"
+msgstr "انضمام"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "About"
+msgstr "حول"
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "Sign Up"
+msgstr "إنشاء حساب"
+
+msgid "All rights reserved."
+msgstr "جميع الحقوق محفوظة."
+
+msgid "English"
+msgstr "الإنجليزية"
+
+msgid "French"
+msgstr "الفرنسية"
+
+msgid "Spanish"
+msgstr "الإسبانية"
+
+msgid "Arabic"
+msgstr "العربية"
+
+msgid "Japanese"
+msgstr "اليابانية"

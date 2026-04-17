@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import include, path, reverse
+from django.conf.urls.i18n import i18n_patterns
 from django.views.generic import TemplateView
 from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps.views import sitemap
@@ -53,7 +54,13 @@ def robot_redirect(request):
 from polls import views as polls_views
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
+    path("robots.txt", robots_txt, name="robots_txt"),
+    path("robot.txt", robot_redirect),
+]
+
+urlpatterns += i18n_patterns(
     path("", root_home, name="home"),
     path("about/", TemplateView.as_view(template_name="about.html"), name="about"),
     path("statistics", polls_views.statistics, name="statistics"),
@@ -63,6 +70,4 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("houses/", include("houses.urls")),
     path("polls/", include("polls.urls")),
-    path("robots.txt", robots_txt, name="robots_txt"),
-    path("robot.txt", robot_redirect),
-]
+)

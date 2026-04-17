@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from dal import autocomplete
 from .models import House
@@ -12,16 +13,16 @@ class HouseForm(forms.ModelForm):
         required=False,
         widget=autocomplete.ModelSelect2Multiple(
             url='houses:user-autocomplete',
-            attrs={'data-placeholder': 'Type username or email...'}
+            attrs={'data-placeholder': _('Type username or email...')}
         ),
-        help_text="Select users to add to this house."
+        help_text=_("Select users to add to this house.")
     )
     
     default_deadline_days = forms.IntegerField(
         initial=3,
         min_value=1,
-        label="Default Deadline (in days)",
-        help_text="Duration for governance polls."
+        label=_("Default Deadline (in days)"),
+        help_text=_("Duration for governance polls.")
     )
 
     class Meta:
@@ -52,7 +53,7 @@ class IntegrationPollForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['target_user'] = forms.ModelChoiceField(
             queryset=User.objects.exclude(houses=house),
-            label="User to integrate"
+            label=_("User to integrate")
         )
 
 class BanishmentPollForm(forms.Form):
@@ -61,5 +62,5 @@ class BanishmentPollForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['target_user'] = forms.ModelChoiceField(
             queryset=house.members.all(),
-            label="Member to banish"
+            label=_("Member to banish")
         )

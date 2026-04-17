@@ -1,52 +1,53 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}About FairPoll | How to Use Our Secure Condorcet Voting System{% endblock %}
+{% block title %}{% trans "About FairPoll | How to Use Our Secure Condorcet Voting System" %}{% endblock %}
 
-{% block meta_description %}Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results.{% endblock %}
+{% block meta_description %}{% trans "Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results." %}{% endblock %}
 
     {% block content %}
       <section class="mb-5">
-        <h2>Quick & Simple Voting</h2>
+        <h2>{% trans "Quick & Simple Voting" %}</h2>
         <ul>
             <li class="mb-3">
-                <strong>Everyday Decisions:</strong> For informal voting, use <a href="{% url 'polls:quickpoll_create' %}">new poll</a> and share the poll ID with your participants.
+                {% trans "Everyday Decisions: For informal voting, use new poll and share the poll ID with your participants." %}
             </li>
             <li class="mb-3">
-                <strong>Important Decisions:</strong> Use <a href="{% url 'polls:quickpoll_create' %}">new poll</a> and select ticket secure.
+                {% trans "Important Decisions: Use new poll and select ticket secure." %}
             </li>
             <li class="mb-3">
-                <strong>Idea:</strong> For several votes from the same device (polling station), use private navigation.
+                {% trans "Idea: For several votes from the same device (polling station), use private navigation." %}
             </li>
         </ul>
       </section>
 
       <section class="mb-5">
-        <h2>Regular Decisions</h2>
+        <h2>{% trans "Regular Decisions" %}</h2>
         <p class="mb-4">
-            For recurring or official decisions, we recommend our secure <strong>House</strong> voting system. It includes advanced features like automatic email notifications to all members.
+            {% trans "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members." %}
         </p>
 
-        <h3 class="mb-3">How it works:</h3>
+        <h3 class="mb-3">{% trans "How it works:" %}</h3>
         <ul style="list-style-type: none; padding-left: 0;">
           <li class="mb-3">
-            <strong>1. Gather your voters:</strong> All voters must belong to the House.
+            {% trans "1. Gather your voters: All voters must belong to the House." %}
           </li>
           <li class="mb-3">
-              <strong>2. <a href="{% url 'houses:house_create' %}">Create a house</a>:</strong> Set it up with all its voting members.
+              {% trans "2. Create a house: Set it up with all its voting members." %}
               <br>
-              <small style="color: #6c757d;"><em>Note: To prevent ballot stuffing, you cannot add new voters after the House is created.</em></small>
+              <small style="color: #6c757d;"><em>{% trans "Note: To prevent ballot stuffing, you cannot add new voters after the House is created." %}</em></small>
           </li>
           <li class="mb-3">
-            <strong>3. Create the Poll:</strong> Initiate a new poll from within the House.
+            {% trans "3. Create the Poll: Initiate a new poll from within the House." %}
           </li>
           <li class="mb-3">
-            <strong>4. Distribute Tickets:</strong> The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box).
+            {% trans "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)." %}
           </li>
           <li class="mb-3">
-            <strong>5. Cast Votes:</strong> Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll).
+            {% trans "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)." %}
           </li>
           <li class="mb-3">
-            <strong>6. Review Results:</strong> Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification.
+            {% trans "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification." %}
           </li>
         </ul>
       </section>

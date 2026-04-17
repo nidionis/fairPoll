@@ -6,11 +6,11 @@
 
 {% block content %}
     <div class="form-container">
-        <h1>Create a House</h1>
+        <h1>{% trans "Create a House" %}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary w-100">Create House</button>
+            <button type="submit" class="btn btn-primary w-100">{% trans "Create House" %}</button>
         </form>
     </div>
 {% endblock %}

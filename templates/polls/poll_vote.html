@@ -4,18 +4,18 @@
     <h3>ID: {{ poll.external_id }}</h3>
 
 
-<h2>Vote: {{ poll.question }}</h2>
+<h2>{% trans "Vote" %}: {{ poll.question }}</h2>
 {% if poll.house %}
-    <p>House: {{ poll.house.name }}</p>
+    <p>{% trans "House" %}: {{ poll.house.name }}</p>
 {% endif %}
-<p>Deadline: {{ poll.dead_line }}</p>
-<p>Rank the choices (drag and drop)</p>
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Rank the choices (drag and drop)" %}</p>
 
 <form method="post">
     {% csrf_token %}
     {% if poll.is_ticket_secured %}
         <div class="alert alert-warning">
-            This poll is ticket secured. Please enter your 8-character ticket code.
+            {% trans "This poll is ticket secured. Please enter your 8-character ticket code." %}
         </div>
         <p>{{ form.ticket_code.label_tag }} {{ form.ticket_code }}</p>
     {% endif %}
@@ -33,12 +33,12 @@
             {% endif %}
         {% endfor %}
     </ul>
-    <button type="submit" class="btn">Cast Vote</button>
+    <button type="submit" class="btn">{% trans "Cast Vote" %}</button>
     {% if poll.is_ticket_secured %}
         {% if poll.house and user == poll.creator %}
-            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
         {% elif not poll.house and is_creator %}
-            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
         {% endif %}
     {% endif %}
 

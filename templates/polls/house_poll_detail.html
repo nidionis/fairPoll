@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Poll: {{ poll.question }}</h2>
-<p>Poll ID: <code>{{ poll.external_id }}</code></p>
-<p>House: {{ poll.house.name }}</p>
-<p>Deadline: {{ poll.dead_line }}</p>
-<p>Max Participants: {{ poll.max_participants }}</p>
-<p>Current Votes: {{ poll.ballots.count }}</p>
-<p>Ticket Secured: {% if poll.is_ticket_secured %}Yes{% else %}No{% endif %}</p>
+<h2>{% trans "Poll" %}: {{ poll.question }}</h2>
+<p>{% trans "Poll ID" %}: <code>{{ poll.external_id }}</code></p>
+<p>{% trans "House" %}: {{ poll.house.name }}</p>
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Max Participants" %}: {{ poll.max_participants }}</p>
+<p>{% trans "Current Votes" %}: {{ poll.ballots.count }}</p>
+<p>{% trans "Ticket Secured" %}: {% if poll.is_ticket_secured %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</p>
 
 {% if poll.is_finished %}
-    <div class="alert alert-info">This poll is finished.</div>
-    <a href="{% url 'polls:house_poll_results' poll.external_id %}" class="btn btn-info">View Results</a>
-    <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
+    <div class="alert alert-info">{% trans "This poll is finished." %}</div>
+    <a href="{% url 'polls:house_poll_results' poll.external_id %}" class="btn btn-info">{% trans "View Results" %}</a>
+    <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
 {% else %}
-    <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">Vote Now</a>
+    <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">{% trans "Vote Now" %}</a>
 {% endif %}
 
 {% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
     <hr>
-    <h3>Available Tickets</h3>
-    <p>Distribute these tickets randomly to voters:</p>
-    <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">Download Tickets</a>
+    <h3>{% trans "Available Tickets" %}</h3>
+    <p>{% trans "Distribute these tickets randomly to voters" %}:</p>
+    <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">{% trans "Download Tickets" %}</a>
 {% endif %}
 
 <hr>
-<a href="{% url 'houses:house_detail' poll.house.pk %}">Back to House</a>
+<a href="{% url 'houses:house_detail' poll.house.pk %}">{% trans "Back to House" %}</a>
 {% endblock %}

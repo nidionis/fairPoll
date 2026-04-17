@@ -1,44 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Results: {{ poll.question }}</h2>
+<h2>{% trans "Results" %}: {{ poll.question }}</h2>
 {% if poll.house %}
-    <p>House: {{ poll.house.name }}</p>
+    <p>{% trans "House" %}: {{ poll.house.name }}</p>
 {% endif %}
-<p>Deadline: {{ poll.dead_line }}</p>
-<p>Status: {% if poll.is_finished %}Finished{% else %}Active{% endif %}</p>
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Status" %}: {% if poll.is_finished %}{% trans "Finished" %}{% else %}{% trans "Active" %}{% endif %}</p>
 
-<h3>Summary</h3>
+<h3>{% trans "Summary" %}</h3>
 <ul>
-    <li>Total Ballots: {{ poll.ballots.count }}</li>
-    <li>Max Participants: {{ poll.max_participants }}</li>
+    <li>{% trans "Total Ballots" %}: {{ poll.ballots.count }}</li>
+    <li>{% trans "Max Participants" %}: {{ poll.max_participants }}</li>
 </ul>
 
 {% if condorcet_stats %}
-    <h3>Condorcet Results</h3>
+    <h3>{% trans "Condorcet Results" %}</h3>
     {% if condorcet_stats.winners %}
         <div class="alert alert-success">
-            <strong>Condorcet Winner(s):</strong> 
+            <strong>{% trans "Condorcet Winner(s):" %}</strong> 
             {{ condorcet_stats.winners|join:", " }}
         </div>
     {% else %}
         <div class="alert alert-warning">
-            <strong>No strict Condorcet winner</strong> (voting cycle / tie detected).
+            <strong>{% trans "No strict Condorcet winner" %}</strong> ({% trans "voting cycle / tie detected" %}).
         </div>
     {% endif %}
 
-    <h4>Head-to-Head Statistics</h4>
-    <p>How many times the option in the row beat the option in the column.</p>
+    <h4>{% trans "Head-to-Head Statistics" %}</h4>
+    <p>{% trans "How many times the option in the row beat the option in the column." %}</p>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Option</th>
+                <th>{% trans "Option" %}</th>
                 {% for opt in condorcet_stats.options %}
                     <th>vs {{ opt }}</th>
                 {% endfor %}
-                <th>Wins</th>
-                <th>Losses</th>
-                <th>Ties</th>
+                <th>{% trans "Wins" %}</th>
+                <th>{% trans "Losses" %}</th>
+                <th>{% trans "Ties" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -80,27 +80,27 @@
 {% endif %}
 
 {% if poll.is_finished %}
-    <p>Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable).</p>
+    <p>{% trans "Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable)." %}</p>
     {% if poll.house %}
-        <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
+        <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
     {% else %}
-        <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
+        <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
     {% endif %}
 {% else %}
-    <p>The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted.</p>
+    <p>{% trans "The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted." %}</p>
     {% if poll.is_ticket_secured and is_creator %}
         {% if poll.house %}
-            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
         {% else %}
-            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">Download Tickets</a>
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
         {% endif %}
     {% endif %}
 {% endif %}
 
 <hr>
 {% if poll.house %}
-    <a href="{% url 'houses:house_detail' poll.house.pk %}" class="btn btn-primary">Back to House</a>
+    <a href="{% url 'houses:house_detail' poll.house.pk %}" class="btn btn-primary">{% trans "Back to House" %}</a>
 {% else %}
-    <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+    <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back to Home" %}</a>
 {% endif %}
 {% endblock %}
