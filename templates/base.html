@@ -100,15 +100,15 @@
         </main>
 
 
-                <footer data-nosnippet style="text-align: center; padding: 30px 20px;">
-                    <div class="footer-nav" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                        <a href="{% url 'polls:quickpoll_archive' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "Results" %}</a>
-                        <a href="{% url 'polls:quickpoll_create' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "New Poll" %}</a>
-                        <a href="{% url 'houses:house_list' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "Houses" %}</a>
-                        <a href="{% url 'houses:house_create' %}" style="padding: 10px 20px; background-color: #007bff; border: 1px solid #007bff; border-radius: 8px; text-decoration: none; color: white; font-weight: 500; transition: all 0.2s;">{% trans "New House" %}</a>
-                    </div>
-                    <div class="footer-help mt-3" style="margin-top: 25px; color: #666; font-size: 0.9em;">
-                        <p><strong>{% trans "Want to help?" %}</strong></p>
+                    <footer data-nosnippet style="text-align: center; padding: 30px 20px;">
+                        <div class="footer-nav" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                            <a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a>
+                            <a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a>
+                            <a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a>
+                            <a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a>
+                        </div>
+                        <div class="footer-help mt-3" style="margin-top: 25px; color: #666; font-size: 0.9em;">
+                            <p><strong>{% trans "Want to help?" %}</strong></p>
                         <p>
                             <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">Buy me a coffee</a> |
                             <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">GitHub</a>
