@@ -7,7 +7,7 @@
 {% block content %}
 
     <div class="hero-section text-center">
-        <h1>{% trans "Welcome to FairPoll" %}</h1>
+        <h1>{% blocktranslate %}Welcome to {{ SITE_NAME }}{% endblocktranslate %}</h1>
         <p class="lead">{% trans "A free and secure Condorcet voting and polling system" %}</p>
     </div>
     <div class="text-center mb-4">
@@ -34,10 +34,14 @@
             <h2>{% trans "Security Concept" %}</h2>
             <ul>
                 <li class="mb-3">
-                    {% trans "Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person." %}
+                    {% blocktranslate trimmed %}
+                    Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person.
+                    {% endblocktranslate %}
                 </li>
                 <li class="mb-3">
-                    {% trans "Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations." %}
+                    {% blocktranslate trimmed %}
+                    Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations.
+                    {% endblocktranslate %}
                 </li>
             </ul>
         </section>
@@ -46,10 +50,14 @@
             <h2>{% trans "Group Autonomy" %}</h2>
             <ul>
                 <li class="mb-3">
-                    {% trans "You Remain in Control: FairPoll provides the tools, but your group decides the outcome." %}
+                    {% blocktranslate trimmed %}
+                    You Remain in Control: {{ SITE_NAME }} provides the tools, but your group decides the outcome.
+                    {% endblocktranslate %}
                 </li>
                 <li class="mb-3">
-                    {% trans "Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption)." %}
+                    {% blocktranslate trimmed %}
+                    Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption).
+                    {% endblocktranslate %}
                 </li>
             </ul>
         </section>

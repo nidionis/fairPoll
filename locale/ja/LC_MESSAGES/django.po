@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FairPoll\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-17 20:26+0000\n"
+"POT-Creation-Date: 2026-04-17 20:52+0000\n"
 "PO-Revision-Date: 2026-04-17 17:07+0000\n"
 "Last-Translator: Junie\n"
 "Language-Team: Japanese\n"
@@ -12,23 +12,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: condorcet_backend/settings.py:137
+#: condorcet_backend/settings.py:138
 msgid "English"
 msgstr "英語"
 
-#: condorcet_backend/settings.py:138
+#: condorcet_backend/settings.py:139
 msgid "French"
 msgstr "フランス語"
 
-#: condorcet_backend/settings.py:139
+#: condorcet_backend/settings.py:140
 msgid "Spanish"
 msgstr "スペイン語"
 
-#: condorcet_backend/settings.py:140
+#: condorcet_backend/settings.py:141
 msgid "Japanese"
 msgstr "日本語"
 
-#: condorcet_backend/settings.py:141
+#: condorcet_backend/settings.py:142
 msgid "Arabic"
 msgstr "アラビア語"
 
@@ -146,14 +146,16 @@ msgid "Invalid Poll ID."
 msgstr "投票ID"
 
 #: templates/about.html:4
-msgid "About FairPoll | How to Use Our Secure Condorcet Voting System"
+#, python-format
+msgid "About %(SITE_NAME)s | How to Use Our Secure Condorcet Voting System"
 msgstr ""
 
 #: templates/about.html:6
+#, python-format
 msgid ""
-"Learn how to use FairPoll for quick decisions or secure, official condorcet "
-"digital votes. Discover our Condorcet voting system with anonymous tickets "
-"and verifiable results."
+"Learn how to use %(SITE_NAME)s for quick decisions or secure, official "
+"condorcet digital votes. Discover our Condorcet voting system with anonymous "
+"tickets and verifiable results."
 msgstr ""
 
 #: templates/about.html:10
@@ -200,12 +202,16 @@ msgid "How it works:"
 msgstr "仕組み："
 
 #: templates/about.html:33
-msgid "1. Gather your voters: All voters must belong to the House."
+#, fuzzy
+#| msgid "1. Gather your voters: All voters must belong to the House."
+msgid "Gather your voters: All voters must belong to the House."
 msgstr ""
 "1. 有権者を集める：すべての有権者は「ハウス」に所属している必要があります。"
 
 #: templates/about.html:36
-msgid "2. Create a house: Set it up with all its voting members."
+#, fuzzy
+#| msgid "2. Create a house: Set it up with all its voting members."
+msgid "Create a house: Set it up with all its voting members."
 msgstr "2. ハウスを作成する：投票メンバーを全員登録してセットアップします。"
 
 #: templates/about.html:38
@@ -217,12 +223,19 @@ msgstr ""
 "とはできません。"
 
 #: templates/about.html:41
-msgid "3. Create the Poll: Initiate a new poll from within the House."
+#, fuzzy
+#| msgid "3. Create the Poll: Initiate a new poll from within the House."
+msgid "Create the Poll: Initiate a new poll from within the House."
 msgstr "3. 投票を作成する：ハウス内から新しい投票を開始します。"
 
 #: templates/about.html:44
+#, fuzzy
+#| msgid ""
+#| "4. Distribute Tickets: The poll creator must print, cut out, and randomly "
+#| "distribute the voting tickets (for example, by having members draw them "
+#| "from a box)."
 msgid ""
-"4. Distribute Tickets: The poll creator must print, cut out, and randomly "
+"Distribute Tickets: The poll creator must print, cut out, and randomly "
 "distribute the voting tickets (for example, by having members draw them from "
 "a box)."
 msgstr ""
@@ -230,8 +243,13 @@ msgstr ""
 "に配布してください（例：箱の中からメンバーに引いてもらうなど）。"
 
 #: templates/about.html:47
+#, fuzzy
+#| msgid ""
+#| "5. Cast Votes: Each voter joins the poll using the poll ID, and uses "
+#| "their unique ticket to cast their vote anonymously (no sign-in required "
+#| "when voting a ticket poll)."
 msgid ""
-"5. Cast Votes: Each voter joins the poll using the poll ID, and uses their "
+"Cast Votes: Each voter joins the poll using the poll ID, and uses their "
 "unique ticket to cast their vote anonymously (no sign-in required when "
 "voting a ticket poll)."
 msgstr ""
@@ -239,8 +257,13 @@ msgstr ""
 "匿名で投票します（チケット投票の場合、ログインは不要です）。"
 
 #: templates/about.html:50
+#, fuzzy
+#| msgid ""
+#| "6. Review Results: Once voting ends, the results are stored in the House "
+#| "archives. The complete ballot can be downloaded for independent "
+#| "verification."
 msgid ""
-"6. Review Results: Once voting ends, the results are stored in the House "
+"Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
 msgstr ""
 "6. 結果を確認する：投票が終了すると、結果はハウスのアーカイブに保存されます。"
@@ -414,9 +437,10 @@ msgid ""
 msgstr ""
 
 #: templates/base.html:14
+#, python-format
 msgid ""
-"FairPoll: The secured Condorcet voting system and democracy tool. Create "
-"secure, official digital votes and polls easily and safely."
+"%(SITE_NAME)s: The secured Condorcet voting system and democracy tool. "
+"Create secure, official digital votes and polls easily and safely."
 msgstr ""
 
 #: templates/base.html:15
@@ -426,17 +450,20 @@ msgid ""
 msgstr ""
 
 #: templates/base.html:20
-msgid "FairPoll - Secured Condorcet Voting System & Democracy Tool"
+#, python-format
+msgid "%(SITE_NAME)s - Secured Condorcet Voting System & Democracy Tool"
 msgstr ""
 
 #: templates/base.html:21
+#, python-format
 msgid ""
-"FairPoll is a secured and transparent condorcet voting platform for official "
-"and digital elections."
+"%(SITE_NAME)s is a secured and transparent condorcet voting platform for "
+"official and digital elections."
 msgstr ""
 
 #: templates/base.html:30
-msgid "FairPoll - Digital Democracy Tool"
+#, python-format
+msgid "%(SITE_NAME)s - Digital Democracy Tool"
 msgstr ""
 
 #: templates/base.html:31
@@ -446,7 +473,8 @@ msgid ""
 msgstr ""
 
 #: templates/base.html:33
-msgid "FairPoll | Secured Condorcet Voting System & Democracy Tool"
+#, python-format
+msgid "%(SITE_NAME)s | Secured Condorcet Voting System & Democracy Tool"
 msgstr ""
 
 #: templates/base.html:47
@@ -515,8 +543,9 @@ msgid "A free and secure Condorcet voting and polling system"
 msgstr "無料で安全なコンドルセ方式の投票・アンケートシステム"
 
 #: templates/home.html:10
-msgid "Welcome to FairPoll"
-msgstr "FairPollへようこそ"
+#, python-format
+msgid "Welcome to %(SITE_NAME)s"
+msgstr ""
 
 #: templates/home.html:19
 msgid "Polls Waiting For You"
@@ -536,6 +565,10 @@ msgid "Security Concept"
 msgstr "セキュリティコンセプト"
 
 #: templates/home.html:37
+#, fuzzy
+#| msgid ""
+#| "Anonymous Voting: You handle the distribution of unique physical tokens "
+#| "(e.g., via random draw). The server cannot link a ballot to a person."
 msgid ""
 "Anonymous Voting: You handle the distribution of unique physical tokens "
 "(e.g., via random draw). The server cannot link a ballot to a person."
@@ -543,7 +576,12 @@ msgstr ""
 "匿名投票：一意の物理的なトークン（例：ランダムな抽選など）の配布は、主催者が"
 "行います。サーバー側で投票内容と個人を紐付けることはできません。"
 
-#: templates/home.html:40
+#: templates/home.html:42
+#, fuzzy
+#| msgid ""
+#| "Verifiable Results: The results are published and verifiable. Even the "
+#| "most skeptical voters can confirm how their vote was counted and review "
+#| "the calculations."
 msgid ""
 "Verifiable Results: The results are published and verifiable. Even the most "
 "skeptical voters can confirm how their vote was counted and review the "
@@ -553,19 +591,28 @@ msgstr ""
 "自分の票がどのようにカウントされたかを確認し、計算内容を検証することができま"
 "す。"
 
-#: templates/home.html:46
+#: templates/home.html:50
 msgid "Group Autonomy"
 msgstr "グループの自律性"
 
-#: templates/home.html:49
+#: templates/home.html:53
+#, fuzzy, python-format
+#| msgid ""
+#| "You Remain in Control: FairPoll provides the tools, but your group "
+#| "decides the outcome."
 msgid ""
-"You Remain in Control: FairPoll provides the tools, but your group decides "
-"the outcome."
+"You Remain in Control: %(SITE_NAME)s provides the tools, but your group "
+"decides the outcome."
 msgstr ""
 "あなたがコントロール：FairPollはツールを提供しますが、最終的な決定はあなたの"
 "グループが行います。"
 
-#: templates/home.html:52
+#: templates/home.html:58
+#, fuzzy
+#| msgid ""
+#| "Custom Rules: The group is entirely free to invalidate a vote according "
+#| "to its own agreed-upon rules (such as in the case of ties or ballot "
+#| "corruption)."
 msgid ""
 "Custom Rules: The group is entirely free to invalidate a vote according to "
 "its own agreed-upon rules (such as in the case of ties or ballot corruption)."
@@ -834,7 +881,8 @@ msgid "Cast Vote"
 msgstr ""
 
 #: templates/polls/statistics.html:4
-msgid "FairPoll Statistics"
+#, python-format
+msgid "%(SITE_NAME)s Statistics"
 msgstr ""
 
 #: templates/polls/statistics.html:8
@@ -1094,3 +1142,6 @@ msgstr ""
 #, python-format
 msgid "Welcome to %(viewed_user.username)s's public profile."
 msgstr ""
+
+#~ msgid "Welcome to FairPoll"
+#~ msgstr "FairPollへようこそ"

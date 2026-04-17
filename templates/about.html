@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "About FairPoll | How to Use Our Secure Condorcet Voting System" %}{% endblock %}
+{% block title %}{% blocktranslate trimmed %}About {{ SITE_NAME }} | How to Use Our Secure Condorcet Voting System{% endblocktranslate %}{% endblock %}
 
-{% block meta_description %}{% trans "Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results." %}{% endblock %}
+{% block meta_description %}{% blocktranslate trimmed %}Learn how to use {{ SITE_NAME }} for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results.{% endblocktranslate %}{% endblock %}
 
     {% block content %}
       <section class="mb-5">
@@ -28,27 +28,27 @@
         </p>
 
         <h3 class="mb-3">{% trans "How it works:" %}</h3>
-        <ul style="list-style-type: none; padding-left: 0;">
+        <ol class="mb-4">
           <li class="mb-3">
-            {% trans "1. Gather your voters: All voters must belong to the House." %}
+            {% trans "Gather your voters: All voters must belong to the House." %}
           </li>
           <li class="mb-3">
-              {% trans "2. Create a house: Set it up with all its voting members." %}
+              {% trans "Create a house: Set it up with all its voting members." %}
               <br>
               <small style="color: #6c757d;"><em>{% trans "Note: To prevent ballot stuffing, you cannot add new voters after the House is created." %}</em></small>
           </li>
           <li class="mb-3">
-            {% trans "3. Create the Poll: Initiate a new poll from within the House." %}
+            {% trans "Create the Poll: Initiate a new poll from within the House." %}
           </li>
           <li class="mb-3">
-            {% trans "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)." %}
+            {% trans "Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)." %}
           </li>
           <li class="mb-3">
-            {% trans "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)." %}
+            {% trans "Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)." %}
           </li>
           <li class="mb-3">
-            {% trans "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification." %}
+            {% trans "Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification." %}
           </li>
-        </ul>
+        </ol>
       </section>
     {% endblock %}

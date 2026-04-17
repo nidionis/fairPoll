@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FairPoll\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-17 20:26+0000\n"
+"POT-Creation-Date: 2026-04-17 20:52+0000\n"
 "PO-Revision-Date: 2026-04-17 17:07+0000\n"
 "Last-Translator: Junie\n"
 "Language-Team: French\n"
@@ -12,31 +12,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: condorcet_backend/settings.py:137
+#: condorcet_backend/settings.py:138
 msgid "English"
 msgstr "Anglais"
 
-#: condorcet_backend/settings.py:138
+#: condorcet_backend/settings.py:139
 msgid "French"
 msgstr "Français"
 
-#: condorcet_backend/settings.py:139
+#: condorcet_backend/settings.py:140
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: condorcet_backend/settings.py:140
+#: condorcet_backend/settings.py:141
 msgid "Japanese"
 msgstr "Japonais"
 
-#: condorcet_backend/settings.py:141
+#: condorcet_backend/settings.py:142
 msgid "Arabic"
 msgstr "Arabe"
 
 #: houses/views.py:24
-#, fuzzy, python-brace-format
-#| msgid "House %(name)s created successfully."
+#, python-brace-format
 msgid "House {house_name} created successfully."
-msgstr "La Maison %(name)s a été créée avec succès."
+msgstr "La Maison {house_name} a été créée avec succès."
 
 #: polls/forms.py:10 polls/forms.py:51
 msgid "Enter choices, one per line."
@@ -63,13 +62,9 @@ msgid "Ticket Code"
 msgstr "Code du ticket"
 
 #: polls/forms.py:116
-#, fuzzy
-#| msgid ""
-#| "This poll is ticket secured. Please enter your 8-character ticket code."
 msgid "This poll is ticket secured. Please enter your ticket code."
 msgstr ""
-"Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 "
-"caractères."
+"Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket."
 
 #: polls/models.py:214
 msgid "Standard Vote"
@@ -119,10 +114,8 @@ msgid "Poll is closed."
 msgstr "Le scrutin est fermé."
 
 #: polls/views.py:131 polls/views.py:292
-#, fuzzy
-#| msgid "House %(name)s created successfully."
 msgid "Vote cast successfully!"
-msgstr "La Maison %(name)s a été créée avec succès."
+msgstr "Vote effectué avec succès !"
 
 #: polls/views.py:149 polls/views.py:314
 msgid "Poll is still in progress. Check back later."
@@ -133,10 +126,8 @@ msgid "The house has been deleted following the successful deletion poll."
 msgstr "La Maison a été supprimée suite au scrutin de suppression réussi."
 
 #: polls/views.py:208 polls/views.py:335
-#, fuzzy
-#| msgid "This poll is finished."
 msgid "Poll is not finished."
-msgstr "Ce scrutin est terminé."
+msgstr "Le scrutin n'est pas terminé."
 
 #: polls/views.py:243
 #, python-format
@@ -160,20 +151,25 @@ msgid "Invalid Poll ID."
 msgstr "ID de scrutin invalide."
 
 #: templates/about.html:4
-msgid "About FairPoll | How to Use Our Secure Condorcet Voting System"
+#, python-format
+msgid "About %(SITE_NAME)s | How to Use Our Secure Condorcet Voting System"
 msgstr ""
-"À propos de FairPoll | Comment utiliser notre système de vote Condorcet "
+"À propos de %(SITE_NAME)s | Comment utiliser notre système de vote Condorcet "
 "sécurisé"
 
 #: templates/about.html:6
+#, python-format
 msgid ""
-"Learn how to use FairPoll for quick decisions or secure, official condorcet "
-"digital votes. Discover our Condorcet voting system with anonymous tickets "
-"and verifiable results."
+"Learn how to use %(SITE_NAME)s for quick decisions or secure, official "
+"condorcet digital votes. Discover our Condorcet voting system with anonymous "
+"tickets and verifiable results."
 msgstr ""
-"Apprenez à utiliser FairPoll pour des décisions rapides ou des votes "
+"Apprenez à utiliser %(SITE_NAME)s pour des décisions rapides ou des votes "
 "numériques Condorcet officiels et sécurisés. Découvrez notre système de vote "
-"Condorcet avec des tickets anonymes et des résultats vérifiables."
+"Condorcet avec des tickets anonymes et des résultats vérifiables.Apprenez à "
+"utiliser %(SITE_NAME)s pour des décisions rapides ou des votes numériques "
+"Condorcet officiels et sécurisés. Découvrez notre système de vote Condorcet "
+"avec des tickets anonymes et des résultats vérifiables."
 
 #: templates/about.html:10
 msgid "Quick & Simple Voting"
@@ -191,7 +187,8 @@ msgstr ""
 msgid "Important Decisions: Use new poll and select ticket secure."
 msgstr ""
 "Décisions importantes : Utilisez \"nouveau scrutin\" et sélectionnez "
-"\"ticket sécurisé\"."
+"\"ticket sécurisé\".Décisions importantes : Utilisez \"nouveau scrutin\" et "
+"sélectionnez \"ticket sécurisé\"."
 
 #: templates/about.html:19
 msgid ""
@@ -220,14 +217,13 @@ msgid "How it works:"
 msgstr "Comment ça marche :"
 
 #: templates/about.html:33
-msgid "1. Gather your voters: All voters must belong to the House."
+msgid "Gather your voters: All voters must belong to the House."
 msgstr ""
-"1. Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la "
-"Maison."
+"Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la Maison."
 
 #: templates/about.html:36
-msgid "2. Create a house: Set it up with all its voting members."
-msgstr "2. Créez une Maison : Configurez-la avec tous ses membres votants."
+msgid "Create a house: Set it up with all its voting members."
+msgstr "Créez une Maison : Configurez-la avec tous ses membres votants."
 
 #: templates/about.html:38
 msgid ""
@@ -238,36 +234,35 @@ msgstr ""
 "nouveaux électeurs après la création de la Maison."
 
 #: templates/about.html:41
-msgid "3. Create the Poll: Initiate a new poll from within the House."
-msgstr ""
-"3. Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
+msgid "Create the Poll: Initiate a new poll from within the House."
+msgstr "Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
 
 #: templates/about.html:44
 msgid ""
-"4. Distribute Tickets: The poll creator must print, cut out, and randomly "
+"Distribute Tickets: The poll creator must print, cut out, and randomly "
 "distribute the voting tickets (for example, by having members draw them from "
 "a box)."
 msgstr ""
-"4. Distribuez les tickets : Le créateur du scrutin doit imprimer, découper "
-"et distribuer au hasard les tickets de vote (par exemple, en les faisant "
-"tirer au sort dans une boîte par les membres)."
+"Distribuez les tickets : Le créateur du scrutin doit imprimer, découper et "
+"distribuer au hasard les tickets de vote (par exemple, en les faisant tirer "
+"au sort dans une boîte par les membres)."
 
 #: templates/about.html:47
 msgid ""
-"5. Cast Votes: Each voter joins the poll using the poll ID, and uses their "
+"Cast Votes: Each voter joins the poll using the poll ID, and uses their "
 "unique ticket to cast their vote anonymously (no sign-in required when "
 "voting a ticket poll)."
 msgstr ""
-"5. Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin "
-"et utilise son ticket unique pour voter anonymement (aucune connexion "
-"requise lors d'un vote par ticket)."
+"Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin et "
+"utilise son ticket unique pour voter anonymement (aucune connexion requise "
+"lors d'un vote par ticket)."
 
 #: templates/about.html:50
 msgid ""
-"6. Review Results: Once voting ends, the results are stored in the House "
+"Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
 msgstr ""
-"6. Examinez les résultats : Une fois le vote terminé, les résultats sont "
+"Examinez les résultats : Une fois le vote terminé, les résultats sont "
 "stockés dans les archives de la Maison. Le bulletin complet peut être "
 "téléchargé pour une vérification indépendante."
 
@@ -439,13 +434,16 @@ msgid ""
 msgstr ""
 
 #: templates/base.html:14
+#, python-format
 msgid ""
-"FairPoll: The secured Condorcet voting system and democracy tool. Create "
-"secure, official digital votes and polls easily and safely."
+"%(SITE_NAME)s: The secured Condorcet voting system and democracy tool. "
+"Create secure, official digital votes and polls easily and safely."
 msgstr ""
-"FairPoll : Le système de vote Condorcet sécurisé et outil de démocratie. "
-"Créez des votes et scrutins numériques officiels facilement et en toute "
-"sécurité."
+"%(SITE_NAME)s : Le système de vote Condorcet sécurisé et outil de "
+"démocratie. Créez des votes et scrutins numériques officiels facilement et "
+"en toute sécurité.%(SITE_NAME)s : Le système de vote Condorcet sécurisé et "
+"outil de démocratie. Créez des votes et scrutins numériques officiels "
+"facilement et en toute sécurité."
 
 #: templates/base.html:15
 msgid ""
@@ -456,20 +454,26 @@ msgstr ""
 "numérique, scrutin officiel, sondage en ligne, enquête sécurisée"
 
 #: templates/base.html:20
-msgid "FairPoll - Secured Condorcet Voting System & Democracy Tool"
-msgstr "FairPoll - Système de vote Condorcet sécurisé & outil de démocratie"
+#, python-format
+msgid "%(SITE_NAME)s - Secured Condorcet Voting System & Democracy Tool"
+msgstr ""
+"%(SITE_NAME)s - Système de vote Condorcet sécurisé & outil de démocratie"
 
 #: templates/base.html:21
+#, python-format
 msgid ""
-"FairPoll is a secured and transparent condorcet voting platform for official "
-"and digital elections."
+"%(SITE_NAME)s is a secured and transparent condorcet voting platform for "
+"official and digital elections."
 msgstr ""
-"FairPoll est une plateforme de vote Condorcet sécurisée et transparente pour "
-"les élections officielles et numériques."
+"%(SITE_NAME)s est une plateforme de vote Condorcet sécurisée et transparente "
+"pour les élections officielles et numériques.%(SITE_NAME)s est une "
+"plateforme de vote Condorcet sécurisée et transparente pour les élections "
+"officielles et numériques."
 
 #: templates/base.html:30
-msgid "FairPoll - Digital Democracy Tool"
-msgstr "FairPoll - Outil de démocratie numérique"
+#, python-format
+msgid "%(SITE_NAME)s - Digital Democracy Tool"
+msgstr "%(SITE_NAME)s - Outil de démocratie numérique"
 
 #: templates/base.html:31
 msgid ""
@@ -480,8 +484,10 @@ msgstr ""
 "numérique sécurisé."
 
 #: templates/base.html:33
-msgid "FairPoll | Secured Condorcet Voting System & Democracy Tool"
-msgstr "FairPoll | Système de vote Condorcet sécurisé & outil de démocratie"
+#, python-format
+msgid "%(SITE_NAME)s | Secured Condorcet Voting System & Democracy Tool"
+msgstr ""
+"%(SITE_NAME)s | Système de vote Condorcet sécurisé & outil de démocratie"
 
 #: templates/base.html:47
 msgid "Home"
@@ -549,8 +555,9 @@ msgid "A free and secure Condorcet voting and polling system"
 msgstr "Un système de vote et de scrutin Condorcet gratuit et sécurisé"
 
 #: templates/home.html:10
-msgid "Welcome to FairPoll"
-msgstr "Bienvenue sur FairPoll"
+#, python-format
+msgid "Welcome to %(SITE_NAME)s"
+msgstr "Bienvenue sur %(SITE_NAME)s"
 
 #: templates/home.html:19
 msgid "Polls Waiting For You"
@@ -577,7 +584,7 @@ msgstr ""
 "Vote anonyme : Vous gérez la distribution de jetons physiques uniques "
 "(tirage au sort). Le serveur ne peut pas lier un bulletin à une personne."
 
-#: templates/home.html:40
+#: templates/home.html:42
 msgid ""
 "Verifiable Results: The results are published and verifiable. Even the most "
 "skeptical voters can confirm how their vote was counted and review the "
@@ -587,19 +594,21 @@ msgstr ""
 "sceptiques peuvent confirmer comment leur vote a été comptabilisé et revoir "
 "les calculs."
 
-#: templates/home.html:46
+#: templates/home.html:50
 msgid "Group Autonomy"
 msgstr "Autonomie du groupe"
 
-#: templates/home.html:49
+#: templates/home.html:53
+#, python-format
 msgid ""
-"You Remain in Control: FairPoll provides the tools, but your group decides "
-"the outcome."
+"You Remain in Control: %(SITE_NAME)s provides the tools, but your group "
+"decides the outcome."
 msgstr ""
-"Restez aux commandes : FairPoll fournit les outils, mais c'est votre groupe "
-"qui décide du résultat."
+"Restez aux commandes : %(SITE_NAME)s fournit les outils, mais c'est votre "
+"groupe qui décide du résultat.Restez aux commandes : %(SITE_NAME)s fournit "
+"les outils, mais c'est votre groupe qui décide du résultat."
 
-#: templates/home.html:52
+#: templates/home.html:58
 msgid ""
 "Custom Rules: The group is entirely free to invalidate a vote according to "
 "its own agreed-upon rules (such as in the case of ties or ballot corruption)."
@@ -861,51 +870,45 @@ msgstr "Classez les choix (glisser-déposer)"
 msgid "This poll is ticket secured. Please enter your 8-character ticket code."
 msgstr ""
 "Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 "
-"caractères."
+"caractères.Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de "
+"ticket à 8 caractères."
 
 #: templates/polls/poll_vote.html:37
 msgid "Cast Vote"
 msgstr "Voter"
 
 #: templates/polls/statistics.html:4
-#, fuzzy
-#| msgid "Head-to-Head Statistics"
-msgid "FairPoll Statistics"
-msgstr "Statistiques face-à-face"
+#, python-format
+msgid "%(SITE_NAME)s Statistics"
+msgstr ""
 
 #: templates/polls/statistics.html:8
-#, fuzzy
-#| msgid "Head-to-Head Statistics"
 msgid "Global Statistics"
-msgstr "Statistiques face-à-face"
+msgstr "Statistiques globales"
 
 #: templates/polls/statistics.html:9
 msgid "Overview of our platform's activity"
-msgstr ""
+msgstr "Aperçu de l'activité de notre plateforme"
 
 #: templates/polls/statistics.html:16 templates/polls/statistics.html:59
 msgid "Unique Visitors"
-msgstr ""
+msgstr "Visiteurs uniques"
 
 #: templates/polls/statistics.html:21
-#, fuzzy
-#| msgid "Total Ballots"
 msgid "Total Votes / Ballots"
 msgstr "Total des bulletins"
 
 #: templates/polls/statistics.html:26
 msgid "Running Polls"
-msgstr ""
+msgstr "Scrutins en cours"
 
 #: templates/polls/statistics.html:31
-#, fuzzy
-#| msgid "Finished"
 msgid "Finished Polls"
-msgstr "Terminé"
+msgstr "Scrutins terminés"
 
 #: templates/polls/statistics.html:36
 msgid "Visitor History (Last 7 Days)"
-msgstr ""
+msgstr "Historique des visiteurs (7 derniers jours)"
 
 #: templates/two_factor/core/backup_tokens.html:5
 #: templates/two_factor/profile/profile.html:32
@@ -1085,8 +1088,8 @@ msgstr ""
 #, python-format
 msgid "You have only one backup token remaining."
 msgid_plural "You have %(counter)s backup tokens remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il ne vous reste qu'un seul jeton de secours."
+msgstr[1] "Il vous reste %(counter)s jetons de secours."
 
 #: templates/two_factor/profile/profile.html:42
 msgid "Show Codes"
@@ -1145,6 +1148,14 @@ msgstr "Page d'accueil de %(username)s"
 #| msgid "Welcome to %(username)s's public profile."
 msgid "Welcome to %(viewed_user.username)s's public profile."
 msgstr "Bienvenue sur le profil public de %(username)s."
+
+#, fuzzy
+#~| msgid "Head-to-Head Statistics"
+#~ msgid "FairPoll Statistics"
+#~ msgstr "Statistiques face-à-face"
+
+#~ msgid "Welcome to FairPoll"
+#~ msgstr "Bienvenue sur FairPoll"
 
 #~ msgid "Create House"
 #~ msgstr "Créer la Maison"
