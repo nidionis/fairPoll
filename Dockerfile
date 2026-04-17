@@ -1,39 +1,49 @@
-# Stage 1: Build
-FROM python:3.14-slim as builder
+# -------- Stage 1: Build --------
+FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+RUN pip wheel --no-cache-dir --no-deps \
+    --wheel-dir /app/wheels \
+    -r requirements.txt
 
 
-# Stage 2: Final
+# -------- Stage 2: Final --------
 FROM python:3.14-slim
 
 WORKDIR /app
 
-RUN addgroup --system django && adduser --system --group django --home /home/django
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Copy wheels and install
+# system deps (runtime only)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends gettext \
+ && rm -rf /var/lib/apt/lists/*
+
+# create non-root user
+RUN addgroup --system django \
+ && adduser --system --ingroup django --home /home/django django
+
+# install python deps
 COPY --from=builder /app/wheels /wheels
 RUN pip install --no-cache-dir /wheels/*
 
-# Copy project files
+# copy project
 COPY . .
 
-# Create directories for static, media and database files
-RUN mkdir -p /app/static /app/media /app/data && \
-    chown -R django:django /app && \
-    apt install gettext
+# prepare directories + permissions
+RUN mkdir -p /app/static /app/media /app/data \
+ && chown -R django:django /app
 
-# Switch to non-root user
 USER django
 
 EXPOSE 8000
