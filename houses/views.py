@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from .models import House
 from .forms import HouseForm, IntegrationPollForm, BanishmentPollForm
 from polls.models import HousePoll
@@ -20,7 +21,7 @@ def house_create(request):
         form = HouseForm(request.POST)
         if form.is_valid():
             house = form.save(creator=request.user)
-            messages.success(request, f"House {house.name} created successfully.")
+            messages.success(request, _("House {house_name} created successfully.").format(house_name=house.name))
             return redirect('houses:house_detail', pk=house.pk)
     else:
         form = HouseForm()
