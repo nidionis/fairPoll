@@ -69,6 +69,11 @@
 
                     <!-- Language Switcher Discrete -->
                     <div style="flex: 1; display: flex; justify-content: flex-end;">
+                    </div>
+                </nav>
+            </header>
+
+        <main>
                         <form action="{% url 'set_language' %}" method="post" class="language-switcher" style="margin: 0;">
                             {% csrf_token %}
                             <input name="next" type="hidden" value="{{ request.path }}">
