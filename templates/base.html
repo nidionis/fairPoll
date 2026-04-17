@@ -34,49 +34,57 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
-<body>
-    <div class="main-wrapper">
-        <header data-nosnippet>
-            <nav>
-                <form action="{% url 'polls:poll_join' %}" method="post">
-                    {% csrf_token %}
-                    <input type="text" name="poll_id" placeholder="{% trans 'Poll ID' %}" required>
-                    <button type="submit">{% trans "Join" %}</button>
-                </form>
+            <body>
+        <div class="main-wrapper">
+            <header data-nosnippet>
+                <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+                    <!-- Empty div to balance flex layout and keep the center exactly in the middle -->
+                    <div style="flex: 1;"></div>
 
-                <!-- Language Switcher -->
-                <form action="{% url 'set_language' %}" method="post" class="language-switcher">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <select name="language" onchange="this.form.submit()">
-                        {% get_available_languages as LANGUAGES %}
-                        {% get_language_info_list for LANGUAGES as languages %}
-                        {% for language in languages %}
-                            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                {{ language.name_local }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </form>
-                
-                <ul class="nav-links">
-                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                    {% if user.is_authenticated %}
-                        <li><a href="{% url 'users:user_homepage' %}">{% trans "Dashboard" %}</a></li>
-                        <li>
-                            <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="link-btn">{% trans "Logout" %}</button>
-                            </form>
-                        </li>
-                    {% else %}
-                        <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
-                        <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </header>
+                    <!-- Centered List + Join -->
+                    <div style="display: flex; align-items: center; justify-content: center; flex: 2; gap: 20px;">
+                        <ul class="nav-links" style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px; align-items: center;">
+                            <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                            <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'users:user_homepage' %}">{% trans "Dashboard" %}</a></li>
+                                <li>
+                                    <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="link-btn">{% trans "Logout" %}</button>
+                                    </form>
+                                </li>
+                            {% else %}
+                                <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
+                                <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
+                            {% endif %}
+                        </ul>
+
+                        <form action="{% url 'polls:poll_join' %}" method="post" style="display: flex; margin: 0;">
+                            {% csrf_token %}
+                            <input type="text" name="poll_id" placeholder="{% trans 'Poll ID' %}" required style="padding: 5px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button type="submit" style="padding: 5px 15px; border: none; border-radius: 4px; background-color: #007bff; color: white; cursor: pointer;">{% trans "Join" %}</button>
+                        </form>
+                    </div>
+
+                    <!-- Language Switcher Discrete -->
+                    <div style="flex: 1; display: flex; justify-content: flex-end;">
+                        <form action="{% url 'set_language' %}" method="post" class="language-switcher" style="margin: 0;">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.path }}">
+                            <select name="language" onchange="this.form.submit()" style="border: none; background: transparent; font-size: 0.85em; opacity: 0.6; cursor: pointer; outline: none;">
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                        {{ language.name_local }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </nav>
+            </header>
 
         <main>
             {% if messages %}
@@ -91,22 +99,23 @@
             {% endblock %}
         </main>
 
-            <footer data-nosnippet>
-                <div class="footer-nav">
-                    <a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a> | 
-                    <a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a> | 
-                    <a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a> | 
-                    <a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a>
-                </div>
-                <div class="footer-help mt-3">
-                    <p><strong>{% trans "Want to help?" %}</strong></p>
-                    <p>
-                        <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener">Buy me a coffee</a> | 
-                        <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener">GitHub</a>
-                    </p>
-                </div>
-                <p>&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
-            </footer>
-        </div>
-    </body>
-</html>
+
+                <footer data-nosnippet style="text-align: center; padding: 30px 20px;">
+                    <div class="footer-nav" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <a href="{% url 'polls:quickpoll_archive' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "Results" %}</a>
+                        <a href="{% url 'polls:quickpoll_create' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "New Poll" %}</a>
+                        <a href="{% url 'houses:house_list' %}" style="padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: all 0.2s;">{% trans "Houses" %}</a>
+                        <a href="{% url 'houses:house_create' %}" style="padding: 10px 20px; background-color: #007bff; border: 1px solid #007bff; border-radius: 8px; text-decoration: none; color: white; font-weight: 500; transition: all 0.2s;">{% trans "New House" %}</a>
+                    </div>
+                    <div class="footer-help mt-3" style="margin-top: 25px; color: #666; font-size: 0.9em;">
+                        <p><strong>{% trans "Want to help?" %}</strong></p>
+                        <p>
+                            <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">Buy me a coffee</a> |
+                            <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">GitHub</a>
+                        </p>
+                    </div>
+                    <p style="margin-top: 15px; color: #888; font-size: 0.85em;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
+                </footer>
+            </div>
+        </body>
+    </html>
