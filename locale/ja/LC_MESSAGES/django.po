@@ -202,15 +202,11 @@ msgid "How it works:"
 msgstr "仕組み："
 
 #: templates/about.html:33
-#, fuzzy
-#| msgid "1. Gather your voters: All voters must belong to the House."
 msgid "Gather your voters: All voters must belong to the House."
 msgstr ""
 "1. 有権者を集める：すべての有権者は「ハウス」に所属している必要があります。"
 
 #: templates/about.html:36
-#, fuzzy
-#| msgid "2. Create a house: Set it up with all its voting members."
 msgid "Create a house: Set it up with all its voting members."
 msgstr "2. ハウスを作成する：投票メンバーを全員登録してセットアップします。"
 
@@ -223,17 +219,10 @@ msgstr ""
 "とはできません。"
 
 #: templates/about.html:41
-#, fuzzy
-#| msgid "3. Create the Poll: Initiate a new poll from within the House."
 msgid "Create the Poll: Initiate a new poll from within the House."
 msgstr "3. 投票を作成する：ハウス内から新しい投票を開始します。"
 
 #: templates/about.html:44
-#, fuzzy
-#| msgid ""
-#| "4. Distribute Tickets: The poll creator must print, cut out, and randomly "
-#| "distribute the voting tickets (for example, by having members draw them "
-#| "from a box)."
 msgid ""
 "Distribute Tickets: The poll creator must print, cut out, and randomly "
 "distribute the voting tickets (for example, by having members draw them from "
@@ -243,11 +232,6 @@ msgstr ""
 "に配布してください（例：箱の中からメンバーに引いてもらうなど）。"
 
 #: templates/about.html:47
-#, fuzzy
-#| msgid ""
-#| "5. Cast Votes: Each voter joins the poll using the poll ID, and uses "
-#| "their unique ticket to cast their vote anonymously (no sign-in required "
-#| "when voting a ticket poll)."
 msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
 "unique ticket to cast their vote anonymously (no sign-in required when "
@@ -257,11 +241,6 @@ msgstr ""
 "匿名で投票します（チケット投票の場合、ログインは不要です）。"
 
 #: templates/about.html:50
-#, fuzzy
-#| msgid ""
-#| "6. Review Results: Once voting ends, the results are stored in the House "
-#| "archives. The complete ballot can be downloaded for independent "
-#| "verification."
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."

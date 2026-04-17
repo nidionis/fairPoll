@@ -203,14 +203,10 @@ msgid "How it works:"
 msgstr "كيف يعمل:"
 
 #: templates/about.html:33
-#, fuzzy
-#| msgid "1. Gather your voters: All voters must belong to the House."
 msgid "Gather your voters: All voters must belong to the House."
 msgstr "1. اجمع ناخبيك: يجب أن ينتمي جميع الناخبين إلى \"البيت\" (House)."
 
 #: templates/about.html:36
-#, fuzzy
-#| msgid "2. Create a house: Set it up with all its voting members."
 msgid "Create a house: Set it up with all its voting members."
 msgstr "2. أنشئ بيتًا: قم بإعداده مع جميع أعضائه المصوتين."
 
@@ -223,17 +219,10 @@ msgstr ""
 "\"البيت\"."
 
 #: templates/about.html:41
-#, fuzzy
-#| msgid "3. Create the Poll: Initiate a new poll from within the House."
 msgid "Create the Poll: Initiate a new poll from within the House."
 msgstr "3. أنشئ الاستطلاع: ابدأ استطلاعًا جديدًا من داخل \"البيت\"."
 
 #: templates/about.html:44
-#, fuzzy
-#| msgid ""
-#| "4. Distribute Tickets: The poll creator must print, cut out, and randomly "
-#| "distribute the voting tickets (for example, by having members draw them "
-#| "from a box)."
 msgid ""
 "Distribute Tickets: The poll creator must print, cut out, and randomly "
 "distribute the voting tickets (for example, by having members draw them from "
@@ -243,11 +232,6 @@ msgstr ""
 "عشوائيًا (على سبيل المثال، عن طريق سحب الأعضاء لها من صندوق)."
 
 #: templates/about.html:47
-#, fuzzy
-#| msgid ""
-#| "5. Cast Votes: Each voter joins the poll using the poll ID, and uses "
-#| "their unique ticket to cast their vote anonymously (no sign-in required "
-#| "when voting a ticket poll)."
 msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
 "unique ticket to cast their vote anonymously (no sign-in required when "
@@ -258,11 +242,6 @@ msgstr ""
 "التصويت في استطلاع تذاكر)."
 
 #: templates/about.html:50
-#, fuzzy
-#| msgid ""
-#| "6. Review Results: Once voting ends, the results are stored in the House "
-#| "archives. The complete ballot can be downloaded for independent "
-#| "verification."
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."

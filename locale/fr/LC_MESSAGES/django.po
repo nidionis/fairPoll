@@ -605,8 +605,7 @@ msgid ""
 "decides the outcome."
 msgstr ""
 "Restez aux commandes : %(SITE_NAME)s fournit les outils, mais c'est votre "
-"groupe qui décide du résultat.Restez aux commandes : %(SITE_NAME)s fournit "
-"les outils, mais c'est votre groupe qui décide du résultat."
+"groupe qui décide du résultat."
 
 #: templates/home.html:58
 msgid ""
