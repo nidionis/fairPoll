@@ -15,6 +15,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -148,6 +149,14 @@ LANGUAGES = (
 
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
+]
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('fr', _('French')),
+    ('es', _('Spanish')),
+    ('ja', _('Japanese')),
+    ('ar', _('Arabic')),
 ]
 
 TIME_ZONE = 'UTC'
