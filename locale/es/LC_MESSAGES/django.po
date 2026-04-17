@@ -203,15 +203,11 @@ msgid "How it works:"
 msgstr "Cómo funciona:"
 
 #: templates/about.html:33
-#, fuzzy
-#| msgid "1. Gather your voters: All voters must belong to the House."
 msgid "Gather your voters: All voters must belong to the House."
 msgstr ""
 "1. Reúna a sus votantes: Todos los votantes deben pertenecer a la House."
 
 #: templates/about.html:36
-#, fuzzy
-#| msgid "2. Create a house: Set it up with all its voting members."
 msgid "Create a house: Set it up with all its voting members."
 msgstr "2. Cree una House: Configúrela con todos sus miembros votantes."
 
@@ -224,17 +220,10 @@ msgstr ""
 "después de crear la House."
 
 #: templates/about.html:41
-#, fuzzy
-#| msgid "3. Create the Poll: Initiate a new poll from within the House."
 msgid "Create the Poll: Initiate a new poll from within the House."
 msgstr "3. Cree la encuesta: Inicie una nueva encuesta desde la House."
 
 #: templates/about.html:44
-#, fuzzy
-#| msgid ""
-#| "4. Distribute Tickets: The poll creator must print, cut out, and randomly "
-#| "distribute the voting tickets (for example, by having members draw them "
-#| "from a box)."
 msgid ""
 "Distribute Tickets: The poll creator must print, cut out, and randomly "
 "distribute the voting tickets (for example, by having members draw them from "
@@ -245,11 +234,6 @@ msgstr ""
 "que los miembros los saquen de una caja)."
 
 #: templates/about.html:47
-#, fuzzy
-#| msgid ""
-#| "5. Cast Votes: Each voter joins the poll using the poll ID, and uses "
-#| "their unique ticket to cast their vote anonymously (no sign-in required "
-#| "when voting a ticket poll)."
 msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
 "unique ticket to cast their vote anonymously (no sign-in required when "
@@ -260,11 +244,6 @@ msgstr ""
 "es necesario iniciar sesión cuando se vota en una encuesta con ticket)."
 
 #: templates/about.html:50
-#, fuzzy
-#| msgid ""
-#| "6. Review Results: Once voting ends, the results are stored in the House "
-#| "archives. The complete ballot can be downloaded for independent "
-#| "verification."
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
