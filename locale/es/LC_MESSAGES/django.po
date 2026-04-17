@@ -1,0 +1,133 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FairPoll\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 17:07+0000\n"
+"PO-Revision-Date: 2026-04-17 17:07+0000\n"
+"Last-Translator: Junie\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Welcome to FairPoll"
+msgstr "Bienvenido a FairPoll"
+
+msgid "A free and secure Condorcet voting and polling system"
+msgstr "Un sistema de votación y encuestas Condorcet gratuito y seguro"
+
+msgid "New Poll"
+msgstr "Nueva encuesta"
+
+msgid "Results"
+msgstr "Resultados"
+
+msgid "Polls Waiting For You"
+msgstr "Encuestas esperándote"
+
+msgid "You have no pending polls to vote on right now."
+msgstr "No tienes encuestas pendientes para votar en este momento."
+
+msgid "Security Concept"
+msgstr "Concepto de seguridad"
+
+msgid "Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person."
+msgstr "Voto anónimo: Usted se encarga de la distribución de fichas físicas únicas (por ejemplo, mediante sorteo). El servidor no puede vincular una papeleta a una persona."
+
+msgid "Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations."
+msgstr "Resultados verificables: Los resultados son públicos y verificables. Incluso los votantes más escépticos pueden confirmar cómo se contó su voto y revisar los cálculos."
+
+msgid "Group Autonomy"
+msgstr "Autonomía del grupo"
+
+msgid "You Remain in Control: FairPoll provides the tools, but your group decides the outcome."
+msgstr "Usted mantiene el control: FairPoll proporciona las herramientas, pero su grupo decide el resultado."
+
+msgid "Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption)."
+msgstr "Reglas personalizadas: El grupo es totalmente libre de invalidar un voto de acuerdo con sus propias reglas acordadas (como en el caso de empates o corrupción de papeletas)."
+
+msgid "Quick & Simple Voting"
+msgstr "Votación rápida y sencilla"
+
+msgid "Everyday Decisions: For informal voting, use new poll and share the poll ID with your participants."
+msgstr "Decisiones cotidianas: Para votaciones informales, use \"nueva encuesta\" y comparta el ID de la encuesta con sus participantes."
+
+msgid "Important Decisions: Use new poll and select ticket secure."
+msgstr "Decisiones importantes: Use \"nueva encuesta\" y seleccione \"ticket seguro\"."
+
+msgid "Idea: For several votes from the same device (polling station), use private navigation."
+msgstr "Idea: Para varios votos desde el mismo dispositivo (centro de votación), use la navegación privada."
+
+msgid "Regular Decisions"
+msgstr "Decisiones habituales"
+
+msgid "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members."
+msgstr "Para decisiones recurrentes u oficiales, recomendamos nuestro sistema seguro de votación por \"House\". Incluye funciones avanzadas como notificaciones automáticas por correo electrónico a todos los miembros."
+
+msgid "How it works:"
+msgstr "Cómo funciona:"
+
+msgid "1. Gather your voters: All voters must belong to the House."
+msgstr "1. Reúna a sus votantes: Todos los votantes deben pertenecer a la House."
+
+msgid "2. Create a house: Set it up with all its voting members."
+msgstr "2. Cree una House: Configúrela con todos sus miembros votantes."
+
+msgid "Note: To prevent ballot stuffing, you cannot add new voters after the House is created."
+msgstr "Nota: Para evitar el relleno de urnas, no puede añadir nuevos votantes después de crear la House."
+
+msgid "3. Create the Poll: Initiate a new poll from within the House."
+msgstr "3. Cree la encuesta: Inicie una nueva encuesta desde la House."
+
+msgid "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)."
+msgstr "4. Distribuya los tickets: El creador de la encuesta debe imprimir, recortar y distribuir aleatoriamente los tickets de votación (por ejemplo, haciendo que los miembros los saquen de una caja)."
+
+msgid "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)."
+msgstr "5. Emita los votos: Cada votante se une a la encuesta usando el ID de la encuesta y utiliza su ticket único para emitir su voto de forma anónima (no es necesario iniciar sesión cuando se vota en una encuesta con ticket)."
+
+msgid "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification."
+msgstr "6. Revise los resultados: Una vez finalizada la votación, los resultados se almacenan en los archivos de la House. El acta de votación completa se puede descargar para una verificación independiente."
+
+msgid "Poll ID"
+msgstr "ID de la encuesta"
+
+msgid "Join"
+msgstr "Unirse"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "Dashboard"
+msgstr "Panel de control"
+
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Sign Up"
+msgstr "Registrarse"
+
+msgid "All rights reserved."
+msgstr "Todos los derechos reservados."
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "French"
+msgstr "Francés"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Arabic"
+msgstr "Árabe"
+
+msgid "Japanese"
+msgstr "Japonés"

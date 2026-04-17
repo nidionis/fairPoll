@@ -1,0 +1,133 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FairPoll\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 17:07+0000\n"
+"PO-Revision-Date: 2026-04-17 17:07+0000\n"
+"Last-Translator: Junie\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Welcome to FairPoll"
+msgstr "FairPollへようこそ"
+
+msgid "A free and secure Condorcet voting and polling system"
+msgstr "無料で安全なコンドルセ方式の投票・アンケートシステム"
+
+msgid "New Poll"
+msgstr "新しい投票"
+
+msgid "Results"
+msgstr "結果"
+
+msgid "Polls Waiting For You"
+msgstr "あなたへの投票依頼"
+
+msgid "You have no pending polls to vote on right now."
+msgstr "現在、投票待ちのアンケートはありません。"
+
+msgid "Security Concept"
+msgstr "セキュリティコンセプト"
+
+msgid "Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person."
+msgstr "匿名投票：一意の物理的なトークン（例：ランダムな抽選など）の配布は、主催者が行います。サーバー側で投票内容と個人を紐付けることはできません。"
+
+msgid "Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations."
+msgstr "検証可能な結果：結果は公開され、検証可能です。最も懐疑的な投票者であっても、自分の票がどのようにカウントされたかを確認し、計算内容を検証することができます。"
+
+msgid "Group Autonomy"
+msgstr "グループの自律性"
+
+msgid "You Remain in Control: FairPoll provides the tools, but your group decides the outcome."
+msgstr "あなたがコントロール：FairPollはツールを提供しますが、最終的な決定はあなたのグループが行います。"
+
+msgid "Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption)."
+msgstr "カスタムルール：同点の場合や投票の不正があった場合など、グループが合意した独自のルールに従って、票を無効にするかどうかを完全に自由に決定できます。"
+
+msgid "Quick & Simple Voting"
+msgstr "素早く簡単な投票"
+
+msgid "Everyday Decisions: For informal voting, use new poll and share the poll ID with your participants."
+msgstr "日常的な決定：カジュアルな投票には、「新しい投票」を作成し、参加者に投票IDを共有してください。"
+
+msgid "Important Decisions: Use new poll and select ticket secure."
+msgstr "重要な決定：「新しい投票」を作成し、「チケットによる安全な投票」を選択してください。"
+
+msgid "Idea: For several votes from the same device (polling station), use private navigation."
+msgstr "ヒント：同じデバイス（投票所など）から複数回投票する場合は、プライベートブラウジングを使用してください。"
+
+msgid "Regular Decisions"
+msgstr "定期的な決定"
+
+msgid "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members."
+msgstr "定期的または公式な決定には、安全な「ハウス（House）」投票システムをお勧めします。全メンバーへの自動メール通知などの高度な機能が含まれています。"
+
+msgid "How it works:"
+msgstr "仕組み："
+
+msgid "1. Gather your voters: All voters must belong to the House."
+msgstr "1. 有権者を集める：すべての有権者は「ハウス」に所属している必要があります。"
+
+msgid "2. Create a house: Set it up with all its voting members."
+msgstr "2. ハウスを作成する：投票メンバーを全員登録してセットアップします。"
+
+msgid "Note: To prevent ballot stuffing, you cannot add new voters after the House is created."
+msgstr "注意：投票の不正（水増し）を防ぐため、ハウス作成後に新しい有権者を追加することはできません。"
+
+msgid "3. Create the Poll: Initiate a new poll from within the House."
+msgstr "3. 投票を作成する：ハウス内から新しい投票を開始します。"
+
+msgid "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)."
+msgstr "4. チケットを配布する：投票作成者は、投票チケットを印刷して切り取り、ランダムに配布してください（例：箱の中からメンバーに引いてもらうなど）。"
+
+msgid "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)."
+msgstr "5. 投票する：各投票者は投票IDを使用して投票に参加し、固有のチケットを使用して匿名で投票します（チケット投票の場合、ログインは不要です）。"
+
+msgid "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification."
+msgstr "6. 結果を確認する：投票が終了すると、結果はハウスのアーカイブに保存されます。完全な投票データは、第三者による検証のためにダウンロード可能です。"
+
+msgid "Poll ID"
+msgstr "投票ID"
+
+msgid "Join"
+msgstr "参加"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "About"
+msgstr "紹介"
+
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+msgid "Logout"
+msgstr "ログアウト"
+
+msgid "Login"
+msgstr "ログイン"
+
+msgid "Sign Up"
+msgstr "サインアップ"
+
+msgid "All rights reserved."
+msgstr "全著作権所有"
+
+msgid "English"
+msgstr "英語"
+
+msgid "French"
+msgstr "フランス語"
+
+msgid "Spanish"
+msgstr "スペイン語"
+
+msgid "Arabic"
+msgstr "アラビア語"
+
+msgid "Japanese"
+msgstr "日本語"

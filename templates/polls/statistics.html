@@ -1,38 +1,39 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}FairPoll Statistics{% endblock %}
+{% block title %}{% trans "FairPoll Statistics" %}{% endblock %}
 
 {% block content %}
 <div style="text-align: center; margin-bottom: 40px;">
-    <h2>Global Statistics</h2>
-    <p style="color: var(--secondary-text);">Overview of our platform's activity</p>
+    <h2>{% trans "Global Statistics" %}</h2>
+    <p style="color: var(--secondary-text);">{% trans "Overview of our platform's activity" %}</p>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 50px;">
     <!-- Stat Cards -->
     <div style="background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 30px; text-align: center; flex: 1; min-width: 180px;">
         <h3 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">{{ number_of_visitors }}</h3>
-        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">Unique Visitors</p>
+        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">{% trans "Unique Visitors" %}</p>
     </div>
     
     <div style="background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 30px; text-align: center; flex: 1; min-width: 180px;">
         <h3 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">{{ number_of_votes }}</h3>
-        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">Total Votes / Ballots</p>
+        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">{% trans "Total Votes / Ballots" %}</p>
     </div>
     
     <div style="background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 30px; text-align: center; flex: 1; min-width: 180px;">
         <h3 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">{{ polls_running }}</h3>
-        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">Running Polls</p>
+        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">{% trans "Running Polls" %}</p>
     </div>
     
     <div style="background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 30px; text-align: center; flex: 1; min-width: 180px;">
         <h3 style="color: var(--accent-color); font-size: 2.5rem; margin-bottom: 10px;">{{ polls_done }}</h3>
-        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">Finished Polls</p>
+        <p style="color: var(--secondary-text); margin: 0; font-weight: 500;">{% trans "Finished Polls" %}</p>
     </div>
 </div>
 
 <div style="background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 40px;">
-    <h3 style="margin-bottom: 30px; font-size: 1.5rem;">Visitor History (Last 7 Days)</h3>
+    <h3 style="margin-bottom: 30px; font-size: 1.5rem;">{% trans "Visitor History (Last 7 Days)" %}</h3>
     <canvas id="visitorChart" width="400" height="200"></canvas>
 </div>
 
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Unique Visitors',
+                label: '{% trans "Unique Visitors" %}',
                 data: data,
                 backgroundColor: gradient,
                 borderColor: '#48a9a6',
