@@ -40,6 +40,9 @@ RUN pip install --no-cache-dir /wheels/*
 # copy project
 COPY . .
 
+# Compile translations
+RUN python manage.py compilemessages
+
 # prepare directories + permissions
 RUN mkdir -p /app/static /app/media /app/data \
  && chown -R django:django /app
