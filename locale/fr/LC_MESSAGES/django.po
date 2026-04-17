@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FairPoll\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-17 17:07+0000\n"
+"POT-Creation-Date: 2026-04-17 20:26+0000\n"
 "PO-Revision-Date: 2026-04-17 17:07+0000\n"
 "Last-Translator: Junie\n"
 "Language-Team: French\n"
@@ -12,463 +12,1187 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Welcome to FairPoll"
-msgstr "Bienvenue sur FairPoll"
-
-msgid "A free and secure Condorcet voting and polling system"
-msgstr "Un système de vote et de scrutin Condorcet gratuit et sécurisé"
-
-msgid "New Poll"
-msgstr "Nouveau scrutin"
-
-msgid "Results"
-msgstr "Résultats"
-
-msgid "Polls Waiting For You"
-msgstr "Scrutins en attente"
-
-msgid "You have no pending polls to vote on right now."
-msgstr "Vous n'avez aucun scrutin en attente."
-
-msgid "Security Concept"
-msgstr "Concept de sécurité"
-
-msgid "Anonymous Voting: You handle the distribution of unique physical tokens (e.g., via random draw). The server cannot link a ballot to a person."
-msgstr "Vote anonyme : Vous gérez la distribution de jetons physiques uniques (tirage au sort). Le serveur ne peut pas lier un bulletin à une personne."
-
-msgid "Verifiable Results: The results are published and verifiable. Even the most skeptical voters can confirm how their vote was counted and review the calculations."
-msgstr "Résultats vérifiables : Les résultats sont publiés et vérifiables. Les plus sceptiques peuvent confirmer comment leur vote a été comptabilisé et revoir les calculs."
-
-msgid "Group Autonomy"
-msgstr "Autonomie du groupe"
-
-msgid "You Remain in Control: FairPoll provides the tools, but your group decides the outcome."
-msgstr "Restez aux commandes : FairPoll fournit les outils, mais c'est votre groupe qui décide du résultat."
-
-msgid "Custom Rules: The group is entirely free to invalidate a vote according to its own agreed-upon rules (such as in the case of ties or ballot corruption)."
-msgstr "Règles personnalisées : Le groupe est entièrement libre d'invalider un vote selon ses propres règles convenues (comme en cas d'égalité ou de corruption de scrutin)."
-
-msgid "Quick & Simple Voting"
-msgstr "Vote rapide et simple"
-
-msgid "Everyday Decisions: For informal voting, use new poll and share the poll ID with your participants."
-msgstr "Décisions informelles : Utilisez \"nouveau scrutin\" et partagez l'ID du scrutin avec vos participants."
-
-msgid "Important Decisions: Use new poll and select ticket secure."
-msgstr "Décisions importantes : Utilisez \"nouveau scrutin\" et sélectionnez \"ticket sécurisé\"."
-
-msgid "Idea: For several votes from the same device (polling station), use private navigation."
-msgstr "Idée : Pour plusieurs votes à partir du même appareil (bureau de vote), utilisez la navigation privée."
-
-msgid "Regular Decisions"
-msgstr "Décisions régulières"
-
-msgid "For recurring or official decisions, we recommend our secure House voting system. It includes advanced features like automatic email notifications to all members."
-msgstr "Pour les décisions récurrentes ou officielles, nous recommandons notre système de vote sécurisé par Maison. Il comprend des fonctionnalités avancées comme des notifications automatiques par e-mail à tous les membres."
-
-msgid "How it works:"
-msgstr "Comment ça marche :"
-
-msgid "1. Gather your voters: All voters must belong to the House."
-msgstr "1. Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la Maison."
-
-msgid "2. Create a house: Set it up with all its voting members."
-msgstr "2. Créez une Maison : Configurez-la avec tous ses membres votants."
-
-msgid "Note: To prevent ballot stuffing, you cannot add new voters after the House is created."
-msgstr "Note : Pour éviter le bourrage d'urnes, vous ne pouvez pas ajouter de nouveaux électeurs après la création de la Maison."
-
-msgid "3. Create the Poll: Initiate a new poll from within the House."
-msgstr "3. Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
-
-msgid "4. Distribute Tickets: The poll creator must print, cut out, and randomly distribute the voting tickets (for example, by having members draw them from a box)."
-msgstr "4. Distribuez les tickets : Le créateur du scrutin doit imprimer, découper et distribuer au hasard les tickets de vote (par exemple, en les faisant tirer au sort dans une boîte par les membres)."
-
-msgid "5. Cast Votes: Each voter joins the poll using the poll ID, and uses their unique ticket to cast their vote anonymously (no sign-in required when voting a ticket poll)."
-msgstr "5. Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin et utilise son ticket unique pour voter anonymement (aucune connexion requise lors d'un vote par ticket)."
-
-msgid "6. Review Results: Once voting ends, the results are stored in the House archives. The complete ballot can be downloaded for independent verification."
-msgstr "6. Examinez les résultats : Une fois le vote terminé, les résultats sont stockés dans les archives de la Maison. Le bulletin complet peut être téléchargé pour une vérification indépendante."
-
-msgid "Poll ID"
-msgstr "ID du scrutin"
-
-msgid "Join"
-msgstr "Rejoindre"
-
-msgid "Home"
-msgstr "Accueil"
-
-msgid "About"
-msgstr "À propos"
-
-msgid "Dashboard"
-msgstr "Tableau de bord"
-
-msgid "Logout"
-msgstr "Déconnexion"
-
-msgid "Login"
-msgstr "Connexion"
-
-msgid "Sign Up"
-msgstr "S'inscrire"
-
-msgid "All rights reserved."
-msgstr "Tous droits réservés."
-
+#: condorcet_backend/settings.py:137
 msgid "English"
 msgstr "Anglais"
 
+#: condorcet_backend/settings.py:138
 msgid "French"
 msgstr "Français"
 
+#: condorcet_backend/settings.py:139
 msgid "Spanish"
 msgstr "Espagnol"
 
-msgid "Arabic"
-msgstr "Arabe"
-
+#: condorcet_backend/settings.py:140
 msgid "Japanese"
 msgstr "Japonais"
 
-msgid "Houses"
-msgstr "Maisons"
-
-msgid "New House"
-msgstr "Nouvelle Maison"
-
-msgid "My Houses"
-msgstr "Mes Maisons"
-
-msgid "Other Houses"
-msgstr "Autres Maisons"
-
-msgid "Create a House"
-msgstr "Créer une Maison"
-
-msgid "Create House"
-msgstr "Créer la Maison"
-
-msgid "Creator"
-msgstr "Créateur"
-
-msgid "You don't belong to any houses yet."
-msgstr "Vous n'appartenez encore à aucune Maison."
-
-msgid "No other houses yet."
-msgstr "Aucune autre Maison pour le moment."
-
-msgid "Default Deadline"
-msgstr "Date limite par défaut"
-
-msgid "Active Polls"
-msgstr "Scrutins actifs"
-
-msgid "No active polls."
-msgstr "Aucun scrutin actif."
-
-msgid "Create New Poll"
-msgstr "Créer un nouveau scrutin"
-
-msgid "Governance Actions"
-msgstr "Actions de gouvernance"
-
-msgid "Integrate New Member"
-msgstr "Intégrer un nouveau membre"
-
-msgid "Banish Member"
-msgstr "Bannir un membre"
-
-msgid "Start Deletion Poll"
-msgstr "Lancer un scrutin de suppression"
-
-msgid "Start a poll to delete this house?"
-msgstr "Lancer un scrutin pour supprimer cette Maison ?"
-
-msgid "Members"
-msgstr "Membres"
-
-msgid "No members."
-msgstr "Aucun membre."
-
-msgid "Archive"
-msgstr "Archive"
-
-msgid "No archived polls."
-msgstr "Aucun scrutin archivé."
-
-msgid "You are not a member of this house."
-msgstr "Vous n'êtes pas membre de cette Maison."
-
-msgid "Poll"
-msgstr "Scrutin"
-
-msgid "House"
-msgstr "Maison"
-
-msgid "Deadline"
-msgstr "Date limite"
-
-msgid "Max Participants"
-msgstr "Participants max"
-
-msgid "Current Votes"
-msgstr "Votes actuels"
-
-msgid "Ticket Secured"
-msgstr "Sécurisé par ticket"
-
-msgid "Yes"
-msgstr "Oui"
-
-msgid "No"
-msgstr "Non"
-
-msgid "This poll is finished."
-msgstr "Ce scrutin est terminé."
-
-msgid "View Results"
-msgstr "Voir les résultats"
-
-msgid "Download JSON Results"
-msgstr "Télécharger les résultats JSON"
-
-msgid "Vote Now"
-msgstr "Voter maintenant"
-
-msgid "Available Tickets"
-msgstr "Tickets disponibles"
-
-msgid "Distribute these tickets randomly to voters"
-msgstr "Distribuez ces tickets au hasard aux électeurs"
-
-msgid "Download Tickets"
-msgstr "Télécharger les tickets"
-
-msgid "Back to House"
-msgstr "Retour à la Maison"
-
-msgid "Create Poll"
-msgstr "Créer le scrutin"
-
-msgid "Status"
-msgstr "Statut"
-
-msgid "Finished"
-msgstr "Terminé"
-
-msgid "Active"
-msgstr "Actif"
-
-msgid "Summary"
-msgstr "Résumé"
-
-msgid "Total Ballots"
-msgstr "Total des bulletins"
-
-msgid "Condorcet Results"
-msgstr "Résultats Condorcet"
-
-msgid "Condorcet Winner(s):"
-msgstr "Gagnant(s) Condorcet :"
-
-msgid "No strict Condorcet winner"
-msgstr "Pas de gagnant Condorcet strict"
-
-msgid "voting cycle / tie detected"
-msgstr "cycle de vote / égalité détecté"
-
-msgid "Head-to-Head Statistics"
-msgstr "Statistiques face-à-face"
-
-msgid "How many times the option in the row beat the option in the column."
-msgstr "Nombre de fois où l'option en ligne a battu l'option en colonne."
-
-msgid "Option"
-msgstr "Option"
-
-msgid "Wins"
-msgstr "Victoires"
-
-msgid "Losses"
-msgstr "Défaites"
-
-msgid "Ties"
-msgstr "Égalités"
-
-msgid "Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable)."
-msgstr "Les données de vérification sont disponibles au téléchargement ci-dessous. Ces données contiennent tous les bulletins individuels avec leurs rangs et le ticket/nom d'utilisateur utilisé (le cas échéant)."
-
-msgid "The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted."
-msgstr "Le scrutin est toujours actif. Les résultats seront affichés une fois la date limite atteinte ou lorsque le nombre maximum de participants aura voté."
-
-msgid "Back to Home"
-msgstr "Retour à l'accueil"
-
-msgid "Vote"
-msgstr "Vote"
-
-msgid "Rank the choices (drag and drop)"
-msgstr "Classez les choix (glisser-déposer)"
-
-msgid "This poll is ticket secured. Please enter your 8-character ticket code."
-msgstr "Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 caractères."
-
-msgid "Cast Vote"
-msgstr "Voter"
-
-msgid "Want to help?"
-msgstr "Vous voulez aider ?"
-
-msgid "About FairPoll | How to Use Our Secure Condorcet Voting System"
-msgstr "À propos de FairPoll | Comment utiliser notre système de vote Condorcet sécurisé"
-
-msgid "Learn how to use FairPoll for quick decisions or secure, official condorcet digital votes. Discover our Condorcet voting system with anonymous tickets and verifiable results."
-msgstr "Apprenez à utiliser FairPoll pour des décisions rapides ou des votes numériques Condorcet officiels et sécurisés. Découvrez notre système de vote Condorcet avec des tickets anonymes et des résultats vérifiables."
-
-msgid "Account"
-msgstr "Compte"
-
-msgid "Modify Profile"
-msgstr "Modifier le profil"
-
-msgid "Security (2FA)"
-msgstr "Sécurité (A2F)"
-
-msgid "Sign Out"
-msgstr "Se déconnecter"
-
-msgid "Update Profile"
-msgstr "Mettre à jour le profil"
-
-msgid "Save Changes"
-msgstr "Enregistrer les modifications"
-
-msgid "Back to Account"
-msgstr "Retour au compte"
-
-msgid "House %(name)s created successfully."
+#: condorcet_backend/settings.py:141
+msgid "Arabic"
+msgstr "Arabe"
+
+#: houses/views.py:24
+#, fuzzy, python-brace-format
+#| msgid "House %(name)s created successfully."
+msgid "House {house_name} created successfully."
 msgstr "La Maison %(name)s a été créée avec succès."
 
-msgid "Only members can start governance polls."
-msgstr "Seuls les membres peuvent lancer des scrutins de gouvernance."
-
-msgid "An active integration poll already exists."
-msgstr "Un scrutin d'intégration actif existe déjà."
-
-msgid "Should we integrate %(username)s into %(house_name)s?"
-msgstr "Devons-nous intégrer %(username)s dans %(house_name)s ?"
-
-msgid "Integration poll for %(username)s created."
-msgstr "Scrutin d'intégration pour %(username)s créé."
-
-msgid "An active banishment poll already exists."
-msgstr "Un scrutin de bannissement actif existe déjà."
-
-msgid "Should we banish %(username)s from %(house_name)s?"
-msgstr "Devons-nous bannir %(username)s de %(house_name)s ?"
-
-msgid "Banishment poll for %(username)s created."
-msgstr "Scrutin de bannissement pour %(username)s créé."
-
-msgid "An active deletion poll already exists."
-msgstr "Un scrutin de suppression actif existe déjà."
-
-msgid "Should we delete the house %(name)s?"
-msgstr "Devons-nous supprimer la Maison %(name)s ?"
-
-msgid "Deletion poll created."
-msgstr "Scrutin de suppression créé."
-
-msgid "Standard Vote"
-msgstr "Vote standard"
-
-msgid "Member Integration"
-msgstr "Intégration de membre"
-
-msgid "Member Banishment"
-msgstr "Bannissement de membre"
-
-msgid "House Deletion"
-msgstr "Suppression de la Maison"
-
-msgid "New Poll in House %(name)s: %(question)s"
-msgstr "Nouveau scrutin dans la Maison %(name)s : %(question)s"
-
-msgid ""
-"A new poll has been created in the house '%(name)s'.\n\n"
-"Question: %(question)s\n"
-"Poll ID: %(external_id)s\n\n"
-"You can view and vote on the poll here: %(link)s\n"
-msgstr ""
-"Un nouveau scrutin a été créé dans la Maison '%(name)s'.\n\n"
-"Question : %(question)s\n"
-"ID du scrutin : %(external_id)s\n\n"
-"Vous pouvez voir et voter sur le scrutin ici : %(link)s\n"
-
-msgid "Type username or email..."
-msgstr "Tapez le nom d'utilisateur ou l'e-mail..."
-
-msgid "Select users to add to this house."
-msgstr "Sélectionnez les utilisateurs à ajouter à cette Maison."
-
-msgid "Default Deadline (in days)"
-msgstr "Date limite par défaut (en jours)"
-
-msgid "Duration for governance polls."
-msgstr "Durée des scrutins de gouvernance."
-
-msgid "User to integrate"
-msgstr "Utilisateur à intégrer"
-
-msgid "Member to banish"
-msgstr "Membre à bannir"
-
+#: polls/forms.py:10 polls/forms.py:51
 msgid "Enter choices, one per line."
 msgstr "Entrez les choix, un par ligne."
 
+#: polls/forms.py:11 polls/forms.py:52
 msgid "Choices"
 msgstr "Choix"
 
+#: polls/forms.py:25 polls/forms.py:66
+msgid "Please provide at least two options."
+msgstr ""
+
+#: polls/forms.py:33 polls/forms.py:74
 msgid "The deadline must be at least 1 minute from now."
 msgstr "La date limite doit être à au moins 1 minute d'ici."
 
+#: polls/forms.py:80
 msgid "A poll must have at least 1 participant."
 msgstr "Un scrutin doit avoir au moins 1 participant."
 
+#: polls/forms.py:93
 msgid "Ticket Code"
 msgstr "Code du ticket"
 
-msgid "%(username)s's Homepage"
-msgstr "Page d'accueil de %(username)s"
+#: polls/forms.py:116
+#, fuzzy
+#| msgid ""
+#| "This poll is ticket secured. Please enter your 8-character ticket code."
+msgid "This poll is ticket secured. Please enter your ticket code."
+msgstr ""
+"Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 "
+"caractères."
 
-msgid "Welcome to %(username)s's public profile."
-msgstr "Bienvenue sur le profil public de %(username)s."
+#: polls/models.py:214
+msgid "Standard Vote"
+msgstr "Vote standard"
 
-msgid "Unauthorized or poll finished."
-msgstr "Non autorisé ou scrutin terminé."
+#: polls/models.py:215
+msgid "Member Integration"
+msgstr "Intégration de membre"
 
-msgid "Poll not found. Please check the ID."
-msgstr "Scrutin introuvable. Veuillez vérifier l'ID."
+#: polls/models.py:216
+msgid "Member Banishment"
+msgstr "Bannissement de membre"
 
-msgid "Invalid Poll ID."
-msgstr "ID de scrutin invalide."
+#: polls/models.py:217
+msgid "House Deletion"
+msgstr "Suppression de la Maison"
 
-msgid "Poll is still in progress. Check back later."
-msgstr "Le scrutin est toujours en cours. Revenez plus tard."
+#: polls/models.py:239
+#, python-format
+msgid "New Poll in House %(name)s: %(question)s"
+msgstr "Nouveau scrutin dans la Maison %(name)s : %(question)s"
 
-msgid "The house has been deleted following the successful deletion poll."
-msgstr "La Maison a été supprimée suite au scrutin de suppression réussi."
+#: polls/models.py:241
+#, python-format
+msgid ""
+"A new poll has been created in the house '%(name)s'.\n"
+"\n"
+"Question: %(question)s\n"
+"Poll ID: %(external_id)s\n"
+"\n"
+"You can view and vote on the poll here: %(link)s\n"
+msgstr ""
+"Un nouveau scrutin a été créé dans la Maison '%(name)s'.\n"
+"\n"
+"Question : %(question)s\n"
+"ID du scrutin : %(external_id)s\n"
+"\n"
+"Vous pouvez voir et voter sur le scrutin ici : %(link)s\n"
 
+#: polls/views.py:100
+#, python-format
+msgid "Poll %(question)s created."
+msgstr "Scrutin %(question)s créé."
+
+#: polls/views.py:118 polls/views.py:268
 msgid "Poll is closed."
 msgstr "Le scrutin est fermé."
 
-msgid "You have already voted in this poll from this device."
-msgstr "Vous avez déjà voté dans ce scrutin depuis cet appareil."
+#: polls/views.py:131 polls/views.py:292
+#, fuzzy
+#| msgid "House %(name)s created successfully."
+msgid "Vote cast successfully!"
+msgstr "La Maison %(name)s a été créée avec succès."
 
+#: polls/views.py:149 polls/views.py:314
+msgid "Poll is still in progress. Check back later."
+msgstr "Le scrutin est toujours en cours. Revenez plus tard."
+
+#: polls/views.py:192
+msgid "The house has been deleted following the successful deletion poll."
+msgstr "La Maison a été supprimée suite au scrutin de suppression réussi."
+
+#: polls/views.py:208 polls/views.py:335
+#, fuzzy
+#| msgid "This poll is finished."
+msgid "Poll is not finished."
+msgstr "Ce scrutin est terminé."
+
+#: polls/views.py:243
+#, python-format
 msgid "QuickPoll created. ID: %(external_id)s"
 msgstr "QuickPoll créé. ID : %(external_id)s"
 
-msgid "Poll %(question)s created."
-msgstr "Scrutin %(question)s créé."
+#: polls/views.py:274
+msgid "You have already voted in this poll from this device."
+msgstr "Vous avez déjà voté dans ce scrutin depuis cet appareil."
+
+#: polls/views.py:352
+msgid "Unauthorized or poll finished."
+msgstr "Non autorisé ou scrutin terminé."
+
+#: polls/views.py:382
+msgid "Poll not found. Please check the ID."
+msgstr "Scrutin introuvable. Veuillez vérifier l'ID."
+
+#: polls/views.py:384
+msgid "Invalid Poll ID."
+msgstr "ID de scrutin invalide."
+
+#: templates/about.html:4
+msgid "About FairPoll | How to Use Our Secure Condorcet Voting System"
+msgstr ""
+"À propos de FairPoll | Comment utiliser notre système de vote Condorcet "
+"sécurisé"
+
+#: templates/about.html:6
+msgid ""
+"Learn how to use FairPoll for quick decisions or secure, official condorcet "
+"digital votes. Discover our Condorcet voting system with anonymous tickets "
+"and verifiable results."
+msgstr ""
+"Apprenez à utiliser FairPoll pour des décisions rapides ou des votes "
+"numériques Condorcet officiels et sécurisés. Découvrez notre système de vote "
+"Condorcet avec des tickets anonymes et des résultats vérifiables."
+
+#: templates/about.html:10
+msgid "Quick & Simple Voting"
+msgstr "Vote rapide et simple"
+
+#: templates/about.html:13
+msgid ""
+"Everyday Decisions: For informal voting, use new poll and share the poll ID "
+"with your participants."
+msgstr ""
+"Décisions informelles : Utilisez \"nouveau scrutin\" et partagez l'ID du "
+"scrutin avec vos participants."
+
+#: templates/about.html:16
+msgid "Important Decisions: Use new poll and select ticket secure."
+msgstr ""
+"Décisions importantes : Utilisez \"nouveau scrutin\" et sélectionnez "
+"\"ticket sécurisé\"."
+
+#: templates/about.html:19
+msgid ""
+"Idea: For several votes from the same device (polling station), use private "
+"navigation."
+msgstr ""
+"Idée : Pour plusieurs votes à partir du même appareil (bureau de vote), "
+"utilisez la navigation privée."
+
+#: templates/about.html:25
+msgid "Regular Decisions"
+msgstr "Décisions régulières"
+
+#: templates/about.html:27
+msgid ""
+"For recurring or official decisions, we recommend our secure House voting "
+"system. It includes advanced features like automatic email notifications to "
+"all members."
+msgstr ""
+"Pour les décisions récurrentes ou officielles, nous recommandons notre "
+"système de vote sécurisé par Maison. Il comprend des fonctionnalités "
+"avancées comme des notifications automatiques par e-mail à tous les membres."
+
+#: templates/about.html:30
+msgid "How it works:"
+msgstr "Comment ça marche :"
+
+#: templates/about.html:33
+msgid "1. Gather your voters: All voters must belong to the House."
+msgstr ""
+"1. Rassemblez vos électeurs : Tous les électeurs doivent appartenir à la "
+"Maison."
+
+#: templates/about.html:36
+msgid "2. Create a house: Set it up with all its voting members."
+msgstr "2. Créez une Maison : Configurez-la avec tous ses membres votants."
+
+#: templates/about.html:38
+msgid ""
+"Note: To prevent ballot stuffing, you cannot add new voters after the House "
+"is created."
+msgstr ""
+"Note : Pour éviter le bourrage d'urnes, vous ne pouvez pas ajouter de "
+"nouveaux électeurs après la création de la Maison."
+
+#: templates/about.html:41
+msgid "3. Create the Poll: Initiate a new poll from within the House."
+msgstr ""
+"3. Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
+
+#: templates/about.html:44
+msgid ""
+"4. Distribute Tickets: The poll creator must print, cut out, and randomly "
+"distribute the voting tickets (for example, by having members draw them from "
+"a box)."
+msgstr ""
+"4. Distribuez les tickets : Le créateur du scrutin doit imprimer, découper "
+"et distribuer au hasard les tickets de vote (par exemple, en les faisant "
+"tirer au sort dans une boîte par les membres)."
+
+#: templates/about.html:47
+msgid ""
+"5. Cast Votes: Each voter joins the poll using the poll ID, and uses their "
+"unique ticket to cast their vote anonymously (no sign-in required when "
+"voting a ticket poll)."
+msgstr ""
+"5. Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin "
+"et utilise son ticket unique pour voter anonymement (aucune connexion "
+"requise lors d'un vote par ticket)."
+
+#: templates/about.html:50
+msgid ""
+"6. Review Results: Once voting ends, the results are stored in the House "
+"archives. The complete ballot can be downloaded for independent verification."
+msgstr ""
+"6. Examinez les résultats : Une fois le vote terminé, les résultats sont "
+"stockés dans les archives de la Maison. Le bulletin complet peut être "
+"téléchargé pour une vérification indépendante."
+
+#: templates/account/email.html:5 templates/account/email.html:9
+msgid "E-mail Addresses"
+msgstr ""
+
+#: templates/account/email.html:12
+msgid "The following e-mail addresses are associated with your account:"
+msgstr ""
+
+#: templates/account/email.html:26
+msgid "Verified"
+msgstr ""
+
+#: templates/account/email.html:28
+msgid "Unverified"
+msgstr ""
+
+#: templates/account/email.html:30
+msgid "Primary"
+msgstr ""
+
+#: templates/account/email.html:36
+msgid "Make Primary"
+msgstr ""
+
+#: templates/account/email.html:37
+msgid "Re-send Verification"
+msgstr ""
+
+#: templates/account/email.html:38
+msgid "Remove"
+msgstr ""
+
+#: templates/account/email.html:45
+msgid "Warning:"
+msgstr ""
+
+#: templates/account/email.html:45
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: templates/account/email.html:48
+msgid "Add E-mail Address"
+msgstr ""
+
+#: templates/account/email.html:53
+msgid "Add E-mail"
+msgstr ""
+
+#: templates/account/email_confirm.html:5
+#: templates/account/email_confirm.html:9
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: templates/account/email_confirm.html:14
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user %(user_display)s."
+msgstr ""
+
+#: templates/account/email_confirm.html:19
+msgid "Confirm"
+msgstr ""
+
+#: templates/account/email_confirm.html:24
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+
+#: templates/account/login.html:7 templates/account/login.html:11
+msgid "Log In"
+msgstr ""
+
+#: templates/account/login.html:14 templates/two_factor/core/login.html:31
+msgid "Forgot Password?"
+msgstr ""
+
+#: templates/account/logout.html:7 templates/account/logout.html:14
+#: users/templates/users/account.html:11
+msgid "Sign Out"
+msgstr "Se déconnecter"
+
+#: templates/account/logout.html:8
+msgid "Are you sure you want to sign out?"
+msgstr ""
+
+#: templates/account/password_reset.html:7
+#: templates/account/password_reset_done.html:7
+msgid "Password Reset"
+msgstr ""
+
+#: templates/account/password_reset.html:11
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+
+#: templates/account/password_reset.html:15
+msgid "Reset My Password"
+msgstr ""
+
+#: templates/account/password_reset.html:17
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: templates/account/password_reset_done.html:8
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+
+#: templates/account/password_reset_done.html:10
+#: templates/account/password_reset_from_key_done.html:10
+#, fuzzy
+#| msgid "Back to Home"
+msgid "Back to Login"
+msgstr "Retour à l'accueil"
+
+#: templates/account/password_reset_from_key.html:7
+#: templates/account/password_reset_from_key.html:19
+#: templates/account/password_reset_from_key_done.html:7
+msgid "Change Password"
+msgstr ""
+
+#: templates/account/password_reset_from_key.html:10
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a new password reset."
+msgstr ""
+
+#: templates/account/password_reset_from_key.html:12
+msgid "Request New Password Reset"
+msgstr ""
+
+#: templates/account/password_reset_from_key.html:15
+msgid "Enter your new password below."
+msgstr ""
+
+#: templates/account/password_reset_from_key_done.html:8
+msgid "Your password has been changed."
+msgstr ""
+
+#: templates/account/signup.html:7 templates/account/signup.html:11
+#: templates/base.html:59
+msgid "Sign Up"
+msgstr "S'inscrire"
+
+#: templates/account/verification_sent.html:5
+#: templates/account/verification_sent.html:9
+msgid "Verify Your E-mail Address"
+msgstr ""
+
+#: templates/account/verification_sent.html:11
+msgid ""
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process."
+msgstr ""
+
+#: templates/account/verification_sent.html:14
+msgid ""
+"If you do not receive an e-mail within a few minutes, check your spam folder."
+msgstr ""
+
+#: templates/base.html:14
+msgid ""
+"FairPoll: The secured Condorcet voting system and democracy tool. Create "
+"secure, official digital votes and polls easily and safely."
+msgstr ""
+"FairPoll : Le système de vote Condorcet sécurisé et outil de démocratie. "
+"Créez des votes et scrutins numériques officiels facilement et en toute "
+"sécurité."
+
+#: templates/base.html:15
+msgid ""
+"condorcet voting system, democracy tool, secured voting, digital vote, "
+"official poll, online poll, secure survey"
+msgstr ""
+"système de vote condorcet, outil de démocratie, vote sécurisé, vote "
+"numérique, scrutin officiel, sondage en ligne, enquête sécurisée"
+
+#: templates/base.html:20
+msgid "FairPoll - Secured Condorcet Voting System & Democracy Tool"
+msgstr "FairPoll - Système de vote Condorcet sécurisé & outil de démocratie"
+
+#: templates/base.html:21
+msgid ""
+"FairPoll is a secured and transparent condorcet voting platform for official "
+"and digital elections."
+msgstr ""
+"FairPoll est une plateforme de vote Condorcet sécurisée et transparente pour "
+"les élections officielles et numériques."
+
+#: templates/base.html:30
+msgid "FairPoll - Digital Democracy Tool"
+msgstr "FairPoll - Outil de démocratie numérique"
+
+#: templates/base.html:31
+msgid ""
+"Create secure and transparent Condorcet polls and votes. Secured digital "
+"voting."
+msgstr ""
+"Créez des scrutins et des votes Condorcet sécurisés et transparents. Vote "
+"numérique sécurisé."
+
+#: templates/base.html:33
+msgid "FairPoll | Secured Condorcet Voting System & Democracy Tool"
+msgstr "FairPoll | Système de vote Condorcet sécurisé & outil de démocratie"
+
+#: templates/base.html:47
+msgid "Home"
+msgstr "Accueil"
+
+#: templates/base.html:48
+msgid "About"
+msgstr "À propos"
+
+#: templates/base.html:50
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: templates/base.html:54
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/base.html:58 templates/two_factor/core/login.html:6
+msgid "Login"
+msgstr "Connexion"
+
+#: templates/base.html:65 templates/polls/house_poll_detail.html:6
+msgid "Poll ID"
+msgstr "ID du scrutin"
+
+#: templates/base.html:66
+msgid "Join"
+msgstr "Rejoindre"
+
+#: templates/base.html:105 templates/home.html:15
+#: templates/polls/poll_results.html:5
+msgid "Results"
+msgstr "Résultats"
+
+#: templates/base.html:106 templates/home.html:14
+msgid "New Poll"
+msgstr "Nouveau scrutin"
+
+#: templates/base.html:107
+msgid "Houses"
+msgstr "Maisons"
+
+#: templates/base.html:108
+msgid "New House"
+msgstr "Nouvelle Maison"
+
+#: templates/base.html:111
+msgid "Want to help?"
+msgstr "Vous voulez aider ?"
+
+#: templates/base.html:113
+msgid "Buy me a coffee"
+msgstr "Offrez-moi un café"
+
+#: templates/base.html:114
+msgid "GitHub"
+msgstr "GitHub"
+
+#: templates/base.html:117
+msgid "All rights reserved."
+msgstr "Tous droits réservés."
+
+#: templates/home.html:5 templates/home.html:11
+msgid "A free and secure Condorcet voting and polling system"
+msgstr "Un système de vote et de scrutin Condorcet gratuit et sécurisé"
+
+#: templates/home.html:10
+msgid "Welcome to FairPoll"
+msgstr "Bienvenue sur FairPoll"
+
+#: templates/home.html:19
+msgid "Polls Waiting For You"
+msgstr "Scrutins en attente"
+
+#: templates/home.html:25 templates/polls/house_poll_detail.html:8
+#: templates/polls/poll_results.html:9 templates/polls/poll_vote.html:12
+msgid "Deadline"
+msgstr "Date limite"
+
+#: templates/home.html:30
+msgid "You have no pending polls to vote on right now."
+msgstr "Vous n'avez aucun scrutin en attente."
+
+#: templates/home.html:34
+msgid "Security Concept"
+msgstr "Concept de sécurité"
+
+#: templates/home.html:37
+msgid ""
+"Anonymous Voting: You handle the distribution of unique physical tokens "
+"(e.g., via random draw). The server cannot link a ballot to a person."
+msgstr ""
+"Vote anonyme : Vous gérez la distribution de jetons physiques uniques "
+"(tirage au sort). Le serveur ne peut pas lier un bulletin à une personne."
+
+#: templates/home.html:40
+msgid ""
+"Verifiable Results: The results are published and verifiable. Even the most "
+"skeptical voters can confirm how their vote was counted and review the "
+"calculations."
+msgstr ""
+"Résultats vérifiables : Les résultats sont publiés et vérifiables. Les plus "
+"sceptiques peuvent confirmer comment leur vote a été comptabilisé et revoir "
+"les calculs."
+
+#: templates/home.html:46
+msgid "Group Autonomy"
+msgstr "Autonomie du groupe"
+
+#: templates/home.html:49
+msgid ""
+"You Remain in Control: FairPoll provides the tools, but your group decides "
+"the outcome."
+msgstr ""
+"Restez aux commandes : FairPoll fournit les outils, mais c'est votre groupe "
+"qui décide du résultat."
+
+#: templates/home.html:52
+msgid ""
+"Custom Rules: The group is entirely free to invalidate a vote according to "
+"its own agreed-upon rules (such as in the case of ties or ballot corruption)."
+msgstr ""
+"Règles personnalisées : Le groupe est entièrement libre d'invalider un vote "
+"selon ses propres règles convenues (comme en cas d'égalité ou de corruption "
+"de scrutin)."
+
+#: templates/houses/house_create.html:6 templates/houses/house_list.html:24
+msgid "Create a House"
+msgstr "Créer une Maison"
+
+#: templates/houses/house_create.html:10
+#, fuzzy
+#| msgid "Creator"
+msgid "Create"
+msgstr "Créateur"
+
+#: templates/houses/house_detail.html:6 templates/houses/house_list.html:8
+#: templates/houses/house_list.html:17
+msgid "Creator"
+msgstr "Créateur"
+
+#: templates/houses/house_detail.html:7
+msgid "Default Deadline"
+msgstr "Date limite par défaut"
+
+#: templates/houses/house_detail.html:10
+msgid "Active Polls"
+msgstr "Scrutins actifs"
+
+#: templates/houses/house_detail.html:18
+msgid "No active polls."
+msgstr "Aucun scrutin actif."
+
+#: templates/houses/house_detail.html:22
+msgid "Create New Poll"
+msgstr "Créer un nouveau scrutin"
+
+#: templates/houses/house_detail.html:25
+msgid "Governance Actions"
+msgstr "Actions de gouvernance"
+
+#: templates/houses/house_detail.html:27
+msgid "Integrate New Member"
+msgstr "Intégrer un nouveau membre"
+
+#: templates/houses/house_detail.html:28
+msgid "Banish Member"
+msgstr "Bannir un membre"
+
+#: templates/houses/house_detail.html:30
+msgid "Start a poll to delete this house?"
+msgstr "Lancer un scrutin pour supprimer cette Maison ?"
+
+#: templates/houses/house_detail.html:30
+msgid "Start Deletion Poll"
+msgstr "Lancer un scrutin de suppression"
+
+#: templates/houses/house_detail.html:33
+msgid "Members"
+msgstr "Membres"
+
+#: templates/houses/house_detail.html:38
+msgid "No members."
+msgstr "Aucun membre."
+
+#: templates/houses/house_detail.html:42
+msgid "Archive"
+msgstr "Archive"
+
+#: templates/houses/house_detail.html:50
+msgid "No archived polls."
+msgstr "Aucun scrutin archivé."
+
+#: templates/houses/house_detail.html:55
+msgid "You are not a member of this house."
+msgstr "Vous n'êtes pas membre de cette Maison."
+
+#: templates/houses/house_list.html:5
+msgid "My Houses"
+msgstr "Mes Maisons"
+
+#: templates/houses/house_list.html:10
+msgid "You don't belong to any houses yet."
+msgstr "Vous n'appartenez encore à aucune Maison."
+
+#: templates/houses/house_list.html:14
+msgid "Other Houses"
+msgstr "Autres Maisons"
+
+#: templates/houses/house_list.html:19
+msgid "No other houses yet."
+msgstr "Aucune autre Maison pour le moment."
+
+#: templates/polls/house_poll_detail.html:5
+msgid "Poll"
+msgstr "Scrutin"
+
+#: templates/polls/house_poll_detail.html:7 templates/polls/poll_results.html:7
+#: templates/polls/poll_vote.html:10
+msgid "House"
+msgstr "Maison"
+
+#: templates/polls/house_poll_detail.html:9
+#: templates/polls/poll_results.html:15
+msgid "Max Participants"
+msgstr "Participants max"
+
+#: templates/polls/house_poll_detail.html:10
+msgid "Current Votes"
+msgstr "Votes actuels"
+
+#: templates/polls/house_poll_detail.html:11
+msgid "Ticket Secured"
+msgstr "Sécurisé par ticket"
+
+#: templates/polls/house_poll_detail.html:11
+msgid "Yes"
+msgstr "Oui"
+
+#: templates/polls/house_poll_detail.html:11
+msgid "No"
+msgstr "Non"
+
+#: templates/polls/house_poll_detail.html:14
+msgid "This poll is finished."
+msgstr "Ce scrutin est terminé."
+
+#: templates/polls/house_poll_detail.html:15
+msgid "View Results"
+msgstr "Voir les résultats"
+
+#: templates/polls/house_poll_detail.html:16
+#: templates/polls/poll_results.html:86 templates/polls/poll_results.html:88
+msgid "Download JSON Results"
+msgstr "Télécharger les résultats JSON"
+
+#: templates/polls/house_poll_detail.html:18
+msgid "Vote Now"
+msgstr "Voter maintenant"
+
+#: templates/polls/house_poll_detail.html:23
+msgid "Available Tickets"
+msgstr "Tickets disponibles"
+
+#: templates/polls/house_poll_detail.html:24
+msgid "Distribute these tickets randomly to voters"
+msgstr "Distribuez ces tickets au hasard aux électeurs"
+
+#: templates/polls/house_poll_detail.html:25
+#: templates/polls/poll_results.html:94 templates/polls/poll_results.html:96
+#: templates/polls/poll_vote.html:40 templates/polls/poll_vote.html:42
+msgid "Download Tickets"
+msgstr "Télécharger les tickets"
+
+#: templates/polls/house_poll_detail.html:29
+#: templates/polls/poll_results.html:103
+msgid "Back to House"
+msgstr "Retour à la Maison"
+
+#: templates/polls/house_poll_form.html:6
+#: templates/polls/house_poll_form.html:11
+msgid "Create Poll"
+msgstr "Créer le scrutin"
+
+#: templates/polls/poll_results.html:10
+msgid "Status"
+msgstr "Statut"
+
+#: templates/polls/poll_results.html:10
+msgid "Finished"
+msgstr "Terminé"
+
+#: templates/polls/poll_results.html:10
+msgid "Active"
+msgstr "Actif"
+
+#: templates/polls/poll_results.html:12
+msgid "Summary"
+msgstr "Résumé"
+
+#: templates/polls/poll_results.html:14
+msgid "Total Ballots"
+msgstr "Total des bulletins"
+
+#: templates/polls/poll_results.html:19
+msgid "Condorcet Results"
+msgstr "Résultats Condorcet"
+
+#: templates/polls/poll_results.html:22
+msgid "Condorcet Winner(s):"
+msgstr "Gagnant(s) Condorcet :"
+
+#: templates/polls/poll_results.html:27
+msgid "No strict Condorcet winner"
+msgstr "Pas de gagnant Condorcet strict"
+
+#: templates/polls/poll_results.html:27
+msgid "voting cycle / tie detected"
+msgstr "cycle de vote / égalité détecté"
+
+#: templates/polls/poll_results.html:31
+msgid "Head-to-Head Statistics"
+msgstr "Statistiques face-à-face"
+
+#: templates/polls/poll_results.html:32
+msgid "How many times the option in the row beat the option in the column."
+msgstr "Nombre de fois où l'option en ligne a battu l'option en colonne."
+
+#: templates/polls/poll_results.html:36
+msgid "Option"
+msgstr "Option"
+
+#: templates/polls/poll_results.html:40
+msgid "Wins"
+msgstr "Victoires"
+
+#: templates/polls/poll_results.html:41
+msgid "Losses"
+msgstr "Défaites"
+
+#: templates/polls/poll_results.html:42
+msgid "Ties"
+msgstr "Égalités"
+
+#: templates/polls/poll_results.html:84
+msgid ""
+"Verification data is available for download below. This data contains all "
+"individual ballots with their ranks and the ticket/username used (if "
+"applicable)."
+msgstr ""
+"Les données de vérification sont disponibles au téléchargement ci-dessous. "
+"Ces données contiennent tous les bulletins individuels avec leurs rangs et "
+"le ticket/nom d'utilisateur utilisé (le cas échéant)."
+
+#: templates/polls/poll_results.html:91
+msgid ""
+"The poll is still active. Results will be shown once the deadline is reached "
+"or the maximum number of participants has voted."
+msgstr ""
+"Le scrutin est toujours actif. Les résultats seront affichés une fois la "
+"date limite atteinte ou lorsque le nombre maximum de participants aura voté."
+
+#: templates/polls/poll_results.html:105
+#: users/templates/users/user_homepage.html:10
+msgid "Back to Home"
+msgstr "Retour à l'accueil"
+
+#: templates/polls/poll_vote.html:8
+msgid "Vote"
+msgstr "Vote"
+
+#: templates/polls/poll_vote.html:13
+msgid "Rank the choices (drag and drop)"
+msgstr "Classez les choix (glisser-déposer)"
+
+#: templates/polls/poll_vote.html:19
+msgid "This poll is ticket secured. Please enter your 8-character ticket code."
+msgstr ""
+"Ce scrutin est sécurisé par ticket. Veuillez saisir votre code de ticket à 8 "
+"caractères."
+
+#: templates/polls/poll_vote.html:37
+msgid "Cast Vote"
+msgstr "Voter"
+
+#: templates/polls/statistics.html:4
+#, fuzzy
+#| msgid "Head-to-Head Statistics"
+msgid "FairPoll Statistics"
+msgstr "Statistiques face-à-face"
+
+#: templates/polls/statistics.html:8
+#, fuzzy
+#| msgid "Head-to-Head Statistics"
+msgid "Global Statistics"
+msgstr "Statistiques face-à-face"
+
+#: templates/polls/statistics.html:9
+msgid "Overview of our platform's activity"
+msgstr ""
+
+#: templates/polls/statistics.html:16 templates/polls/statistics.html:59
+msgid "Unique Visitors"
+msgstr ""
+
+#: templates/polls/statistics.html:21
+#, fuzzy
+#| msgid "Total Ballots"
+msgid "Total Votes / Ballots"
+msgstr "Total des bulletins"
+
+#: templates/polls/statistics.html:26
+msgid "Running Polls"
+msgstr ""
+
+#: templates/polls/statistics.html:31
+#, fuzzy
+#| msgid "Finished"
+msgid "Finished Polls"
+msgstr "Terminé"
+
+#: templates/polls/statistics.html:36
+msgid "Visitor History (Last 7 Days)"
+msgstr ""
+
+#: templates/two_factor/core/backup_tokens.html:5
+#: templates/two_factor/profile/profile.html:32
+msgid "Backup Tokens"
+msgstr ""
+
+#: templates/two_factor/core/backup_tokens.html:6
+msgid ""
+"Backup tokens can be used when your primary and backup phone numbers aren't "
+"available. The tokens should be kept in a safe place."
+msgstr ""
+
+#: templates/two_factor/core/backup_tokens.html:16
+msgid "Print these tokens and keep them in a safe place."
+msgstr ""
+
+#: templates/two_factor/core/backup_tokens.html:18
+#, fuzzy
+#| msgid "You don't belong to any houses yet."
+msgid "You don't have any backup tokens yet."
+msgstr "Vous n'appartenez encore à aucune Maison."
+
+#: templates/two_factor/core/backup_tokens.html:22
+#, fuzzy
+#| msgid "Integrate New Member"
+msgid "Generate New Tokens"
+msgstr "Intégrer un nouveau membre"
+
+#: templates/two_factor/core/backup_tokens.html:26
+#: templates/two_factor/core/setup_complete.html:9
+#, fuzzy
+#| msgid "Back to Account"
+msgid "Back to Account Security"
+msgstr "Retour au compte"
+
+#: templates/two_factor/core/login.html:9
+msgid "Please enter your credentials."
+msgstr ""
+
+#: templates/two_factor/core/login.html:11
+msgid "Please enter the token generated by your token generator."
+msgstr ""
+
+#: templates/two_factor/core/login.html:13
+msgid "Please enter a backup token."
+msgstr ""
+
+#: templates/two_factor/core/login.html:23
+#: templates/two_factor/core/setup.html:59
+msgid "First step"
+msgstr ""
+
+#: templates/two_factor/core/login.html:24
+#: templates/two_factor/core/setup.html:60
+msgid "Previous step"
+msgstr ""
+
+#: templates/two_factor/core/login.html:27
+msgid "Submit"
+msgstr ""
+
+#: templates/two_factor/core/setup.html:5
+#: templates/two_factor/profile/profile.html:54
+msgid "Enable Two-Factor Authentication"
+msgstr ""
+
+#: templates/two_factor/core/setup.html:7
+msgid ""
+"You are about to take your account security to the next level. Follow the "
+"steps in this wizard to enable two-factor authentication."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:11
+msgid "Please select which authentication method you would like to use."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:14
+msgid ""
+"To start using a token generator, please use your smartphone to scan the QR "
+"code below. For example, use Google Authenticator."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:20
+msgid ""
+"Alternatively you can use the following secret to setup TOTP in your "
+"authenticator or password manager manually."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:22
+msgid "TOTP Secret:"
+msgstr ""
+
+#: templates/two_factor/core/setup.html:23
+msgid "Then, enter the token generated by the app."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:26
+msgid ""
+"Please enter the phone number you wish to receive the text messages on. This "
+"number will be validated in the next step."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:30
+msgid ""
+"Please enter the phone number you wish to be called on. This number will be "
+"validated in the next step."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:35
+msgid "We are calling your phone right now, please enter the digits you hear."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:38
+msgid "We sent you a text message, please enter the tokens we sent."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:42
+msgid ""
+"We've encountered an issue with the selected authentication method. Please "
+"go back and verify that you entered your information correctly, try again, "
+"or use a different authentication method instead. If the issue persists, "
+"contact the site administrator."
+msgstr ""
+
+#: templates/two_factor/core/setup.html:62
+msgid "Next step"
+msgstr ""
+
+#: templates/two_factor/core/setup_complete.html:5
+msgid "Two-factor Authentication Enabled"
+msgstr ""
+
+#: templates/two_factor/core/setup_complete.html:6
+msgid "Congratulations, you've successfully enabled two-factor authentication."
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:6
+#, fuzzy
+#| msgid "Account"
+msgid "Account Security"
+msgstr "Compte"
+
+#: templates/two_factor/profile/profile.html:9
+#, python-format
+msgid "Primary method: %(primary)s"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:12
+msgid "Backup Phone Numbers"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:13
+msgid ""
+"If your primary method is not available, we are able to send backup tokens "
+"to the phone numbers listed below."
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:21
+msgid "Are you sure?"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:23
+msgid "Unregister"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:29
+msgid "Add Phone Number"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:34
+msgid ""
+"If you don't have any device with you, you can access your account using "
+"backup tokens."
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:36
+#, python-format
+msgid "You have only one backup token remaining."
+msgid_plural "You have %(counter)s backup tokens remaining."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/two_factor/profile/profile.html:42
+msgid "Show Codes"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:44
+#: templates/two_factor/profile/profile.html:48
+msgid "Disable Two-Factor Authentication"
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:45
+msgid ""
+"However we strongly discourage you to do so, you can also disable two-factor "
+"authentication for your account."
+msgstr ""
+
+#: templates/two_factor/profile/profile.html:50
+msgid ""
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
+msgstr ""
+
+#: users/templates/users/account.html:3 users/templates/users/account.html:6
+msgid "Account"
+msgstr "Compte"
+
+#: users/templates/users/account.html:9
+msgid "Modify Profile"
+msgstr "Modifier le profil"
+
+#: users/templates/users/account.html:10
+msgid "Security (2FA)"
+msgstr "Sécurité (A2F)"
+
+#: users/templates/users/profile_update.html:3
+#: users/templates/users/profile_update.html:6
+msgid "Update Profile"
+msgstr "Mettre à jour le profil"
+
+#: users/templates/users/profile_update.html:11
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+#: users/templates/users/profile_update.html:14
+msgid "Back to Account"
+msgstr "Retour au compte"
+
+#: users/templates/users/user_homepage.html:3
+#, fuzzy, python-format
+#| msgid "%(username)s's Homepage"
+msgid "%(viewed_user.username)s's Homepage"
+msgstr "Page d'accueil de %(username)s"
+
+#: users/templates/users/user_homepage.html:7
+#, fuzzy, python-format
+#| msgid "Welcome to %(username)s's public profile."
+msgid "Welcome to %(viewed_user.username)s's public profile."
+msgstr "Bienvenue sur le profil public de %(username)s."
+
+#~ msgid "Create House"
+#~ msgstr "Créer la Maison"
+
+#~ msgid "Only members can start governance polls."
+#~ msgstr "Seuls les membres peuvent lancer des scrutins de gouvernance."
+
+#~ msgid "An active integration poll already exists."
+#~ msgstr "Un scrutin d'intégration actif existe déjà."
+
+#~ msgid "Should we integrate %(username)s into %(house_name)s?"
+#~ msgstr "Devons-nous intégrer %(username)s dans %(house_name)s ?"
+
+#~ msgid "Integration poll for %(username)s created."
+#~ msgstr "Scrutin d'intégration pour %(username)s créé."
+
+#~ msgid "An active banishment poll already exists."
+#~ msgstr "Un scrutin de bannissement actif existe déjà."
+
+#~ msgid "Should we banish %(username)s from %(house_name)s?"
+#~ msgstr "Devons-nous bannir %(username)s de %(house_name)s ?"
+
+#~ msgid "Banishment poll for %(username)s created."
+#~ msgstr "Scrutin de bannissement pour %(username)s créé."
+
+#~ msgid "An active deletion poll already exists."
+#~ msgstr "Un scrutin de suppression actif existe déjà."
+
+#~ msgid "Should we delete the house %(name)s?"
+#~ msgstr "Devons-nous supprimer la Maison %(name)s ?"
+
+#~ msgid "Deletion poll created."
+#~ msgstr "Scrutin de suppression créé."
+
+#~ msgid "Type username or email..."
+#~ msgstr "Tapez le nom d'utilisateur ou l'e-mail..."
+
+#~ msgid "Select users to add to this house."
+#~ msgstr "Sélectionnez les utilisateurs à ajouter à cette Maison."
+
+#~ msgid "Default Deadline (in days)"
+#~ msgstr "Date limite par défaut (en jours)"
+
+#~ msgid "Duration for governance polls."
+#~ msgstr "Durée des scrutins de gouvernance."
+
+#~ msgid "User to integrate"
+#~ msgstr "Utilisateur à intégrer"
+
+#~ msgid "Member to banish"
+#~ msgstr "Membre à bannir"
