@@ -78,7 +78,7 @@ def create_integration_poll(request, pk):
         if form.is_valid():
             target_user = form.cleaned_data['target_user']
             question = _("Should we integrate %(username)s into %(house_name)s?") % {'username': target_user.username, 'house_name': house.name}
-            
+
             poll = house.create_governance_poll(question, HousePoll.POLL_TYPE_INTEGRATION)
             
             messages.success(request, _("Integration poll for %(username)s created.") % {'username': target_user.username})
