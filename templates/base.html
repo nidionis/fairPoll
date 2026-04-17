@@ -11,26 +11,26 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}{% trans "FairPoll: The secured Condorcet voting system and democracy tool. Create secure, official digital votes and polls easily and safely." %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% blocktranslate trimmed %}{{ SITE_NAME }}: The secured Condorcet voting system and democracy tool. Create secure, official digital votes and polls easily and safely.{% endblocktranslate %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}{% trans "condorcet voting system, democracy tool, secured voting, digital vote, official poll, online poll, secure survey" %}{% endblock %}">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="FairPoll">
+    <meta name="author" content="{{ SITE_NAME }}">
 
     <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}{% trans "FairPoll - Secured Condorcet Voting System & Democracy Tool" %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% trans "FairPoll is a secured and transparent condorcet voting platform for official and digital elections." %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% blocktranslate trimmed %}{{ SITE_NAME }} - Secured Condorcet Voting System & Democracy Tool{% endblocktranslate %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% blocktranslate trimmed %}{{ SITE_NAME }} is a secured and transparent condorcet voting platform for official and digital elections.{% endblocktranslate %}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:site_name" content="FairPoll">
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
     <!-- Ajoutez ici un lien vers une image pour l'aperçu sur les réseaux sociaux -->
     <!-- <meta property="og:image" content="{% static 'static/favicon.ico' %}"> -->
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}{% trans "FairPoll - Digital Democracy Tool" %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% blocktranslate trimmed %}{{ SITE_NAME }} - Digital Democracy Tool{% endblocktranslate %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% trans "Create secure and transparent Condorcet polls and votes. Secured digital voting." %}{% endblock %}">
 
-    <title>{% block title %}{% trans "FairPoll | Secured Condorcet Voting System & Democracy Tool" %}{% endblock %}</title>
+    <title>{% block title %}{% blocktranslate trimmed %}{{ SITE_NAME }} | Secured Condorcet Voting System & Democracy Tool{% endblocktranslate %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
@@ -114,7 +114,7 @@
                             <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">{% trans "GitHub" %}</a>
                         </p>
                     </div>
-                    <p style="margin-top: 15px; color: #888; font-size: 0.85em;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
+                    <p style="margin-top: 15px; color: #888; font-size: 0.85em;">&copy; {% now "Y" %} {{ SITE_NAME }}. {% trans "All rights reserved." %}</p>
                 </footer>
             </div>
         </body>
