@@ -92,21 +92,22 @@
         </main>
 
             <footer data-nosnippet>
-                <div class="footer-nav">
-                    <a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a> | 
-                    <a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a> | 
-                    <a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a> | 
-                    <a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a>
-                </div>
-                <div class="footer-help mt-3">
+                <ul class="footer-nav">
+                    <li><a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a></li>
+                    <li><a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a></li>
+                    <li><a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a></li>
+                    <li><a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a></li>
+                </ul>
+                <div class="footer-help mt-3" style="text-align: center;">
                     <p><strong>{% trans "Want to help?" %}</strong></p>
-                    <p>
-                        <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener">Buy me a coffee</a> | 
-                        <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener">GitHub</a>
-                    </p>
+                    <ul style="margin-bottom: 20px;">
+                        <li><a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener">Buy me a coffee</a></li>
+                        <li><a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener">GitHub</a></li>
+                    </ul>
                 </div>
-                <p>&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
+                <p style="text-align: center;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
             </footer>
         </div>
     </body>
 </html>
+t
