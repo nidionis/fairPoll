@@ -11,85 +11,72 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}{% blocktranslate trimmed %}{{ SITE_NAME }}: The secured Condorcet voting system and democracy tool. Create secure, official digital votes and polls easily and safely.{% endblocktranslate %}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}{% trans "condorcet voting system, democracy tool, secured voting, digital vote, official poll, online poll, secure survey" %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}condorcet voting system, democracy tool, secured voting, vote numérique, scrutin officialisable, online poll, sondage sécurisé{% endblock %}">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="{{ SITE_NAME }}">
+    <meta name="author" content="FairPoll">
 
     <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}{% blocktranslate trimmed %}{{ SITE_NAME }} - Secured Condorcet Voting System & Democracy Tool{% endblocktranslate %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% blocktranslate trimmed %}{{ SITE_NAME }} is a secured and transparent condorcet voting platform for official and digital elections.{% endblocktranslate %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}FairPoll - Secured Condorcet Voting System & Democracy Tool{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}FairPoll is a secured and transparent condorcet voting platform for official and digital elections.{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta property="og:site_name" content="FairPoll">
     <!-- Ajoutez ici un lien vers une image pour l'aperçu sur les réseaux sociaux -->
     <!-- <meta property="og:image" content="{% static 'static/favicon.ico' %}"> -->
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}{% blocktranslate trimmed %}{{ SITE_NAME }} - Digital Democracy Tool{% endblocktranslate %}{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}{% trans "Create secure and transparent Condorcet polls and votes. Secured digital voting." %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}FairPoll - Digital Democracy Tool{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endblock %}">
 
-    <title>{% block title %}{% blocktranslate trimmed %}{{ SITE_NAME }} | Secured Condorcet Voting System & Democracy Tool{% endblocktranslate %}{% endblock %}</title>
+    <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
-            <body>
-        <div class="main-wrapper">
-            <header data-nosnippet>
-                <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
-                    <!-- Empty div to balance flex layout and keep the center exactly in the middle -->
-                    <div style="flex: 1;"></div>
+<body>
+    <div class="main-wrapper">
+        <header data-nosnippet>
+            <nav>
+                <form action="{% url 'polls:poll_join' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="poll_id" placeholder="{% trans 'Poll ID' %}" required>
+                    <button type="submit">{% trans "Join" %}</button>
+                </form>
 
-                    <!-- Centered List + Join -->
-                    <div style="display: flex; align-items: center; justify-content: center; flex: 2; gap: 20px;">
-                        <ul class="nav-links" style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px; align-items: center;">
-                            <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                            <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                            {% if user.is_authenticated %}
-                                <li><a href="{% url 'users:user_homepage' %}">{% trans "Dashboard" %}</a></li>
-                                <li>
-                                    <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit" class="link-btn">{% trans "Logout" %}</button>
-                                    </form>
-                                </li>
-                            {% else %}
-                                <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
-                                <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
-                            {% endif %}
-                        </ul>
-
-                        <form action="{% url 'polls:poll_join' %}" method="post" style="display: flex; margin: 0;">
-                            {% csrf_token %}
-                            <input type="text" name="poll_id" placeholder="{% trans 'Poll ID' %}" required style="padding: 5px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px;">
-                            <button type="submit" style="padding: 5px 15px; border: none; border-radius: 4px; background-color: #007bff; color: white; cursor: pointer;">{% trans "Join" %}</button>
-                        </form>
-                    </div>
-
-                    <!-- Language Switcher Discrete -->
-                    <div style="flex: 1; display: flex; justify-content: flex-end;">
-                    </div>
-                </nav>
-            </header>
-
-        <main>
-                        <form action="{% url 'set_language' %}" method="post" class="language-switcher" style="margin: 0;">
-                            {% csrf_token %}
-                            <input name="next" type="hidden" value="{{ request.path }}">
-                            <select name="language" onchange="this.form.submit()" style="border: none; background: transparent; font-size: 0.85em; opacity: 0.6; cursor: pointer; outline: none;">
-                                {% get_available_languages as LANGUAGES %}
-                                {% get_language_info_list for LANGUAGES as languages %}
-                                {% for language in languages %}
-                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                        {{ language.name_local }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </form>
-                    </div>
-                </nav>
-            </header>
+                <!-- Language Switcher -->
+                <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                {{ language.name_local }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+                
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                    <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'users:user_homepage' %}">{% trans "Dashboard" %}</a></li>
+                        <li>
+                            <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="link-btn">{% trans "Logout" %}</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'account_login' %}">{% trans "Login" %}</a></li>
+                        <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
 
         <main>
             {% if messages %}
@@ -104,23 +91,23 @@
             {% endblock %}
         </main>
 
-
-                    <footer data-nosnippet style="text-align: center; padding: 30px 20px;">
-                        <div class="footer-nav" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                            <a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a>
-                            <a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a>
-                            <a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a>
-                            <a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a>
-                        </div>
-                        <div class="footer-help mt-3" style="margin-top: 25px; color: #666; font-size: 0.9em;">
-                            <p><strong>{% trans "Want to help?" %}</strong></p>
-                        <p>
-                            <a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">{% trans "Buy me a coffee" %}</a> |
-                            <a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener" style="color: #666; text-decoration: none;">{% trans "GitHub" %}</a>
-                        </p>
-                    </div>
-                    <p style="margin-top: 15px; color: #888; font-size: 0.85em;">&copy; {% now "Y" %} {{ SITE_NAME }}. {% trans "All rights reserved." %}</p>
-                </footer>
-            </div>
-        </body>
-    </html>
+            <footer data-nosnippet>
+                <ul class="footer-nav">
+                    <li><a href="{% url 'polls:quickpoll_archive' %}">{% trans "Results" %}</a></li>
+                    <li><a href="{% url 'polls:quickpoll_create' %}">{% trans "New Poll" %}</a></li>
+                    <li><a href="{% url 'houses:house_list' %}">{% trans "Houses" %}</a></li>
+                    <li><a href="{% url 'houses:house_create' %}">{% trans "New House" %}</a></li>
+                </ul>
+                <div class="footer-help mt-3" style="text-align: center;">
+                    <p><strong>{% trans "Want to help?" %}</strong></p>
+                    <ul style="margin-bottom: 20px;">
+                        <li><a href="https://buymeacoffee.com/buymeacoffuh" target="_blank" rel="noopener">Buy me a coffee</a></li>
+                        <li><a href="https://github.com/nidionis/fairPoll/" target="_blank" rel="noopener">GitHub</a></li>
+                    </ul>
+                </div>
+                <p style="text-align: center;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
+            </footer>
+        </div>
+    </body>
+</html>
+t
