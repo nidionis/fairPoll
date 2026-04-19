@@ -108,5 +108,9 @@
                 <p style="text-align: center;">&copy; {% now "Y" %} FairPoll. {% trans "All rights reserved." %}</p>
             </footer>
         </div>
+
+        <!-- jQuery is required for django-autocomplete-light -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        {% block extra_js %}{% endblock %}
     </body>
 </html>
