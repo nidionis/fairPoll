@@ -10,12 +10,14 @@
         <h1>{% blocktranslate %}Welcome to {{ SITE_NAME }}{% endblocktranslate %}</h1>
         <p class="lead">{% trans "A free and secure Condorcet voting and polling system" %}</p>
     </div>
-    <div class="text-center mb-4">
+    <br class="text-center mb-4">
         <a href="{% url 'polls:quickpoll_create' %}" class="btn">{% trans "New Poll" %}</a>
         <a href="{% url 'polls:quickpoll_archive' %}" class="btn">{% trans "Results" %}</a>
     </div>
 
     {% if user.is_authenticated %}
+        <a href="{% url 'houses:house_create' %}" class="btn">{% trans "New House" %}</a>
+        <a href="{% url 'houses:house_list' %}" class="btn">{% trans "Houses" %}</a>
       <h2>{% trans "Polls Waiting For You" %}</h2>
       {% if pending_polls %}
           <ul>
