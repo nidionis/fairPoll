@@ -171,10 +171,13 @@ msgstr ""
 "共有してください。"
 
 #: templates/about.html:16
-msgid "Important Decisions: Use new poll and select ticket secure."
+msgid ""
+"Important Decisions: Use new poll and select ticket secure. The poll creator "
+"must print, cut out, and distribute the voting tickets (random draw)."
 msgstr ""
 "重要な決定：「新しい投票」を作成し、「チケットによる安全な投票」を選択してく"
-"ださい。"
+"ださい。投票作成者は、投票チケットを印刷、切り取り、配布（無作為抽出）する必"
+"要があります。"
 
 #: templates/about.html:19
 msgid ""
@@ -203,12 +206,11 @@ msgstr "仕組み："
 
 #: templates/about.html:33
 msgid "Gather your voters: All voters must belong to the House."
-msgstr ""
-"1. 有権者を集める：すべての有権者は「ハウス」に所属している必要があります。"
+msgstr "有権者を集める：すべての有権者は「ハウス」に所属している必要があります。"
 
 #: templates/about.html:36
 msgid "Create a house: Set it up with all its voting members."
-msgstr "2. ハウスを作成する：投票メンバーを全員登録してセットアップします。"
+msgstr "ハウスを作成する：投票メンバーを全員登録してセットアップします。"
 
 #: templates/about.html:38
 msgid ""
@@ -219,33 +221,25 @@ msgstr ""
 "とはできません。"
 
 #: templates/about.html:41
-msgid "Create the Poll: Initiate a new poll from within the House."
-msgstr "3. 投票を作成する：ハウス内から新しい投票を開始します。"
+msgid "Create the Poll: Initiate a new poll FROM WITHIN the House."
+msgstr "投票を作成する：ハウス「内」から新しい投票を開始します。"
+
 
 #: templates/about.html:44
 msgid ""
-"Distribute Tickets: The poll creator must print, cut out, and randomly "
-"distribute the voting tickets (for example, by having members draw them from "
-"a box)."
-msgstr ""
-"4. チケットを配布する：投票作成者は、投票チケットを印刷して切り取り、ランダム"
-"に配布してください（例：箱の中からメンバーに引いてもらうなど）。"
-
-#: templates/about.html:47
-msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
-"unique ticket to cast their vote anonymously (no sign-in required when "
-"voting a ticket poll)."
+"unique ticket to cast their vote (no sign-in required when voting a ticket "
+"poll)."
 msgstr ""
-"5. 投票する：各投票者は投票IDを使用して投票に参加し、固有のチケットを使用して"
-"匿名で投票します（チケット投票の場合、ログインは不要です）。"
+"投票する：各投票者は投票IDを使用して投票に参加し、固有のチケットを使用して投"
+"票します（チケット投票の場合、ログインは不要です）。"
 
 #: templates/about.html:50
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
 msgstr ""
-"6. 結果を確認する：投票が終了すると、結果はハウスのアーカイブに保存されます。"
+"結果を確認する：投票が終了すると、結果はハウスのアーカイブに保存されます。"
 "完全な投票データは、第三者による検証のためにダウンロード可能です。"
 
 #: templates/account/email.html:5 templates/account/email.html:9

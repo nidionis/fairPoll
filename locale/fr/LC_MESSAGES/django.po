@@ -184,10 +184,13 @@ msgstr ""
 "scrutin avec vos participants."
 
 #: templates/about.html:16
-msgid "Important Decisions: Use new poll and select ticket secure."
+msgid ""
+"Important Decisions: Use new poll and select ticket secure. The poll creator "
+"must print, cut out, and distribute the voting tickets (random draw)."
 msgstr ""
 "Décisions importantes : Utilisez \"nouveau scrutin\" et sélectionnez "
-"\"ticket sécurisé\"."
+"\"ticket sécurisé\". Le créateur du scrutin doit imprimer, découper et "
+"distribuer les tickets de vote (tirage au sort)."
 
 #: templates/about.html:19
 msgid ""
@@ -233,28 +236,19 @@ msgstr ""
 "nouveaux électeurs après la création de la Maison."
 
 #: templates/about.html:41
-msgid "Create the Poll: Initiate a new poll from within the House."
-msgstr "Créez le scrutin : Initiez un nouveau scrutin à partir de la Maison."
+msgid "Create the Poll: Initiate a new poll FROM WITHIN the House."
+msgstr "Créez le scrutin : Initiez un nouveau scrutin À PARTIR de la Maison."
+
 
 #: templates/about.html:44
 msgid ""
-"Distribute Tickets: The poll creator must print, cut out, and randomly "
-"distribute the voting tickets (for example, by having members draw them from "
-"a box)."
-msgstr ""
-"Distribuez les tickets : Le créateur du scrutin doit imprimer, découper et "
-"distribuer au hasard les tickets de vote (par exemple, en les faisant tirer "
-"au sort dans une boîte par les membres)."
-
-#: templates/about.html:47
-msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
-"unique ticket to cast their vote anonymously (no sign-in required when "
-"voting a ticket poll)."
+"unique ticket to cast their vote (no sign-in required when voting a ticket "
+"poll)."
 msgstr ""
 "Votez : Chaque électeur rejoint le scrutin en utilisant l'ID du scrutin et "
-"utilise son ticket unique pour voter anonymement (aucune connexion requise "
-"lors d'un vote par ticket)."
+"utilise son ticket unique pour voter (aucune connexion requise lors d'un "
+"vote par ticket)."
 
 #: templates/about.html:50
 msgid ""

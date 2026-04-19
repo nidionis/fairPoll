@@ -172,9 +172,12 @@ msgstr ""
 "الاستطلاع مع المشاركين."
 
 #: templates/about.html:16
-msgid "Important Decisions: Use new poll and select ticket secure."
+msgid ""
+"Important Decisions: Use new poll and select ticket secure. The poll creator "
+"must print, cut out, and distribute the voting tickets (random draw)."
 msgstr ""
-"قرارات هامة: استخدم \"استطلاع جديد\" واختر \"تذكرة آمنة\" (ticket secure)."
+"قرارات هامة: استخدم \"استطلاع جديد\" واختر \"تذكرة آمنة\" (ticket secure). "
+"يجب على منشئ الاستطلاع طباعة تذاكر التصويت وقصها وتوزيعها (سحب عشوائي)."
 
 #: templates/about.html:19
 msgid ""
@@ -204,11 +207,11 @@ msgstr "كيف يعمل:"
 
 #: templates/about.html:33
 msgid "Gather your voters: All voters must belong to the House."
-msgstr "1. اجمع ناخبيك: يجب أن ينتمي جميع الناخبين إلى \"البيت\" (House)."
+msgstr "اجمع ناخبيك: يجب أن ينتمي جميع الناخبين إلى \"البيت\" (House)."
 
 #: templates/about.html:36
 msgid "Create a house: Set it up with all its voting members."
-msgstr "2. أنشئ بيتًا: قم بإعداده مع جميع أعضائه المصوتين."
+msgstr "أنشئ بيتًا: قم بإعداده مع جميع أعضائه المصوتين."
 
 #: templates/about.html:38
 msgid ""
@@ -219,34 +222,26 @@ msgstr ""
 "\"البيت\"."
 
 #: templates/about.html:41
-msgid "Create the Poll: Initiate a new poll from within the House."
-msgstr "3. أنشئ الاستطلاع: ابدأ استطلاعًا جديدًا من داخل \"البيت\"."
+msgid "Create the Poll: Initiate a new poll FROM WITHIN the House."
+msgstr "أنشئ الاستطلاع: ابدأ استطلاعًا جديدًا مِنْ دَاخِل \"البيت\"."
+
 
 #: templates/about.html:44
 msgid ""
-"Distribute Tickets: The poll creator must print, cut out, and randomly "
-"distribute the voting tickets (for example, by having members draw them from "
-"a box)."
-msgstr ""
-"4. توزيع التذاكر: يجب على منشئ الاستطلاع طباعة تذاكر التصويت وقصها وتوزيعها "
-"عشوائيًا (على سبيل المثال، عن طريق سحب الأعضاء لها من صندوق)."
-
-#: templates/about.html:47
-msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
-"unique ticket to cast their vote anonymously (no sign-in required when "
-"voting a ticket poll)."
+"unique ticket to cast their vote (no sign-in required when voting a ticket "
+"poll)."
 msgstr ""
-"5. الإدلاء بالأصوات: ينضم كل ناخب إلى الاستطلاع باستخدام معرف الاستطلاع، "
-"ويستخدم تذكرته الفريدة للإدلاء بصوته بشكل مجهول (لا يتطلب تسجيل الدخول عند "
-"التصويت في استطلاع تذاكر)."
+"الإدلاء بالأصوات: ينضم كل ناخب إلى الاستطلاع باستخدام معرف الاستطلاع، "
+"ويستخدم تذكرته الفريدة للإدلاء بصوته (لا يتطلب تسجيل الدخول عند التصويت في "
+"استطلاع تذاكر)."
 
 #: templates/about.html:50
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
 msgstr ""
-"6. مراجعة النتائج: بمجرد انتهاء التصويت، يتم تخزين النتائج في أرشيفات "
+"مراجعة النتائج: بمجرد انتهاء التصويت، يتم تخزين النتائج في أرشيفات "
 "\"البيت\". يمكن تنزيل الاقتراع الكامل للتحقق المستقل."
 
 #: templates/account/email.html:5 templates/account/email.html:9

@@ -171,10 +171,13 @@ msgstr ""
 "comparta el ID de la encuesta con sus participantes."
 
 #: templates/about.html:16
-msgid "Important Decisions: Use new poll and select ticket secure."
+msgid ""
+"Important Decisions: Use new poll and select ticket secure. The poll creator "
+"must print, cut out, and distribute the voting tickets (random draw)."
 msgstr ""
 "Decisiones importantes: Use \"nueva encuesta\" y seleccione \"ticket "
-"seguro\"."
+"seguro\". El creador de la encuesta debe imprimir, recortar y distribuir los "
+"tickets de votación (sorteo aleatorio)."
 
 #: templates/about.html:19
 msgid ""
@@ -204,12 +207,11 @@ msgstr "Cómo funciona:"
 
 #: templates/about.html:33
 msgid "Gather your voters: All voters must belong to the House."
-msgstr ""
-"1. Reúna a sus votantes: Todos los votantes deben pertenecer a la House."
+msgstr "Reúna a sus votantes: Todos los votantes deben pertenecer a la House."
 
 #: templates/about.html:36
 msgid "Create a house: Set it up with all its voting members."
-msgstr "2. Cree una House: Configúrela con todos sus miembros votantes."
+msgstr "Cree una House: Configúrela con todos sus miembros votantes."
 
 #: templates/about.html:38
 msgid ""
@@ -220,35 +222,26 @@ msgstr ""
 "después de crear la House."
 
 #: templates/about.html:41
-msgid "Create the Poll: Initiate a new poll from within the House."
-msgstr "3. Cree la encuesta: Inicie una nueva encuesta desde la House."
+msgid "Create the Poll: Initiate a new poll FROM WITHIN the House."
+msgstr "Cree la encuesta: Inicie una nueva encuesta DESDE DENTRO de la House."
+
 
 #: templates/about.html:44
 msgid ""
-"Distribute Tickets: The poll creator must print, cut out, and randomly "
-"distribute the voting tickets (for example, by having members draw them from "
-"a box)."
-msgstr ""
-"4. Distribuya los tickets: El creador de la encuesta debe imprimir, recortar "
-"y distribuir aleatoriamente los tickets de votación (por ejemplo, haciendo "
-"que los miembros los saquen de una caja)."
-
-#: templates/about.html:47
-msgid ""
 "Cast Votes: Each voter joins the poll using the poll ID, and uses their "
-"unique ticket to cast their vote anonymously (no sign-in required when "
-"voting a ticket poll)."
+"unique ticket to cast their vote (no sign-in required when voting a ticket "
+"poll)."
 msgstr ""
-"5. Emita los votos: Cada votante se une a la encuesta usando el ID de la "
-"encuesta y utiliza su ticket único para emitir su voto de forma anónima (no "
-"es necesario iniciar sesión cuando se vota en una encuesta con ticket)."
+"Emita los votos: Cada votante se une a la encuesta usando el ID de la "
+"encuesta y utiliza su ticket único para emitir su voto (no es necesario "
+"iniciar sesión cuando se vota en una encuesta con ticket)."
 
 #: templates/about.html:50
 msgid ""
 "Review Results: Once voting ends, the results are stored in the House "
 "archives. The complete ballot can be downloaded for independent verification."
 msgstr ""
-"6. Revise los resultados: Una vez finalizada la votación, los resultados se "
+"Revise los resultados: Una vez finalizada la votación, los resultados se "
 "almacenan en los archivos de la House. El acta de votación completa se puede "
 "descargar para una verificación independiente."
 
