@@ -32,6 +32,9 @@
 
     <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- jQuery is required for django-autocomplete-light -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div class="main-wrapper">
@@ -107,8 +110,6 @@
             </footer>
         </div>
 
-        <!-- jQuery is required for django-autocomplete-light -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         {% block extra_js %}{% endblock %}
     </body>
 </html>
