@@ -187,8 +187,7 @@ msgstr ""
 msgid "Important Decisions: Use new poll and select ticket secure."
 msgstr ""
 "Décisions importantes : Utilisez \"nouveau scrutin\" et sélectionnez "
-"\"ticket sécurisé\".Décisions importantes : Utilisez \"nouveau scrutin\" et "
-"sélectionnez \"ticket sécurisé\"."
+"\"ticket sécurisé\"."
 
 #: templates/about.html:19
 msgid ""
