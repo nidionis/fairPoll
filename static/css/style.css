@@ -160,7 +160,8 @@ form p {
 }
 
 /* Lists styling */
-main ul li, main ol li {
+main ul:not([class^="select2"]):not([class*=" select2"]) li:not([class^="select2"]):not([class*=" select2"]), 
+main ol li {
     background: #fdfdfd;
     margin-bottom: 20px;
     padding: 28px 40px;
@@ -193,6 +194,13 @@ main ol {
 
 main ol li {
     padding-left: 70px;
+}
+
+main ul:not([class^="select2"]):not([class*=" select2"]) li:not([class^="select2"]):not([class*=" select2"]):hover, 
+main ol li:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.03);
 }
 
 main ol li::before {
