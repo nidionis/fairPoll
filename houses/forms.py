@@ -16,8 +16,6 @@ class HouseForm(forms.ModelForm):
             attrs={'data-placeholder': _('Type username or email...')}
         ),
         help_text=_("Select users to add to this house.")
-        widget=autocomplete.ModelSelect2Multiple(url='houses:user-autocomplete'),
-        help_text="Select users to add to this house."
     )
     
     default_deadline_days = forms.IntegerField(
