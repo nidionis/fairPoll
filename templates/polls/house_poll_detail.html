@@ -25,6 +25,32 @@
     <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">{% trans "Download Tickets" %}</a>
 {% endif %}
 
+<a href="{{ request.build_absolute_uri }}" class="btn btn-outline-primary" id="share-btn">{% trans "Share" %}</a>
+
+{% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
+    <hr>
+    <h3>{% trans "Available Tickets" %}</h3>
+    <p>{% trans "Distribute these tickets randomly to voters" %}:</p>
+    <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">{% trans "Download Tickets" %}</a>
+{% endif %}
+
 <hr>
 <a href="{% url 'houses:house_detail' poll.house.pk %}">{% trans "Back to House" %}</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var shareBtn = document.getElementById('share-btn');
+        if (shareBtn && navigator.clipboard) {
+            shareBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                navigator.clipboard.writeText(window.location.href).then(function () {
+                    shareBtn.textContent = '{% trans "Copied!" %}';
+                    setTimeout(function () {
+                        shareBtn.textContent = '{% trans "Share" %}';
+                    }, 1500);
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}
