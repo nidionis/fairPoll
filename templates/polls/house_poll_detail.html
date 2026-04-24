@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}{{ poll.question }} | FairPoll{% endblock %}
+{% block og_title %}{{ poll.question }}{% endblock %}
+{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block twitter_title %}{{ poll.question }}{% endblock %}
+{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block meta_description %}{{ poll.options|join:", " }}{% endblock %}
+
 {% block content %}
 <h2>{% trans "Poll" %}: {{ poll.question }}</h2>
 <p>{% trans "Poll ID" %}: <code>{{ poll.external_id }}</code></p>
@@ -18,14 +25,7 @@
     <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">{% trans "Vote Now" %}</a>
 {% endif %}
 
-{% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
-    <hr>
-    <h3>{% trans "Available Tickets" %}</h3>
-    <p>{% trans "Distribute these tickets randomly to voters" %}:</p>
-    <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">{% trans "Download Tickets" %}</a>
-{% endif %}
-
-<a href="{{ request.build_absolute_uri }}" class="btn btn-outline-primary" id="share-btn">{% trans "Share" %}</a>
+<button type="button" class="btn btn-secondary" onclick="copyToClipboard(window.location.href, this)">{% trans "Share" %}</button>
 
 {% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
     <hr>
@@ -38,19 +38,16 @@
 <a href="{% url 'houses:house_detail' poll.house.pk %}">{% trans "Back to House" %}</a>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var shareBtn = document.getElementById('share-btn');
-        if (shareBtn && navigator.clipboard) {
-            shareBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                navigator.clipboard.writeText(window.location.href).then(function () {
-                    shareBtn.textContent = '{% trans "Copied!" %}';
-                    setTimeout(function () {
-                        shareBtn.textContent = '{% trans "Share" %}';
-                    }, 1500);
-                });
-            });
-        }
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        var originalText = btn.innerText;
+        btn.innerText = "{% trans 'Copied!' %}";
+        setTimeout(function() {
+            btn.innerText = originalText;
+        }, 2000);
+    }, function(err) {
+        console.error('Could not copy text: ', err);
     });
+}
 </script>
 {% endblock %}

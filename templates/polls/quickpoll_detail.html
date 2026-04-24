@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}{{ poll.question }} | FairPoll{% endblock %}
+{% block og_title %}{{ poll.question }}{% endblock %}
+{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block twitter_title %}{{ poll.question }}{% endblock %}
+{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block meta_description %}{{ poll.options|join:", " }}{% endblock %}
+
 {% block content %}
 <h2>QuickPoll: {{ poll.question }}</h2>
 <p>Deadline: {{ poll.dead_line }}</p>
@@ -14,8 +21,14 @@
 {% else %}
     <a href="{% url 'polls:quickpoll_vote' poll.external_id %}" class="btn btn-primary">Vote Now</a>
 {% endif %}
+{% if poll.is_ticket_secured and is_creator %}
+    <hr>
+    <h3>Available Tickets</h3>
+    <p>Distribute these tickets randomly to voters:</p>
+    <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">Download Tickets</a>
+{% endif %}
 
-<a href="{{ request.build_absolute_uri }}" class="btn btn-outline-primary" id="share-btn">Share</a>
+<button type="button" class="btn btn-secondary" onclick="copyToClipboard(window.location.href, this)">{% trans "Share" %}</button>
 
 {% if poll.is_ticket_secured and is_creator %}
     <hr>
@@ -29,19 +42,16 @@
 <p>Share this ID with others to let them vote.</p>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var shareBtn = document.getElementById('share-btn');
-        if (shareBtn && navigator.clipboard) {
-            shareBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                navigator.clipboard.writeText(window.location.href).then(function () {
-                    shareBtn.textContent = 'Copied!';
-                    setTimeout(function () {
-                        shareBtn.textContent = 'Share';
-                    }, 1500);
-                });
-            });
-        }
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        var originalText = btn.innerText;
+        btn.innerText = "{% trans 'Copied!' %}";
+        setTimeout(function() {
+            btn.innerText = originalText;
+        }, 2000);
+    }, function(err) {
+        console.error('Could not copy text: ', err);
     });
+}
 </script>
 {% endblock %}
