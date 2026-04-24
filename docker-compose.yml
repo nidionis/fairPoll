@@ -12,6 +12,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --no-input &&
+             python manage.py shell -c \"from django.contrib.sites.models import Site; Site.objects.filter(id=1).update(domain='fairpoll.org', name='FairPoll')\" &&
              gunicorn --bind 0.0.0.0:8000 --workers 3 condorcet_backend.wsgi:application"
 
   nginx:
