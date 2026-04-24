@@ -89,8 +89,12 @@
             {% endif %}
 
             {% block content %}
-            {% endblock %}
-        </main>
+
+    <div class="hero-section text-center">
+        <p><i>{% trans "Enough to be the best" %}</i></p>
+        <p class="lead">{% trans "A free and secure Condorcet voting and polling system" %}</p>
+    </div>
+    <div class="text-center mb-4" style="gap: 15px; display: flex; justify-content: center; flex-wrap: wrap;">
 
             <footer data-nosnippet>
                 <ul class="footer-nav">
