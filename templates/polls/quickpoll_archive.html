@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <a href="{% url 'polls:quickpoll_create' %}" class="btn">New Quickpoll</a>
+</div>
+<h2>QuickPoll Archive</h2>
+<ul>
+    {% for poll in polls %}
+        <li>
+            <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a> 
+            ({{ poll.ballot_count }} votes) - Finished: {{ poll.dead_line|date:"F j, Y, g:i a" }}
+        </li>
+    {% empty %}
+        <li>No archived polls.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
