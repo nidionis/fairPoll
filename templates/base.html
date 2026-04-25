@@ -6,16 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% block meta_tags %}
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if poll %}{{ poll.question }}{% else %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endif %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}condorcet voting system, democracy tool, secured voting, vote numérique, scrutin officialisable, online poll, sondage sécurisé{% endblock %}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FairPoll">
 
     <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}FairPoll - Secured Condorcet Voting System & Democracy Tool{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}FairPoll is a secured and transparent condorcet voting platform for official and digital elections.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if poll %}{{ poll.question }}{% else %}FairPoll - Secured Condorcet Voting System & Democracy Tool{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if poll %}{{ poll.question }}{% else %}FairPoll is a secured and transparent condorcet voting platform for official and digital elections.{% endif %}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="FairPoll">
@@ -23,10 +22,9 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}FairPoll - Digital Democracy Tool{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% if poll %}{{ poll.question }}{% else %}FairPoll - Digital Democracy Tool{% endif %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% if poll %}{{ poll.question }}{% else %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endif %}{% endblock %}">
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
-    {% endblock %}
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
