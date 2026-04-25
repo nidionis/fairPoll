@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Results" %}: {{ poll.question }} | FairPoll{% endblock %}
+{% block og_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
+{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block twitter_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
+{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block meta_description %}{% trans "Results for" %} {{ poll.question }}: {{ poll.options|join:", " }}{% endblock %}
+
+{% block content %}
+<h2>{% trans "Results" %}: {{ poll.question }}</h2>
+{% if poll.house %}
+    <p>{% trans "House" %}: {{ poll.house.name }}</p>
+{% endif %}
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Status" %}: {% if poll.is_finished %}{% trans "Finished" %}{% else %}{% trans "Active" %}{% endif %}</p>
+
+<h3>{% trans "Summary" %}</h3>
+<ul>
+    <li>{% trans "Total Ballots" %}: {{ poll.ballots.count }}</li>
+    <li>{% trans "Max Participants" %}: {{ poll.max_participants }}</li>
+</ul>
+
+{% if condorcet_stats %}
+    <h3>{% trans "Condorcet Results" %}</h3>
+    {% if condorcet_stats.winners %}
+        <div class="alert alert-success">
+            <strong>{% trans "Condorcet Winner(s):" %}</strong> 
+            {{ condorcet_stats.winners|join:", " }}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <strong>{% trans "No strict Condorcet winner" %}</strong> ({% trans "voting cycle / tie detected" %}).
+        </div>
+    {% endif %}
+
+    <h4>{% trans "Head-to-Head Statistics" %}</h4>
+    <p>{% trans "How many times the option in the row beat the option in the column." %}</p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>{% trans "Option" %}</th>
+                {% for opt in condorcet_stats.options %}
+                    <th>vs {{ opt }}</th>
+                {% endfor %}
+                <th>{% trans "Wins" %}</th>
+                <th>{% trans "Losses" %}</th>
+                <th>{% trans "Ties" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for opt1 in condorcet_stats.options %}
+                <tr>
+                    <th>{{ opt1 }}</th>
+                    {% for opt2 in condorcet_stats.options %}
+                        <td>
+                            {% if opt1 == opt2 %}
+                                -
+                            {% else %}
+                                <!-- Accessing dictionary values by key in django template requires custom filter or we can just render the raw string if we built a specific structure. Alternatively, we use nested loops -->
+                                {% for row_key, row_dict in condorcet_stats.matrix.items %}
+                                    {% if row_key == opt1 %}
+                                        {% for col_key, value in row_dict.items %}
+                                            {% if col_key == opt2 %}
+                                                {{ value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    
+                    {% for key, val in condorcet_stats.wins_count.items %}
+                        {% if key == opt1 %}<td><strong>{{ val }}</strong></td>{% endif %}
+                    {% endfor %}
+                    {% for key, val in condorcet_stats.losses_count.items %}
+                        {% if key == opt1 %}<td>{{ val }}</td>{% endif %}
+                    {% endfor %}
+                    {% for key, val in condorcet_stats.ties_count.items %}
+                        {% if key == opt1 %}<td>{{ val }}</td>{% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if poll.is_finished %}
+    <p>{% trans "Verification data is available for download below. This data contains all individual ballots with their ranks and the ticket/username used (if applicable)." %}</p>
+    {% if poll.house %}
+        <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
+    {% else %}
+        <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
+    {% endif %}
+{% else %}
+    <p>{% trans "The poll is still active. Results will be shown once the deadline is reached or the maximum number of participants has voted." %}</p>
+    {% if poll.is_ticket_secured and is_creator %}
+        {% if poll.house %}
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% else %}
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<hr>
+{% if poll.house %}
+    <a href="{% url 'houses:house_detail' poll.house.pk %}" class="btn btn-primary">{% trans "Back to House" %}</a>
+{% else %}
+    <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back to Home" %}</a>
+{% endif %}
+{% endblock %}

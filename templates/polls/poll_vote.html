@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Vote" %}: {{ poll.question }} | FairPoll{% endblock %}
+{% block og_title %}{% trans "Vote" %}: {{ poll.question }}{% endblock %}
+{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block twitter_title %}{% trans "Vote" %}: {{ poll.question }}{% endblock %}
+{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block meta_description %}{% trans "Vote for" %}: {{ poll.options|join:", " }}{% endblock %}
+
+{% block content %}
+    <h3>ID: {{ poll.external_id }}</h3>
+
+
+<h2>{% trans "Vote" %}: {{ poll.question }}</h2>
+{% if poll.house %}
+    <p>{% trans "House" %}: {{ poll.house.name }}</p>
+{% endif %}
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Rank the choices (drag and drop)" %}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% if poll.is_ticket_secured %}
+        <div class="alert alert-warning">
+            {% trans "This poll is ticket secured. Please enter your 8-character ticket code." %}
+        </div>
+        <p>{{ form.ticket_code.label_tag }} {{ form.ticket_code }}</p>
+    {% endif %}
+
+    <ul id="sortable-options" class="sortable-list">
+        {% for field in form %}
+            {% if field.name != "ticket_code" %}
+                <li class="sortable-item" data-id="{{ field.name }}">
+                    <span class="handle">⠿</span>
+                    <div style="flex-grow: 1;">
+                        {{ field.label }}
+                    </div>
+                    {{ field.as_hidden }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <button type="submit" class="btn">{% trans "Cast Vote" %}</button>
+    {% if poll.is_ticket_secured %}
+        {% if poll.house and user == poll.creator %}
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% elif not poll.house and is_creator %}
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% endif %}
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('sortable-options');
+            if (el) {
+                var sortable = Sortable.create(el, {
+                    animation: 150,
+                    handle: '.handle',
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                        updateRanks();
+                    }
+                });
+
+                function updateRanks() {
+                    var items = el.getElementsByClassName('sortable-item');
+                    for (var i = 0; i < items.length; i++) {
+                        var input = items[i].querySelector('input[type="hidden"]');
+                        if (input) {
+                            input.value = i + 1;
+                        }
+                    }
+                }
+                updateRanks();
+            }
+        });
+    </script>
+</form>
+{% endblock %}
