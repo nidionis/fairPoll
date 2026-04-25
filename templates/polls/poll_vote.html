@@ -10,8 +10,11 @@
     <meta name="author" content="FairPoll">
 
     <meta property="og:title" content="{{ poll.question }}">
-    <meta property="og:description" content="{{ poll.question }}">
-    <meta property="og:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}">
+    {% if poll.options %}
+        <meta property="og:description" content="{% trans 'Poll' %}: {{ poll.options|join:', ' }}">
+    {% else %}
+        <meta property="og:description" content="{{ poll.question }}">
+    {% endif %}
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="FairPoll">
@@ -19,7 +22,11 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ poll.question }}">
-    <meta name="twitter:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}">
+    {% if poll.options %}
+        <meta name="twitter:description" content="{% trans 'Poll' %}: {{ poll.options|join:', ' }}">
+    {% else %}
+        <meta name="twitter:description" content="{{ poll.question }}">
+    {% endif %}
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
 {% endblock %}
 
