@@ -2,10 +2,10 @@
 {% load i18n %}
 
 {% block title %}{% trans "Results" %}: {{ poll.question }} | FairPoll{% endblock %}
-{% block og_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
-{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
-{% block twitter_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
-{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block og_title %}{{ poll.question }}{% endblock %}
+{% block og_description %}{% trans "Results for" %} {{ poll.question }}: {{ poll.options|join:", " }}{% endblock %}
+{% block twitter_title %}{{ poll.question }}{% endblock %}
+{% block twitter_description %}{% trans "Results for" %} {{ poll.question }}: {{ poll.options|join:", " }}{% endblock %}
 {% block meta_description %}{% trans "Results for" %} {{ poll.question }}: {{ poll.options|join:", " }}{% endblock %}
 
 {% block content %}

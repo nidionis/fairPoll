@@ -5,11 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-    <link rel="icon" href="{% static 'favicon.ico' %}">
 
+    {% block meta_tags %}
     <!-- SEO Meta Tags -->
     <meta name="description" content="{% block meta_description %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}condorcet voting system, democracy tool, secured voting, vote numérique, scrutin officialisable, online poll, sondage sécurisé{% endblock %}">
@@ -29,6 +26,11 @@
     <meta name="twitter:title" content="{% block twitter_title %}FairPoll - Digital Democracy Tool{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endblock %}">
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+    {% endblock %}
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
 
 
     <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
