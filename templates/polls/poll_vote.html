@@ -3,6 +3,25 @@
 
 {% block title %}{% trans "Vote" %}: {{ poll.question }} | FairPoll{% endblock %}
 
+{% block meta_tags %}
+    <meta name="description" content="{{ poll.question }}">
+    <meta name="keywords" content="condorcet voting system, democracy tool, secured voting, {{ poll.question }}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FairPoll">
+
+    <meta property="og:title" content="{{ poll.question }}">
+    <meta property="og:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="FairPoll">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ poll.question }}">
+    <meta name="twitter:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+{% endblock %}
+
 {% block content %}
     <h3>ID: {{ poll.external_id }}</h3>
 

@@ -110,7 +110,7 @@ def house_poll_detail(request, external_id):
     if poll.is_finished or (request.user.is_authenticated and poll.ballots.filter(voter=request.user).exists()):
         return redirect('polls:house_poll_results', external_id=external_id)
         
-    return redirect('polls:house_poll_vote', external_id=external_id)
+    return render(request, 'polls/house_poll_detail.html', {'poll': poll})
 
 def house_poll_vote(request, external_id):
     poll = get_object_or_404(HousePoll, external_id=external_id)
@@ -260,7 +260,14 @@ def quickpoll_detail(request, external_id):
     if poll.is_finished or str(external_id) in voted_polls or (request.user.is_authenticated and poll.ballots.filter(voter=request.user).exists()):
         return redirect('polls:quickpoll_results', external_id=external_id)
     
-    return redirect('polls:quickpoll_vote', external_id=external_id)
+    # Check if the user created this poll
+    is_creator = False
+    if request.user.is_authenticated and poll.owner == request.user:
+        is_creator = True
+    elif str(external_id) in request.session.get('created_quickpolls', []):
+        is_creator = True
+
+    return render(request, 'polls/quickpoll_detail.html', {'poll': poll, 'is_creator': is_creator})
 
 def quickpoll_vote(request, external_id):
     poll = get_object_or_404(QuickPoll, external_id=external_id)

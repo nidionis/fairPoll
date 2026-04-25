@@ -3,6 +3,25 @@
 
 {% block title %}{% trans "Results" %}: {{ poll.question }} | FairPoll{% endblock %}
 
+{% block meta_tags %}
+    <meta name="description" content="{% trans 'Results for' %} {{ poll.question }}: {{ poll.options|join:', ' }}">
+    <meta name="keywords" content="condorcet voting results, democracy tool, secured voting, {{ poll.question }}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FairPoll">
+
+    <meta property="og:title" content="{% trans 'Results' %}: {{ poll.question }}">
+    <meta property="og:description" content="{% trans 'Results for' %} {{ poll.question }}: {{ poll.options|join:', ' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="FairPoll">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'Results' %}: {{ poll.question }}">
+    <meta name="twitter:description" content="{% trans 'Results for' %} {{ poll.question }}: {{ poll.options|join:', ' }}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+{% endblock %}
+
 {% block content %}
 <h2>{% trans "Results" %}: {{ poll.question }}</h2>
 {% if poll.house %}
