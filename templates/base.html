@@ -11,7 +11,7 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}FairPoll: The secured Condorcet voting system and democracy tool. Créez des votes et scrutins officialisables numériques facilement et en toute sécurité.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% trans "A free and secure Condorcet voting and polling system" %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}condorcet voting system, democracy tool, secured voting, vote numérique, scrutin officialisable, online poll, sondage sécurisé{% endblock %}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="FairPoll">
@@ -89,9 +89,13 @@
             {% endif %}
 
             {% block content %}
+            {% endblock %}
+        </main>
+
+            {% block content %}
 
     <div class="hero-section text-center">
-        <p><i>{% trans "Enough to be the best" %}</i></p>
+        <h1><i>{% trans "Enough to be the best" %}</i></h1>
         <p class="lead">{% trans "A free and secure Condorcet voting and polling system" %}</p>
     </div>
     <div class="text-center mb-4" style="gap: 15px; display: flex; justify-content: center; flex-wrap: wrap;">
