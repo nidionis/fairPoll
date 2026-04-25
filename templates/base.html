@@ -22,13 +22,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="FairPoll">
-    <!-- Ajoutez ici un lien vers une image pour l'aperçu sur les réseaux sociaux -->
-    <!-- <meta property="og:image" content="{% static 'static/favicon.ico' %}"> -->
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}FairPoll - Digital Democracy Tool{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Create secure and transparent Condorcet polls and votes. Scrutin numérique sécurisé.{% endblock %}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
 
     <title>{% block title %}FairPoll | Secured Condorcet Voting System & Democracy Tool{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
