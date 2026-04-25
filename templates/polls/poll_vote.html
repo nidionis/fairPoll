@@ -9,8 +9,8 @@
     <meta name="robots" content="index, follow">
     <meta name="author" content="FairPoll">
 
-    <meta property="og:title" content="{{ poll.question }}">
-    <meta property="og:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}">
+    <meta property="og:description" content="{{ poll.question }}">
+    <!--<meta property="og:description" content="{% trans 'Vote for' %}: {{ poll.options|join:', ' }}"> -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="FairPoll">
