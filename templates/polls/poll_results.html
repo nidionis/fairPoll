@@ -22,13 +22,6 @@
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
 {% endblock %}
 
-{% block title %}{% trans "Results" %}: {{ poll.question }} | FairPoll{% endblock %}
-{% block og_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
-{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
-{% block twitter_title %}{% trans "Results" %}: {{ poll.question }}{% endblock %}
-{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
-{% block meta_description %}{% trans "Results for" %}: {{ poll.options|join:", " }}{% endblock %}
-
 {% block content %}
 <h2>{% trans "Results" %}: {{ poll.question }}</h2>
 {% if poll.house %}
