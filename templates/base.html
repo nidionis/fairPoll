@@ -112,16 +112,17 @@
             </footer>
         </div>
 
+        <script>
+            function copyToClipboard() {
+                navigator.clipboard.writeText(window.location.href).then(function() {
+                    alert('{% trans "Link copied to clipboard!" %}');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+        </script>
+
         {% block extra_js %}{% endblock %}
     </body>
-<script>
-    function copyToClipboard() {
-        navigator.clipboard.writeText(window.location.href).then(function() {
-            alert('{% trans "Link copied to clipboard!" %}');
-        }, function(err) {
-            console.error('Could not copy text: ', err);
-        });
-    }
-</script>
 </html>
 
