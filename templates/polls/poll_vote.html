@@ -1,53 +1,104 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
-{% block title %}{{ poll.question }} | FairPoll{% endblock %}
-{% block og_title %}{{ poll.question }}{% endblock %}
-{% block og_description %}{{ poll.options|join:", " }}{% endblock %}
-{% block twitter_title %}{{ poll.question }}{% endblock %}
-{% block twitter_description %}{{ poll.options|join:", " }}{% endblock %}
-{% block meta_description %}{{ poll.options|join:", " }}{% endblock %}
+{% block title %}{% trans "Vote" %}: {{ poll.question }} | FairPoll{% endblock %}
+
+{% block meta_tags %}
+    <meta name="description" content="{{ poll.question }}">
+    <meta name="keywords" content="condorcet voting system, democracy tool, secured voting, {{ poll.question }}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FairPoll">
+
+    <meta property="og:title" content="{{ poll.question }}">
+    {% if poll.options %}
+        <meta property="og:description" content="{% trans 'Poll' %}: {{ poll.options|join:', ' }}">
+    {% else %}
+        <meta property="og:description" content="{{ poll.question }}">
+    {% endif %}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="FairPoll">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ poll.question }}">
+    {% if poll.options %}
+        <meta name="twitter:description" content="{% trans 'Poll' %}: {{ poll.options|join:', ' }}">
+    {% else %}
+        <meta name="twitter:description" content="{{ poll.question }}">
+    {% endif %}
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'favicon.ico' %}">
+{% endblock %}
 
 {% block content %}
-<h2>QuickPoll: {{ poll.question }}</h2>
-<p>Deadline: {{ poll.dead_line }}</p>
-<p>Max Participants: {{ poll.max_participants }}</p>
-<p>Current Votes: {{ poll.ballots.count }}</p>
+    <h3>ID: {{ poll.external_id }}</h3>
 
-{% if poll.is_finished %}
-    <div class="alert alert-info">This poll is finished.</div>
-    <a href="{% url 'polls:quickpoll_results' poll.external_id %}" class="btn btn-info">View Results</a>
-    <a href="{% url 'polls:quickpoll_export' poll.external_id %}" class="btn btn-secondary">Download JSON Results</a>
-{% else %}
-    <a href="{% url 'polls:quickpoll_vote' poll.external_id %}" class="btn btn-primary">Vote Now</a>
+
+<h2>{% trans "Vote" %}: {{ poll.question }}</h2>
+{% if poll.house %}
+    <p>{% trans "House" %}: {{ poll.house.name }}</p>
 {% endif %}
-<a href="#" class="btn btn-outline-primary" id="share-btn">{% trans "Share" %}</a>
+<p>{% trans "Deadline" %}: {{ poll.dead_line }}</p>
+<p>{% trans "Rank the choices (drag and drop)" %}</p>
 
-{% if poll.is_ticket_secured and is_creator %}
-    <hr>
-    <h3>Available Tickets</h3>
-    <p>Distribute these tickets randomly to voters:</p>
-    <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary mb-3">Download Tickets</a>
-{% endif %}
+<form method="post">
+    {% csrf_token %}
+    {% if poll.is_ticket_secured %}
+        <div class="alert alert-warning">
+            {% trans "This poll is ticket secured. Please enter your 8-character ticket code." %}
+        </div>
+        <p>{{ form.ticket_code.label_tag }} {{ form.ticket_code }}</p>
+    {% endif %}
 
-<hr>
-<p>Poll ID: <code>{{ poll.external_id }}</code></p>
-<p>Share this link with others to let them open this poll.</p>
+    <ul id="sortable-options" class="sortable-list">
+        {% for field in form %}
+            {% if field.name != "ticket_code" %}
+                <li class="sortable-item" data-id="{{ field.name }}">
+                    <span class="handle">⠿</span>
+                    <div style="flex-grow: 1;">
+                        {{ field.label }}
+                    </div>
+                    {{ field.as_hidden }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <button type="submit" class="btn">{% trans "Cast Vote" %}</button>
+    <button type="button" onclick="copyToClipboard()" class="btn btn-secondary">{% trans "Share" %}</button>
+    {% if poll.is_ticket_secured %}
+        {% if poll.house and user == poll.creator %}
+            <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% elif not poll.house and is_creator %}
+            <a href="{% url 'polls:quickpoll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>
+        {% endif %}
+    {% endif %}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var shareBtn = document.getElementById('share-btn');
-        if (!shareBtn) return;
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var el = document.getElementById('sortable-options');
+            if (el) {
+                var sortable = Sortable.create(el, {
+                    animation: 150,
+                    handle: '.handle',
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                        updateRanks();
+                    }
+                });
 
-        shareBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            navigator.clipboard.writeText(window.location.href).then(function () {
-                shareBtn.textContent = '{% trans "Copied!" %}';
-                setTimeout(function () {
-                    shareBtn.textContent = '{% trans "Share" %}';
-                }, 1500);
-            });
+                function updateRanks() {
+                    var items = el.getElementsByClassName('sortable-item');
+                    for (var i = 0; i < items.length; i++) {
+                        var input = items[i].querySelector('input[type="hidden"]');
+                        if (input) {
+                            input.value = i + 1;
+                        }
+                    }
+                }
+                updateRanks();
+            }
         });
-    });
-</script>
+    </script>
+</form>
 {% endblock %}

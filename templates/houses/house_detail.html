@@ -13,6 +13,16 @@
                 <li>
                     <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="stretched-link">{{ poll.question }}</a>
                     ({{ poll.poll_type }})
+                    {% if poll.is_finished %}
+                        <div class="alert alert-info">{% trans "This poll is finished." %}</div>
+                        <a href="{% url 'polls:house_poll_results' poll.external_id %}" class="btn btn-info">{% trans "View Results" %}</a>
+                        <a href="{% url 'polls:house_poll_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download JSON Results" %}</a>
+                    {% else %}
+                        <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">{% trans "Vote Now" %}</a>
+                    {% endif %}
+                    <button onclick="copyToClipboard()" class="btn btn-secondary">{% trans "Share" %}</button>
+
+                    {% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
                 </li>
             {% empty %}
                 <li>{% trans "No active polls." %}</li>
