@@ -115,7 +115,7 @@
         <script>
             function copyToClipboard() {
                 navigator.clipboard.writeText(window.location.href).then(function() {
-                    alert('{% trans "Link copied to clipboard!" %}');
+                    alert('Link copied to clipboard!');
                 }, function(err) {
                     console.error('Could not copy text: ', err);
                 });
