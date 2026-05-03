@@ -65,8 +65,8 @@ class PollLog(models.Model):
         ('VOTE', 'Vote'),
     )
     
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     poll = GenericForeignKey('content_type', 'object_id')
     
     action_type = models.CharField(max_length=10, choices=ACTION_TYPES)

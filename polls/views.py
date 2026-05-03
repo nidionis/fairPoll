@@ -413,6 +413,14 @@ def statistics(request):
 
     number_of_visitors = PollLog.objects.filter(action_type='VISIT').values('ip_address').distinct().count()
     number_of_votes = Ballot.objects.count()
+
+    # Last IPs list
+    last_ips = (
+        PollLog.objects.filter(action_type='VISIT')
+        .values('ip_address')
+        .annotate(last_visit=models.Max('timestamp'))
+        .order_by('-last_visit')[:15]
+    )
     
     all_polls = list(HousePoll.objects.all()) + list(QuickPoll.objects.all())
     polls_done = sum(1 for p in all_polls if p.is_finished)
@@ -426,5 +434,6 @@ def statistics(request):
         'number_of_ballots': number_of_votes, # Synonymous in this context
         'polls_done': polls_done,
         'polls_running': polls_running,
+        'last_ips': last_ips,
     }
     return render(request, 'polls/statistics.html', context)
