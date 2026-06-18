@@ -1,3 +1,5 @@
+import qrcode
+import io
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -385,6 +387,29 @@ def poll_join(request):
     
     # If it's a GET request or the form had errors, return to home
     return redirect('home')
+
+def poll_qrcode(request, external_id):
+    # Try HousePoll
+    poll = HousePoll.objects.filter(external_id=external_id).first()
+    if not poll:
+        # Try QuickPoll
+        poll = QuickPoll.objects.filter(external_id=external_id).first()
+    
+    if not poll:
+        return HttpResponse(status=404)
+
+    # Determine the poll detail URL
+    if hasattr(poll, 'house'):
+        url_name = 'polls:house_poll_detail'
+    else:
+        url_name = 'polls:quickpoll_detail'
+    
+    poll_url = request.build_absolute_uri(reverse(url_name, kwargs={'external_id': external_id}))
+    
+    img = qrcode.make(poll_url)
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
 
 def statistics(request):
     # Calculate visitor history for the last 7 days
