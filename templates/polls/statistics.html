@@ -37,6 +37,32 @@
     <canvas id="visitorChart" width="400" height="200"></canvas>
 </div>
 
+<div style="margin-top: 50px; background: #252525; border: 1px solid #333; border-radius: var(--card-radius); padding: 40px;">
+    <h3 style="margin-bottom: 30px; font-size: 1.5rem;">{% trans "Recent Visitors" %}</h3>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid #444;">
+                    <th style="padding: 12px; color: var(--secondary-text);">{% trans "IP Address" %}</th>
+                    <th style="padding: 12px; color: var(--secondary-text);">{% trans "Last Visit" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in last_ips %}
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px; font-family: monospace;">{{ entry.ip_address }}</td>
+                    <td style="padding: 12px;">{{ entry.last_visit|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" style="padding: 12px; text-align: center; color: var(--secondary-text);">{% trans "No data available" %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

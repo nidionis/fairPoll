@@ -9,7 +9,18 @@ from django.http import HttpResponse
 from two_factor.urls import urlpatterns as tf_urls
 
 
+from polls.models import PollLog
+from polls.views import get_client_ip
+
+
 def root_home(request):
+    if not request.user.is_authenticated:
+        # Log visit to homepage for anonymous users
+        PollLog.objects.create(
+            action_type='VISIT',
+            ip_address=get_client_ip(request)
+        )
+    
     if request.user.is_authenticated:
         return redirect("users:user_homepage")
     return TemplateView.as_view(template_name="home.html")(request)
