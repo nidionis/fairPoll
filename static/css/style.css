@@ -481,3 +481,15 @@ footer a:hover {
     vertical-align: middle;
 }
 
+.qrcode-img {
+    max-width: 200px;
+    height: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: white;
+}
+
+.qrcode-wrapper {
+    margin-top: 15px;
+    display: none;
+}

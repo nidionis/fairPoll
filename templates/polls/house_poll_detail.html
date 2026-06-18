@@ -25,7 +25,13 @@
     <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">{% trans "Vote Now" %}</a>
 {% endif %}
 
-<button type="button" class="btn btn-secondary" onclick="copyToClipboard(window.location.href, this)">{% trans "Share Link" %}</button>
+<div class="share-container mb-3">
+    <button type="button" class="btn btn-secondary" onclick="copyToClipboard(window.location.href, this)">{% trans "Share Link" %}</button>
+    <div class="qrcode-wrapper mt-3">
+        <p><strong>{% trans "QR Code to share" %}:</strong></p>
+        <img src="{% url 'polls:poll_qrcode' poll.external_id %}" alt="QR Code" class="qrcode-img">
+    </div>
+</div>
 
 {% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
     <hr>
@@ -43,6 +49,17 @@ function copyToClipboard(text, btn) {
         var originalText = btn.innerText;
         btn.innerText = "{% trans 'Copied!' %}";
         
+        // Show QR code
+        var wrapper = btn.nextElementSibling;
+        if (wrapper && wrapper.classList.contains('qrcode-wrapper')) {
+            wrapper.style.display = 'block';
+        } else {
+            // Fallback if structure is slightly different
+            var parent = btn.parentElement;
+            var qrWrapper = parent.querySelector('.qrcode-wrapper');
+            if (qrWrapper) qrWrapper.style.display = 'block';
+        }
+
         setTimeout(function() {
             btn.innerText = originalText;
         }, 2000);
