@@ -48,6 +48,18 @@ function copyToClipboard(text, btn) {
     navigator.clipboard.writeText(text).then(function() {
         var originalText = btn.innerText;
         btn.innerText = "{% trans 'Copied!' %}";
+        
+        // Show QR code
+        var wrapper = btn.nextElementSibling;
+        if (wrapper && wrapper.classList.contains('qrcode-wrapper')) {
+            wrapper.style.display = 'block';
+        } else {
+            // Fallback if structure is slightly different
+            var parent = btn.parentElement;
+            var qrWrapper = parent.querySelector('.qrcode-wrapper');
+            if (qrWrapper) qrWrapper.style.display = 'block';
+        }
+
         setTimeout(function() {
             btn.innerText = originalText;
         }, 2000);

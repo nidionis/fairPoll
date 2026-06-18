@@ -491,4 +491,5 @@ footer a:hover {
 
 .qrcode-wrapper {
     margin-top: 15px;
+    display: none;
 }
