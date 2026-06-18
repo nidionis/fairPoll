@@ -395,6 +395,29 @@ def poll_join(request):
     # If it's a GET request or the form had errors, return to home
     return redirect('home')
 
+def poll_share(request, external_id):
+    # Try HousePoll
+    poll = HousePoll.objects.filter(external_id=external_id).first()
+    if not poll:
+        # Try QuickPoll
+        poll = QuickPoll.objects.filter(external_id=external_id).first()
+
+    if not poll:
+        return HttpResponse(status=404)
+
+    # Determine the poll detail URL
+    if hasattr(poll, 'house'):
+        url_name = 'polls:house_poll_detail'
+    else:
+        url_name = 'polls:quickpoll_detail'
+
+    poll_url = request.build_absolute_uri(reverse(url_name, kwargs={'external_id': external_id}))
+
+    return render(request, 'polls/poll_share.html', {
+        'poll': poll,
+        'poll_url': poll_url,
+    })
+
 def poll_qrcode(request, external_id):
     # Try HousePoll
     poll = HousePoll.objects.filter(external_id=external_id).first()

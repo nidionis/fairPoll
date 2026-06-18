@@ -36,34 +36,9 @@
     <a href="{% url 'polls:quickpoll_vote' poll.external_id %}" class="btn btn-primary">Vote Now</a>
 {% endif %}
 <div class="share-container mb-3">
-    <button type="button" class="btn btn-secondary" onclick="copyToClipboard(window.location.href, this)">{% trans "Share Link" %}</button>
-    <div class="qrcode-wrapper mt-3" style="display: none;">
-        <p><strong>{% trans "Link copied to clipboard!" %}</strong></p>
-        <p><strong>{% trans "QR Code to share" %}:</strong></p>
-        <img src="{% url 'polls:poll_qrcode' poll.external_id %}" alt="QR Code" class="qrcode-img">
-    </div>
+    <a href="{% url 'polls:poll_share' poll.external_id %}" class="btn btn-secondary">{% trans "Share" %}</a>
 </div>
 
-<script>
-function copyToClipboard(text, btn) {
-    navigator.clipboard.writeText(text).then(function() {
-        var originalText = btn.innerText;
-        btn.innerText = "{% trans 'Copied!' %}";
-        
-        // Show QR code and message
-        var wrapper = btn.nextElementSibling;
-        if (wrapper && wrapper.classList.contains('qrcode-wrapper')) {
-            wrapper.style.display = 'block';
-        }
-
-        setTimeout(function() {
-            btn.innerText = originalText;
-        }, 2000);
-    }, function(err) {
-        console.error('Could not copy text: ', err);
-    });
-}
-</script>
 
 <hr>
 <p>Poll ID: <code>{{ poll.external_id }}</code></p>

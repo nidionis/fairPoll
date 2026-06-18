@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Share Poll" %} | {{ poll.question }}{% endblock %}
+
+{% block content %}
+<div class="share-page text-center">
+    <h2>{% trans "Share Poll" %}</h2>
+    <p><strong>{{ poll.question }}</strong></p>
+    <p>{% trans "Poll ID" %}: <code>{{ poll.external_id }}</code></p>
+    
+    <div class="share-actions mt-4">
+        <div class="qrcode-section mb-4">
+            <h3>{% trans "QR Code" %}</h3>
+            <img src="{% url 'polls:poll_qrcode' poll.external_id %}" alt="QR Code" class="qrcode-img">
+        </div>
+        
+        <div class="link-section mb-4">
+            <h3>{% trans "Direct Link" %}</h3>
+            <p><a href="{{ poll_url }}">{{ poll_url }}</a></p>
+            <button type="button" class="btn btn-primary" onclick="copyToClipboard('{{ poll_url }}', this)">{% trans "Copy Link" %}</button>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        {% if poll.house %}
+            <a href="{% url 'polls:house_poll_detail' poll.external_id %}" class="btn btn-secondary">{% trans "Back to Poll" %}</a>
+        {% else %}
+            <a href="{% url 'polls:quickpoll_detail' poll.external_id %}" class="btn btn-secondary">{% trans "Back to Poll" %}</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        var originalText = btn.innerText;
+        btn.innerText = "{% trans 'Copied!' %}";
+        setTimeout(function() {
+            btn.innerText = originalText;
+        }, 2000);
+    }, function(err) {
+        console.error('Could not copy text: ', err);
+    });
+}
+</script>
+{% endblock %}
