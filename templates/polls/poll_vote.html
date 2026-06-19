@@ -64,7 +64,7 @@
         {% endfor %}
     </ul>
     <button type="submit" class="btn">{% trans "Cast Vote" %}</button>
-    <button type="button" onclick="copyToClipboard()" class="btn btn-secondary">{% trans "Share" %}</button>
+    <a href="{% url 'polls:poll_share' poll.external_id %}" class="btn btn-secondary">{% trans "Share" %}</a>
     {% if poll.is_ticket_secured %}
         {% if poll.house and user == poll.creator %}
             <a href="{% url 'polls:house_poll_tickets_export' poll.external_id %}" class="btn btn-secondary">{% trans "Download Tickets" %}</a>

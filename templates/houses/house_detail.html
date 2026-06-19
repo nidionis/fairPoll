@@ -20,7 +20,7 @@
                     {% else %}
                         <a href="{% url 'polls:house_poll_vote' poll.external_id %}" class="btn btn-primary">{% trans "Vote Now" %}</a>
                     {% endif %}
-                    <button onclick="copyToClipboard()" class="btn btn-secondary">{% trans "Share" %}</button>
+                    <a href="{% url 'polls:poll_share' poll.external_id %}" class="btn btn-secondary">{% trans "Share" %}</a>
 
                     {% if poll.is_ticket_secured and not poll.is_finished and user == poll.creator %}
                 </li>

@@ -125,5 +125,5 @@
 {% else %}
     <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Back to Home" %}</a>
 {% endif %}
-    <button onclick="copyToClipboard()" class="btn btn-secondary">{% trans "Share" %}</button>
-    {% endblock %}
+    <a href="{% url 'polls:poll_share' poll.external_id %}" class="btn btn-secondary">{% trans "Share" %}</a>
+{% endblock %}
